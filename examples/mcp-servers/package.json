@@ -1,0 +1,17 @@
+{
+  "name": "simple-mcp-servers",
+  "version": "1.0.0",
+  "description": "Simple MCP server examples for Knowledge RAG Web UI",
+  "main": "simple-rag-server.js",
+  "scripts": {
+    "start:rag": "node simple-rag-server.js",
+    "start:all": "npm run start:rag"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}

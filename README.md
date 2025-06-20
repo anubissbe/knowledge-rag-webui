@@ -119,12 +119,13 @@ Knowledge RAG System
 ### Prerequisites
 - Node.js 18+
 - npm or yarn
-- Access to Knowledge RAG System API
+- Knowledge RAG System backend (see [setup guide](./docs/KNOWLEDGE_RAG_SETUP.md))
 
 ### Installation
 ```bash
 # Clone the repository
-cd /opt/projects/projects/knowledge-rag-webui
+git clone https://github.com/anubissbe/knowledge-rag-webui.git
+cd knowledge-rag-webui
 
 # Install dependencies
 npm install
@@ -174,6 +175,23 @@ Access the MCP test page at `/test-mcp` (development mode only) to:
 - Test memory operations
 - Validate search functionality
 - Check knowledge graph extraction
+
+## 🚀 Quick Start with Example Server
+
+For testing purposes, you can use the included example MCP server:
+
+```bash
+# Terminal 1: Start example MCP server
+cd examples/mcp-servers
+npm install
+npm run start:rag
+
+# Terminal 2: Start the web UI
+cd ../..
+npm run dev
+```
+
+Then navigate to `http://localhost:5173` to use the web UI.
 
 ## 📐 Design Principles
 
