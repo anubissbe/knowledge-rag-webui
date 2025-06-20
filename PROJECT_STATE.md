@@ -23,8 +23,6 @@
 - **Next task**: Implement real-time updates with WebSocket
 
 ## Project Details
-- **Project ID**: 9fbc487c-1b29-4f74-b235-4697cf9610e5
-- **Task Management URL**: http://192.168.1.24:5173/projects/9fbc487c-1b29-4f74-b235-4697cf9610e5
 - **Total Tasks**: 30 (High: 10, Medium: 13, Low: 7)
 - **Estimated Hours**: ~110 hours
 
@@ -211,10 +209,10 @@ npm run build
 - **Testing**: E2E testing with comprehensive scenarios
 
 ## API Endpoints to Integrate
-- RAG Server: http://192.168.1.24:8002
-- Knowledge Graph: http://192.168.1.24:8001
-- Vector DB: http://192.168.1.24:8003
-- Unified DB: http://192.168.1.24:8004
+- RAG Server: http://localhost:8002
+- Knowledge Graph: http://localhost:8001
+- Vector DB: http://localhost:8003
+- Unified DB: http://localhost:8004
 
 ## Design Inspiration
 - Mem0: Clean, minimalist interface with focus on content
@@ -256,14 +254,11 @@ npm run typecheck    # TypeScript validation
 npm run build        # Production build
 npm run lint         # Code linting
 
-# View project tasks
-curl http://192.168.1.24:3001/api/projects/9fbc487c-1b29-4f74-b235-4697cf9610e5/tasks | jq
-
 # Test backend services
-curl http://192.168.1.24:8002/health  # RAG service
-curl http://192.168.1.24:8001/health  # Knowledge Graph
-curl http://192.168.1.24:8003/health  # Vector DB
-curl http://192.168.1.24:8004/health  # Unified DB
+curl http://localhost:8002/health  # RAG service
+curl http://localhost:8001/health  # Knowledge Graph
+curl http://localhost:8003/health  # Vector DB
+curl http://localhost:8004/health  # Unified DB
 ```
 
 ## Known Issues
@@ -280,6 +275,6 @@ curl http://192.168.1.24:8004/health  # Unified DB
 4. Authentication strategy (local vs OAuth providers)?
 
 ## Resources
-- [Project Tasks](http://192.168.1.24:5173/projects/9fbc487c-1b29-4f74-b235-4697cf9610e5)
 - [Mem0 Demo](https://app.mem0.ai)
-- [Knowledge RAG API Docs](/opt/projects/projects/knowledge-rag-system/docs/API_REFERENCE.md)
+- [React Documentation](https://react.dev)
+- [MCP Protocol](https://modelcontextprotocol.io/)

@@ -8,10 +8,10 @@
 ## Test Environment
 - **Frontend**: React 19.1.0 + TypeScript 5.8.3
 - **MCP Servers**: 
-  - RAG Server (8002)
-  - Knowledge Graph (8001)
-  - Vector DB (8003)
-  - Unified DB (8004)
+  - RAG Server (port 8002)
+  - Knowledge Graph (port 8001)
+  - Vector DB (port 8003)
+  - Unified DB (port 8004)
 - **Protocol**: JSON-RPC 2.0
 - **Test Framework**: Manual verification + automated type checking
 

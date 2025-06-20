@@ -3,8 +3,7 @@
 ## Project Overview
 Building a modern web interface for the Knowledge RAG System, inspired by Mem0's design philosophy.
 
-**Project ID**: 9fbc487c-1b29-4f74-b235-4697cf9610e5
-**Task Management**: http://192.168.1.24:5173/projects/9fbc487c-1b29-4f74-b235-4697cf9610e5
+**Project Type**: Web UI for Knowledge RAG System
 
 ## Current Status
 - [x] Project created in task management system

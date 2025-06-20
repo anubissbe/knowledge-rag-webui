@@ -105,8 +105,6 @@ Knowledge RAG System
 
 ## 📋 Project Status
 
-**Project ID**: 9fbc487c-1b29-4f74-b235-4697cf9610e5
-
 **Current Phase**: Core Feature Development ✅
 
 **Total Tasks**: 30
@@ -141,12 +139,12 @@ npm run dev
 ### Configuration
 Edit `.env` file with your settings:
 ```env
-VITE_API_URL=http://192.168.1.24:3001
-VITE_RAG_URL=http://192.168.1.24:8002
-VITE_KG_URL=http://192.168.1.24:8001
-VITE_VECTOR_URL=http://192.168.1.24:8003
-VITE_UNIFIED_URL=http://192.168.1.24:8004
-VITE_WS_URL=ws://192.168.1.24:3001
+VITE_API_URL=http://localhost:3001
+VITE_RAG_URL=http://localhost:8002
+VITE_KG_URL=http://localhost:8001
+VITE_VECTOR_URL=http://localhost:8003
+VITE_UNIFIED_URL=http://localhost:8004
+VITE_WS_URL=ws://localhost:3001
 ```
 
 ## 🔌 API Integration
@@ -268,9 +266,9 @@ This project is part of the MCP-Enhanced Workspace ecosystem. Contributions are 
 - [API Integration Tests](./docs/API_INTEGRATION_E2E_TESTS.md) - E2E test results
 
 ### External Resources
-- [Knowledge RAG System Docs](/opt/projects/projects/knowledge-rag-system/README.md)
 - [Mem0 Inspiration](https://github.com/mem0ai/mem0)
-- [Task Management](http://192.168.1.24:5173)
+- [MCP Protocol](https://modelcontextprotocol.io/)
+- [React Documentation](https://react.dev)
 
 ## 📄 License
 

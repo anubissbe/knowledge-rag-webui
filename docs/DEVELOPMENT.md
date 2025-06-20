@@ -4,7 +4,7 @@
 
 ### Prerequisites
 - Node.js 18+ installed
-- Access to Knowledge RAG System APIs (running on 192.168.1.24)
+- Access to Knowledge RAG System APIs
 - Git for version control
 
 ### Initial Setup
@@ -293,8 +293,8 @@ npm run preview
 All environment variables must be prefixed with `VITE_`:
 
 ```env
-VITE_API_URL=http://192.168.1.24:3001
-VITE_RAG_URL=http://192.168.1.24:8002
+VITE_API_URL=http://localhost:3001
+VITE_RAG_URL=http://localhost:8002
 VITE_ENABLE_FEATURE_X=true
 ```
 

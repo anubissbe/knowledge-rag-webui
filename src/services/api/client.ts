@@ -3,11 +3,11 @@ import type { AxiosResponse } from 'axios'
 import type { Memory, SearchParams, SearchResult, Collection, User, Entity, CreateCollectionDto } from '../../types'
 
 // API URLs from environment
-const API_URL = import.meta.env.VITE_API_URL || 'http://192.168.1.24:3001'
-const RAG_URL = import.meta.env.VITE_RAG_URL || 'http://192.168.1.24:8002'
-const KG_URL = import.meta.env.VITE_KG_URL || 'http://192.168.1.24:8001'
-const VECTOR_URL = import.meta.env.VITE_VECTOR_URL || 'http://192.168.1.24:8003'
-const UNIFIED_URL = import.meta.env.VITE_UNIFIED_URL || 'http://192.168.1.24:8004'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const RAG_URL = import.meta.env.VITE_RAG_URL || 'http://localhost:8002'
+const KG_URL = import.meta.env.VITE_KG_URL || 'http://localhost:8001'
+const VECTOR_URL = import.meta.env.VITE_VECTOR_URL || 'http://localhost:8003'
+const UNIFIED_URL = import.meta.env.VITE_UNIFIED_URL || 'http://localhost:8004'
 
 // Create axios instances for each service
 export const apiClient = axios.create({

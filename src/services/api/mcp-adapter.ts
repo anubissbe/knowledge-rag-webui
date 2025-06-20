@@ -13,10 +13,10 @@ import type {
 } from '@/types'
 
 // MCP Server URLs
-const RAG_MCP_URL = 'http://192.168.1.24:8002'
-const KG_MCP_URL = 'http://192.168.1.24:8001'
-const VECTOR_MCP_URL = 'http://192.168.1.24:8003'
-const UNIFIED_MCP_URL = 'http://192.168.1.24:8004'
+const RAG_MCP_URL = import.meta.env.VITE_RAG_URL || 'http://localhost:8002'
+const KG_MCP_URL = import.meta.env.VITE_KG_URL || 'http://localhost:8001'
+const VECTOR_MCP_URL = import.meta.env.VITE_VECTOR_URL || 'http://localhost:8003'
+const UNIFIED_MCP_URL = import.meta.env.VITE_UNIFIED_URL || 'http://localhost:8004'
 
 // Helper to make JSON-RPC calls
 async function callMCPMethod<T = any>(

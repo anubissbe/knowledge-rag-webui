@@ -7,10 +7,10 @@ The Knowledge RAG Web UI communicates with backend services through MCP (Model C
 ## MCP Server Endpoints
 
 ### Base URLs
-- **RAG Server**: `http://192.168.1.24:8002`
-- **Knowledge Graph**: `http://192.168.1.24:8001`
-- **Vector DB**: `http://192.168.1.24:8003`
-- **Unified DB**: `http://192.168.1.24:8004`
+- **RAG Server**: `http://localhost:8002`
+- **Knowledge Graph**: `http://localhost:8001`
+- **Vector DB**: `http://localhost:8003`
+- **Unified DB**: `http://localhost:8004`
 
 ### Authentication
 All requests include a Bearer token in the Authorization header when available:

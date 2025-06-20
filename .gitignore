@@ -22,3 +22,21 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Test reports and scripts
+*E2E*.md
+*TEST*.md
+e2e-test*.json
+e2e-test*.js
+manual-ui-test.js
+test-*.cjs
+*_test_*.py
+
+# Implementation summaries
+*SUMMARY.md
+COMPLETION_SUMMARY.md
