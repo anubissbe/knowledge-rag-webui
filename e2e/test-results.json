@@ -174,19 +174,19 @@
   "suites": [],
   "errors": [
     {
-      "message": "Error: browserType.launch: Executable doesn't exist at /home/drwho/.cache/ms-playwright/chromium_headless_shell-1179/chrome-linux/headless_shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-      "stack": "Error: browserType.launch: Executable doesn't exist at /home/drwho/.cache/ms-playwright/chromium_headless_shell-1179/chrome-linux/headless_shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝\n    at globalSetup (/opt/projects/projects/knowledge-rag-webui/e2e/global-setup.ts:10:36)",
+      "message": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"app-container\"]') to be visible\u001b[22m\n",
+      "stack": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"app-container\"]') to be visible\u001b[22m\n\n    at globalSetup (/opt/projects/projects/knowledge-rag-webui/e2e/global-setup.ts:17:16)",
       "location": {
         "file": "/opt/projects/projects/knowledge-rag-webui/e2e/global-setup.ts",
-        "column": 36,
-        "line": 10
+        "column": 16,
+        "line": 17
       },
-      "snippet": "\u001b[90m   at \u001b[39mglobal-setup.ts:10\n\n   8 |   \n   9 |   try {\n> 10 |     const browser = await chromium.launch()\n     |                                    ^\n  11 |     const page = await browser.newPage()\n  12 |     \n  13 |     console.log(`📡 Checking application at ${baseURL}`)"
+      "snippet": "\u001b[90m   at \u001b[39mglobal-setup.ts:17\n\n  15 |     \n  16 |     // Wait for app to be ready\n> 17 |     await page.waitForSelector('[data-testid=\"app-container\"]', { timeout: 30000 })\n     |                ^\n  18 |     \n  19 |     console.log('✅ Application is ready')\n  20 |     "
     }
   ],
   "stats": {
-    "startTime": "2025-06-20T16:39:02.357Z",
-    "duration": 1108.616,
+    "startTime": "2025-06-20T17:10:33.673Z",
+    "duration": 37223.628,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

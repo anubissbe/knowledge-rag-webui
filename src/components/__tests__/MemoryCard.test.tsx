@@ -1,5 +1,5 @@
 import { screen, fireEvent, waitFor } from '@testing-library/react'
-import { MemoryCard } from '../MemoryCard'
+import { MemoryCard } from '../memory/MemoryCard'
 import { renderWithProviders, mockMemory } from '@/utils/test-helpers'
 
 describe('MemoryCard', () => {

@@ -28,8 +28,13 @@ async function cleanupTestData(page: any) {
   console.log('🗑️  Cleaning up test data...')
   
   try {
-    // Navigate to memories page
-    await page.click('[data-testid="memories-nav-link"]', { timeout: 5000 })
+    // Navigate to memories page to clear test data - skip if not found
+    try {
+      await page.click('[data-testid="memories-nav-link"]', { timeout: 5000 })
+    } catch (error) {
+      console.log('⚠️  Could not find memories nav link, skipping test data cleanup')
+      return
+    }
     
     // Get all test memories (memories created during setup)
     const testMemoryTitles = [

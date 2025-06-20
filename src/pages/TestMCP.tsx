@@ -5,8 +5,8 @@ import { useCollectionStore } from '../stores/collectionStore'
 import { useGraphStore } from '../stores/graphStore'
 import { mcpAdapter } from '../services/api/mcp-adapter'
 import { Layout } from '../components/layout/Layout'
-import { Button } from '../components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
+import { Button } from '../components/ui/Button'
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import { Loader2 } from 'lucide-react'
 
 export function TestMCPPage() {

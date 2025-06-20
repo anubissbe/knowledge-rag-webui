@@ -9,10 +9,10 @@ import axios from 'axios';
 import chalk from 'chalk';
 
 const MCP_SERVERS = {
-  RAG: { url: 'http://192.168.1.24:8002', name: 'RAG Server' },
-  KNOWLEDGE_GRAPH: { url: 'http://192.168.1.24:8001', name: 'Knowledge Graph' },
-  VECTOR_DB: { url: 'http://192.168.1.24:8003', name: 'Vector DB' },
-  UNIFIED_DB: { url: 'http://192.168.1.24:8004', name: 'Unified DB' },
+  RAG: { url: process.env.VITE_RAG_URL || 'http://localhost:8002', name: 'RAG Server' },
+  KNOWLEDGE_GRAPH: { url: process.env.VITE_KG_URL || 'http://localhost:8001', name: 'Knowledge Graph' },
+  VECTOR_DB: { url: process.env.VITE_VECTOR_URL || 'http://localhost:8003', name: 'Vector DB' },
+  UNIFIED_DB: { url: process.env.VITE_UNIFIED_URL || 'http://localhost:8004', name: 'Unified DB' },
 };
 
 // Helper to make JSON-RPC requests

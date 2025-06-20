@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools, subscribeWithSelector } from 'zustand/middleware';
-import { webSocketService, WebSocketEvents } from '../services/websocket';
+import { webSocketService } from '../services/websocket';
 import { useMemoryStore } from './memoryStore';
 import { useCollectionStore } from './collectionStore';
 import { useGraphStore } from './graphStore';
@@ -26,7 +26,7 @@ interface WebSocketState {
 
 export const useWebSocketStore = create<WebSocketState>()(
   devtools(
-    subscribeWithSelector((set, get) => ({
+    subscribeWithSelector((set) => ({
       isConnected: false,
       reconnectAttempts: 0,
       subscribedRooms: [],
@@ -42,8 +42,9 @@ export const useWebSocketStore = create<WebSocketState>()(
         // Connection status events
         webSocketService.on('connected' as any, () => {
           set({ isConnected: true, reconnectAttempts: 0 });
-          useUIStore.getState().showNotification({
+          useUIStore.getState().addNotification({
             type: 'success',
+            title: 'Connection Status',
             message: 'Real-time sync connected',
           });
         });
@@ -51,16 +52,18 @@ export const useWebSocketStore = create<WebSocketState>()(
         webSocketService.on('disconnected' as any, (reason: string) => {
           set({ isConnected: false });
           if (reason !== 'io client disconnect') {
-            useUIStore.getState().showNotification({
+            useUIStore.getState().addNotification({
               type: 'warning',
+              title: 'Connection Status',
               message: 'Real-time sync disconnected',
             });
           }
         });
 
         webSocketService.on('error', (error) => {
-          useUIStore.getState().showNotification({
+          useUIStore.getState().addNotification({
             type: 'error',
+            title: 'Connection Error',
             message: `WebSocket error: ${error.message}`,
           });
         });
@@ -130,21 +133,39 @@ function setupWebSocketEventHandlers(set: any) {
 
   // Memory events
   webSocketService.on('memory:created', (memory) => {
-    memoryStore.addMemory(memory);
-    uiStore.showNotification({
+    // Directly add memory to the store without API call
+    useMemoryStore.setState(state => ({
+      memories: [memory, ...state.memories],
+      totalCount: state.totalCount + 1,
+    }));
+    uiStore.addNotification({
       type: 'info',
+      title: 'Memory Update',
       message: 'New memory created',
     });
   });
 
   webSocketService.on('memory:updated', (memory) => {
-    memoryStore.updateMemory(memory.id, memory);
+    // Directly update memory in the store without API call
+    useMemoryStore.setState(state => ({
+      memories: state.memories.map(m => 
+        m.id === memory.id ? memory : m
+      ),
+      selectedMemory: state.selectedMemory?.id === memory.id ? memory : state.selectedMemory,
+    }));
   });
 
   webSocketService.on('memory:deleted', (memoryId) => {
-    memoryStore.deleteMemory(memoryId);
-    uiStore.showNotification({
+    // Directly remove memory from the store without API call
+    useMemoryStore.setState(state => ({
+      memories: state.memories.filter(m => m.id !== memoryId),
+      selectedMemory: state.selectedMemory?.id === memoryId ? null : state.selectedMemory,
+      selectedMemories: state.selectedMemories.filter(mId => mId !== memoryId),
+      totalCount: state.totalCount - 1,
+    }));
+    uiStore.addNotification({
       type: 'info',
+      title: 'Memory Update',
       message: 'Memory deleted',
     });
   });
@@ -158,27 +179,41 @@ function setupWebSocketEventHandlers(set: any) {
 
   // Collection events
   webSocketService.on('collection:created', (collection) => {
-    collectionStore.addCollection(collection);
-    uiStore.showNotification({
+    // Directly add collection to the store without API call
+    useCollectionStore.setState(state => ({
+      collections: [...state.collections, collection],
+    }));
+    uiStore.addNotification({
       type: 'info',
+      title: 'Collection Update',
       message: `Collection "${collection.name}" created`,
     });
   });
 
   webSocketService.on('collection:updated', (collection) => {
-    collectionStore.updateCollection(collection.id, collection);
+    // Directly update collection in the store without API call
+    useCollectionStore.setState(state => ({
+      collections: state.collections.map(c => 
+        c.id === collection.id ? collection : c
+      ),
+      selectedCollection: state.selectedCollection?.id === collection.id ? collection : state.selectedCollection,
+    }));
   });
 
   webSocketService.on('collection:deleted', (collectionId) => {
-    collectionStore.deleteCollection(collectionId);
+    // Directly remove collection from the store without API call
+    useCollectionStore.setState(state => ({
+      collections: state.collections.filter(c => c.id !== collectionId),
+      selectedCollection: state.selectedCollection?.id === collectionId ? null : state.selectedCollection,
+    }));
   });
 
-  webSocketService.on('collection:memory-added', ({ collectionId, memoryId }) => {
+  webSocketService.on('collection:memory-added', ({ collectionId }) => {
     // Update the collection's memory count
     collectionStore.fetchCollection(collectionId);
   });
 
-  webSocketService.on('collection:memory-removed', ({ collectionId, memoryId }) => {
+  webSocketService.on('collection:memory-removed', ({ collectionId }) => {
     // Update the collection's memory count
     collectionStore.fetchCollection(collectionId);
   });

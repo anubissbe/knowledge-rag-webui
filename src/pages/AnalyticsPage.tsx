@@ -2,24 +2,20 @@ import { useEffect } from 'react';
 import { 
   BarChart3, 
   TrendingUp, 
-  Clock, 
   Users, 
   FileText, 
   Hash, 
-  Calendar,
   Activity,
   PieChart,
   Database,
   HardDrive,
   Zap
 } from 'lucide-react';
-import { Card } from '../components/common/Card';
+import { Card } from '../components/ui/Card';
 import { useMemoryStore } from '../stores/memoryStore';
 import { useCollectionStore } from '../stores/collectionStore';
 import { useAnalyticsStore } from '../stores/analyticsStore';
 import { 
-  LineChart, 
-  Line, 
   BarChart, 
   Bar, 
   PieChart as RePieChart, 
@@ -29,7 +25,6 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  Legend, 
   ResponsiveContainer,
   AreaChart,
   Area
@@ -205,7 +200,7 @@ export function AnalyticsPage() {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {stats.collectionDistribution.map((entry, index) => (
+                {stats.collectionDistribution.map((_entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

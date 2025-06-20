@@ -202,7 +202,7 @@ export class WebSocketService {
   }
 
   // Send custom events
-  emit(event: string, data: any) {
+  sendEvent(event: string, data: any) {
     if (this.socket?.connected) {
       this.socket.emit(event, data);
     } else {

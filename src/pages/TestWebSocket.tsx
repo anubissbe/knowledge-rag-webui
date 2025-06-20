@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useWebSocketStore } from '../stores/websocketStore';
 import { useMemoryStore } from '../stores/memoryStore';
 import { useCollectionStore } from '../stores/collectionStore';
-import { Button } from '../components/common/Button';
-import { Card } from '../components/common/Card';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
 import { Wifi, WifiOff, Send, RefreshCw } from 'lucide-react';
 
 export function TestWebSocketPage() {

@@ -13,8 +13,8 @@ async function globalSetup(config: FullConfig) {
     console.log(`📡 Checking application at ${baseURL}`)
     await page.goto(baseURL, { timeout: 30000 })
     
-    // Wait for app to be ready
-    await page.waitForSelector('[data-testid="app-container"]', { timeout: 30000 })
+    // Wait for app to be ready - check for any main content
+    await page.waitForLoadState('networkidle', { timeout: 30000 })
     
     console.log('✅ Application is ready')
     

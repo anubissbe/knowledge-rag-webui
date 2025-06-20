@@ -1,5 +1,6 @@
-import { render, RenderOptions } from '@testing-library/react'
-import { ReactElement } from 'react'
+import { render, type RenderOptions } from '@testing-library/react'
+import { type ReactElement } from 'react'
+import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
@@ -159,8 +160,9 @@ export const mockLocalStorage = () => {
 export const mockFetch = (responses: Record<string, any>) => {
   const originalFetch = global.fetch
   
-  global.fetch = jest.fn((url: string) => {
-    const response = responses[url]
+  global.fetch = jest.fn((url: RequestInfo | URL) => {
+    const urlString = typeof url === 'string' ? url : url.toString()
+    const response = responses[urlString]
     if (response) {
       return Promise.resolve({
         ok: true,
@@ -168,7 +170,7 @@ export const mockFetch = (responses: Record<string, any>) => {
         text: () => Promise.resolve(JSON.stringify(response))
       } as Response)
     }
-    return Promise.reject(new Error(`No mock response for ${url}`))
+    return Promise.reject(new Error(`No mock response for ${urlString}`))
   })
   
   return () => { global.fetch = originalFetch }
