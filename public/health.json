@@ -1,0 +1,6 @@
+{
+  "status": "ok",
+  "service": "knowledge-rag-webui",
+  "version": "1.0.0",
+  "timestamp": "BUILD_TIME"
+}

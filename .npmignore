@@ -1,0 +1,38 @@
+# Source files
+src/
+examples/
+docs/
+scripts/
+
+# Config files
+.github/
+.env
+.env.*
+*.config.js
+tsconfig.*
+vite.config.ts
+
+# Development files
+*.md
+!README.md
+!LICENSE
+*.json
+!package.json
+!package-lock.json
+
+# Test files
+*.test.*
+*.spec.*
+__tests__/
+coverage/
+
+# Build tools
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Misc
+.DS_Store
+*.log
+.vscode/
+.idea/

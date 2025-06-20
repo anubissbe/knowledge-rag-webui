@@ -8,7 +8,14 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "start": "node scripts/start-dev.js",
+    "test": "echo \"No tests yet\" && exit 0",
+    "clean": "rm -rf dist node_modules",
+    "analyze": "vite build --mode analyze",
+    "docker:build": "docker build -t knowledge-rag-webui .",
+    "docker:run": "docker run -p 3000:3000 knowledge-rag-webui",
+    "docker:compose": "docker-compose up -d"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
