@@ -81,6 +81,7 @@ Knowledge RAG System
 - **Modern UI/UX**
   - Clean, minimalist design
   - Dark/light/system themes with auto-detection ✅
+  - Interactive onboarding flow with guided tour ✅
   - Responsive layout
   - Keyboard shortcuts
 
@@ -307,6 +308,7 @@ This project is part of the MCP-Enhanced Workspace ecosystem. Contributions are 
 - [API Documentation](./docs/API_DOCUMENTATION.md) - Complete API reference
 - [Testing Guide](./docs/TESTING.md) - Testing strategies and examples
 - [Theme System](./docs/THEME_SYSTEM.md) - Dark/light theme implementation ✅
+- [Onboarding System](./docs/ONBOARDING_SYSTEM.md) - Interactive user onboarding ✅
 - [API Integration Tests](./docs/API_INTEGRATION_E2E_TESTS.md) - E2E test results
 
 ### External Resources

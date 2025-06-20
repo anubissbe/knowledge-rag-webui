@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { OnboardingProvider } from './contexts/OnboardingContext'
+import { OnboardingOverlay } from './components/onboarding/OnboardingOverlay'
 import { Layout } from './components/layout/Layout'
 import { ProtectedRoute } from './components/auth'
 import { HomePage } from './pages/HomePage'
@@ -27,7 +29,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <BrowserRouter>
+        <OnboardingProvider>
+          <BrowserRouter>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
@@ -140,7 +143,9 @@ function App() {
             } 
           />
         </Routes>
-        </BrowserRouter>
+          <OnboardingOverlay />
+          </BrowserRouter>
+        </OnboardingProvider>
       </ThemeProvider>
     </QueryClientProvider>
   )

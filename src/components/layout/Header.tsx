@@ -3,6 +3,7 @@ import { Search, User, LogOut, Command, Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../stores'
 import { ThemeToggleButton } from '../ThemeToggle'
+import { OnboardingTrigger } from '../onboarding/OnboardingTrigger'
 import { cn } from '@/lib/utils'
 
 export const Header: FC = () => {
@@ -68,6 +69,9 @@ export const Header: FC = () => {
 
         {/* Right side actions */}
         <div className="flex items-center gap-4 ml-6">
+          {/* Help/Tutorial */}
+          <OnboardingTrigger variant="help" />
+          
           {/* Theme toggle */}
           <ThemeToggleButton />
 
@@ -113,6 +117,10 @@ export const Header: FC = () => {
                           <Settings size={16} />
                           <span>Settings</span>
                         </button>
+                        <OnboardingTrigger 
+                          variant="menu-item"
+                          className="text-left"
+                        />
                         <button 
                           onClick={handleLogout}
                           className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded hover:bg-muted transition-colors text-destructive"
