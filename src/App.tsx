@@ -24,6 +24,7 @@ const SettingsPage = lazy(() => import('./pages/SettingsPage').then(module => ({
 const ImportExportPage = lazy(() => import('./pages/ImportExportPage').then(module => ({ default: module.default })))
 const TestMCPPage = lazy(() => import('./pages/TestMCP').then(module => ({ default: module.TestMCPPage })))
 const TestWebSocketPage = lazy(() => import('./pages/TestWebSocket').then(module => ({ default: module.TestWebSocketPage })))
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage').then(module => ({ default: module.AnalyticsPage })))
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -124,7 +125,11 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <div>Analytics Page (Coming Soon)</div>
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <AnalyticsPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
                 </Layout>
               </ProtectedRoute>
             } 
