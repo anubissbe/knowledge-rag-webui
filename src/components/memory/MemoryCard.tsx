@@ -1,8 +1,9 @@
 import { type FC } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Tag, FolderOpen, MoreVertical, Edit, Trash2, Share } from 'lucide-react'
+import { Calendar, Tag, FolderOpen, MoreVertical, Edit, Trash2, Share, CheckSquare, Square } from 'lucide-react'
 import { type Memory } from '@/types'
 import { cn } from '@/lib/utils'
+import { useBulkOperationsStore } from '../../stores/bulkOperationsStore'
 
 interface MemoryCardProps {
   memory: Memory
@@ -17,6 +18,9 @@ export const MemoryCard: FC<MemoryCardProps> = ({
   onShare,
   className,
 }) => {
+  const { isSelectionMode, isItemSelected, toggleItemSelection } = useBulkOperationsStore();
+  const isSelected = isItemSelected(memory.id);
+
   const formatDate = (date: Date) => {
     const d = new Date(date)
     return d.toLocaleDateString('en-US', {
@@ -32,16 +36,46 @@ export const MemoryCard: FC<MemoryCardProps> = ({
     action()
   }
 
+  const handleSelectionToggle = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    toggleItemSelection(memory.id)
+  }
+
   return (
     <article
       className={cn(
         "group relative p-6 rounded-lg border",
         "bg-card hover:shadow-md transition-all duration-200",
         "hover:border-primary/50",
+        isSelected && "ring-2 ring-primary border-primary",
         className
       )}
+      data-testid="memory-card"
     >
-      <Link to={`/memories/${memory.id}`} className="block">
+      {isSelectionMode && (
+        <div 
+          className="absolute top-3 left-3 z-10"
+          onClick={handleSelectionToggle}
+        >
+          <button
+            className="p-1 rounded hover:bg-muted transition-colors"
+            aria-label={isSelected ? "Deselect item" : "Select item"}
+            data-testid="select-checkbox"
+          >
+            {isSelected ? (
+              <CheckSquare size={20} className="text-primary" />
+            ) : (
+              <Square size={20} className="text-muted-foreground" />
+            )}
+          </button>
+        </div>
+      )}
+      <Link 
+        to={`/memories/${memory.id}`} 
+        className={cn("block", isSelectionMode && "pl-10")}
+        onClick={(e) => isSelectionMode && e.preventDefault()}
+      >
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
           <h3 className="text-lg font-semibold line-clamp-2 flex-1 pr-2">

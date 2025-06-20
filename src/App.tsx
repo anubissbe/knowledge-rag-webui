@@ -27,6 +27,7 @@ const ImportExportPage = lazy(() => import('./pages/ImportExportPage').then(modu
 const TestMCPPage = lazy(() => import('./pages/TestMCP').then(module => ({ default: module.TestMCPPage })))
 const TestWebSocketPage = lazy(() => import('./pages/TestWebSocket').then(module => ({ default: module.TestWebSocketPage })))
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage').then(module => ({ default: module.AnalyticsPage })))
+const TestBulkOperations = lazy(() => import('./pages/TestBulkOperations').then(module => ({ default: module.TestBulkOperations })))
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -226,6 +227,20 @@ function App() {
                   <LazyLoadErrorBoundary>
                     <LazyLoadWrapper>
                       <TestWebSocketPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
+                </Layout>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/test-bulk-operations" 
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <TestBulkOperations />
                     </LazyLoadWrapper>
                   </LazyLoadErrorBoundary>
                 </Layout>

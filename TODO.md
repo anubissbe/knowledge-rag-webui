@@ -36,7 +36,7 @@ Building a modern web interface for the Knowledge RAG System, inspired by Mem0's
 2. [ ] Build collections management (4h)
 3. [x] Implement knowledge graph visualization (6h) ✅
 4. [ ] Create user settings page (3h)
-5. [ ] Add bulk operations (3h)
+5. [x] Add bulk operations (3h) ✅
 6. [ ] Build import/export functionality (4h)
 7. [ ] Create onboarding flow (3h)
 8. [ ] Implement responsive mobile design (4h)

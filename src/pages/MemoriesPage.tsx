@@ -3,14 +3,19 @@ import { Plus, Brain, LayoutGrid, List } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { MemoryList } from '@/components/memory/MemoryList'
+import { BulkOperationsToolbar } from '@/components/memory/BulkOperationsToolbar'
 import { type Memory } from '@/types'
 import { cn } from '@/lib/utils'
+import { useBulkOperationsStore } from '@/stores/bulkOperationsStore'
+import { useUIStore } from '@/stores/uiStore'
 
 export const MemoriesPage: FC = () => {
   const [layout, setLayout] = useState<'grid' | 'list'>('grid')
   const [selectedCollection, setSelectedCollection] = useState<string>('all')
   const [sortBy, setSortBy] = useState<'recent' | 'oldest' | 'relevant'>('recent')
   const queryClient = useQueryClient()
+  const { addNotification } = useUIStore()
+  const { clearSelection } = useBulkOperationsStore()
 
   // Mock data for now - will be replaced with API calls
   const { data: memories, isLoading } = useQuery({
@@ -120,6 +125,75 @@ export const MemoriesPage: FC = () => {
     console.log('Sharing memory:', id)
   }
 
+  // Bulk operation handlers
+  const handleBulkDelete = async (ids: string[]) => {
+    // Mock implementation - will call api.bulkDeleteMemories(ids)
+    console.log('Bulk deleting memories:', ids)
+    queryClient.invalidateQueries({ queryKey: ['memories'] })
+  }
+
+  const handleBulkTag = async (ids: string[], tags: string[]) => {
+    // Mock implementation - will call api.bulkAddTags(ids, tags)
+    console.log('Bulk tagging memories:', ids, tags)
+    queryClient.invalidateQueries({ queryKey: ['memories'] })
+  }
+
+  const handleBulkMove = async (ids: string[], collectionId: string) => {
+    // Mock implementation - will call api.bulkMoveToCollection(ids, collectionId)
+    console.log('Bulk moving memories:', ids, 'to collection:', collectionId)
+    queryClient.invalidateQueries({ queryKey: ['memories'] })
+  }
+
+  const handleBulkExport = async (ids: string[], format: 'json' | 'csv' | 'markdown') => {
+    // Mock implementation - will call api.exportMemories(ids, format)
+    console.log('Bulk exporting memories:', ids, 'as', format)
+    
+    // Simulate export
+    const exportData = memories?.filter(m => ids.includes(m.id)) || []
+    let content = ''
+    let filename = `memories-export-${new Date().toISOString().split('T')[0]}`
+    let mimeType = ''
+
+    switch (format) {
+      case 'json':
+        content = JSON.stringify(exportData, null, 2)
+        filename += '.json'
+        mimeType = 'application/json'
+        break
+      case 'csv':
+        // Simple CSV export
+        const headers = ['Title', 'Content', 'Tags', 'Collection', 'Created', 'Updated']
+        const rows = exportData.map(m => [
+          m.title,
+          m.content.replace(/[\n\r,]/g, ' '),
+          m.tags.join(';'),
+          m.collection || '',
+          m.created_at,
+          m.updated_at
+        ])
+        content = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n')
+        filename += '.csv'
+        mimeType = 'text/csv'
+        break
+      case 'markdown':
+        content = exportData.map(m => `# ${m.title}\n\n${m.content}\n\n**Tags:** ${m.tags.join(', ')}\n**Collection:** ${m.collection || 'None'}\n**Created:** ${m.created_at}\n\n---\n`).join('\n')
+        filename += '.md'
+        mimeType = 'text/markdown'
+        break
+    }
+
+    // Create download
+    const blob = new Blob([content], { type: mimeType })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-8">
@@ -169,8 +243,17 @@ export const MemoriesPage: FC = () => {
         </div>
       </div>
 
+      {/* Bulk Operations Toolbar */}
+      <BulkOperationsToolbar
+        totalItems={memories?.length || 0}
+        onBulkDelete={handleBulkDelete}
+        onBulkTag={handleBulkTag}
+        onBulkMove={handleBulkMove}
+        onBulkExport={handleBulkExport}
+      />
+
       {/* Filters */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-6 mt-4">
         <select 
           value={selectedCollection}
           onChange={(e) => setSelectedCollection(e.target.value)}
