@@ -4,7 +4,7 @@ Thank you for your interest in contributing to the Knowledge RAG Web UI project!
 
 ## 📋 Before You Begin
 
-1. **Check the Task Management System**: Visit http://192.168.1.24:5173/projects/9fbc487c-1b29-4f74-b235-4697cf9610e5 to see available tasks
+1. **Check the Task Management System**: Visit http://localhost:5173/projects/9fbc487c-1b29-4f74-b235-4697cf9610e5 to see available tasks
 2. **Read the Documentation**: Familiarize yourself with the project structure and design principles
 3. **Set Up Your Environment**: Follow the setup instructions in README.md
 
@@ -254,7 +254,7 @@ Use Tailwind spacing utilities:
 ## 📞 Getting Help
 
 - **Documentation**: Check `/docs` folder
-- **Task System**: http://192.168.1.24:5173
+- **Task System**: http://localhost:5173
 - **API Docs**: `/opt/projects/projects/knowledge-rag-system/docs/`
 
 ## 🙏 Recognition

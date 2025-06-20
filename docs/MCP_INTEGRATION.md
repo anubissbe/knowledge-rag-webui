@@ -58,10 +58,10 @@ The application connects to four primary MCP servers:
 
 ```env
 # MCP Server URLs
-VITE_RAG_URL=http://192.168.1.24:8002
-VITE_KG_URL=http://192.168.1.24:8001
-VITE_VECTOR_URL=http://192.168.1.24:8003
-VITE_UNIFIED_URL=http://192.168.1.24:8004
+VITE_RAG_URL=http://localhost:8002
+VITE_KG_URL=http://localhost:8001
+VITE_VECTOR_URL=http://localhost:8003
+VITE_UNIFIED_URL=http://localhost:8004
 
 # Optional authentication
 VITE_MCP_AUTH_TOKEN=your-token-here
@@ -316,10 +316,10 @@ Manual health check:
 
 ```bash
 # Check individual servers
-curl http://192.168.1.24:8002/health
-curl http://192.168.1.24:8001/health
-curl http://192.168.1.24:8003/health
-curl http://192.168.1.24:8004/health
+curl http://localhost:8002/health
+curl http://localhost:8001/health
+curl http://localhost:8003/health
+curl http://localhost:8004/health
 ```
 
 ## Monitoring

@@ -178,11 +178,11 @@ knowledge-rag-webui/
 ```
 
 #### Integration Points
-- RAG Server: http://192.168.1.24:8002
-- Knowledge Graph: http://192.168.1.24:8001
-- Vector DB: http://192.168.1.24:8003
-- Unified DB: http://192.168.1.24:8004
-- Task Management: http://192.168.1.24:5173
+- RAG Server: http://localhost:8002
+- Knowledge Graph: http://localhost:8001
+- Vector DB: http://localhost:8003
+- Unified DB: http://localhost:8004
+- Task Management: http://localhost:5173
 
 ---
 

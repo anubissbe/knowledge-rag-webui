@@ -68,4 +68,4 @@ Next Steps:
 
 // Note: Since direct API access isn't working, this summary provides
 // the status update information that can be manually entered
-// into the Task Management System UI at http://192.168.1.24:5173
+// into the Task Management System UI

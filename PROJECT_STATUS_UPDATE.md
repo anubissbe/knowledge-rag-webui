@@ -123,7 +123,7 @@ The Knowledge RAG Web UI is now feature-complete for the core functionality with
 ### WebSocket Configuration
 ```typescript
 // WebSocket server runs on same port as API
-const WS_URL = 'ws://192.168.1.24:8002/ws';
+const WS_URL = 'ws://localhost:8002/ws';
 
 // Events supported:
 - memory:created
@@ -155,7 +155,7 @@ All MCP servers are operational and tested:
 
 To update the task status in the MCP Task Management System:
 
-1. Navigate to: http://192.168.1.24:5173
+1. Navigate to the Task Management System UI
 2. Find project: Knowledge RAG Web UI (ID: 9fbc487c-1b29-4f74-b235-4697cf9610e5)
 3. Update the following tasks to "completed":
    - "Implement real-time updates" → COMPLETED
