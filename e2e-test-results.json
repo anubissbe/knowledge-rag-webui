@@ -1,0 +1,318 @@
+{
+  "startTime": "2025-06-19T21:34:04.753Z",
+  "endTime": "2025-06-19T21:34:17.317Z",
+  "totalTests": 9,
+  "passedTests": 7,
+  "failedTests": 2,
+  "skippedTests": 0,
+  "tests": [
+    {
+      "name": "Project Structure Validation",
+      "status": "PASS",
+      "duration": 1,
+      "timestamp": "2025-06-19T21:34:04.756Z",
+      "checkedFiles": 10,
+      "allFilesPresent": true
+    },
+    {
+      "name": "TypeScript Compilation",
+      "status": "PASS",
+      "duration": 240,
+      "timestamp": "2025-06-19T21:34:05.998Z",
+      "output": "\n> knowledge-rag-webui@0.1.0 typecheck\n> tsc --noEmit\n\n"
+    },
+    {
+      "name": "Production Build",
+      "status": "FAIL",
+      "duration": 3212,
+      "timestamp": "2025-06-19T21:34:10.212Z",
+      "error": "Command failed: npm run build\n",
+      "stdout": "\n> knowledge-rag-webui@0.1.0 build\n> tsc -b && vite build\n\nsrc/pages/MemoriesPage.tsx(29,13): error TS2739: Type '{ id: string; name: string; type: string; properties: {}; }' is missing the following properties from type 'Entity': created_at, updated_at\nsrc/pages/MemoriesPage.tsx(30,13): error TS2739: Type '{ id: string; name: string; type: string; properties: {}; }' is missing the following properties from type 'Entity': created_at, updated_at\nsrc/pages/MemoriesPage.tsx(44,13): error TS2739: Ty"
+    },
+    {
+      "name": "API Endpoints Health Check",
+      "status": "FAIL",
+      "duration": 86,
+      "timestamp": "2025-06-19T21:34:11.300Z",
+      "healthyEndpoints": 0,
+      "totalEndpoints": 5,
+      "details": [
+        {
+          "name": "Task Management API",
+          "url": "http://192.168.1.24:3001/health",
+          "status": "404",
+          "healthy": false
+        },
+        {
+          "name": "RAG Service",
+          "url": "http://192.168.1.24:8002/health",
+          "status": "405",
+          "healthy": false
+        },
+        {
+          "name": "Knowledge Graph",
+          "url": "http://192.168.1.24:8001/health",
+          "status": "405",
+          "healthy": false
+        },
+        {
+          "name": "Vector DB",
+          "url": "http://192.168.1.24:8003/health",
+          "status": "405",
+          "healthy": false
+        },
+        {
+          "name": "Unified DB",
+          "url": "http://192.168.1.24:8004/health",
+          "status": "405",
+          "healthy": false
+        }
+      ],
+      "error": "Too many endpoints are unhealthy"
+    },
+    {
+      "name": "Search Components Integration",
+      "status": "PASS",
+      "duration": 0,
+      "timestamp": "2025-06-19T21:34:12.302Z",
+      "validComponents": 4,
+      "totalComponents": 4,
+      "details": [
+        {
+          "component": "SearchBar.tsx",
+          "checks": {
+            "hasReactImport": true,
+            "hasTypeScriptInterface": true,
+            "hasExportDefault": true,
+            "hasJSXReturn": true,
+            "hasProperTyping": true
+          },
+          "score": "5/5",
+          "valid": true
+        },
+        {
+          "component": "SearchFilters.tsx",
+          "checks": {
+            "hasReactImport": true,
+            "hasTypeScriptInterface": true,
+            "hasExportDefault": true,
+            "hasJSXReturn": true,
+            "hasProperTyping": true
+          },
+          "score": "5/5",
+          "valid": true
+        },
+        {
+          "component": "SearchResults.tsx",
+          "checks": {
+            "hasReactImport": true,
+            "hasTypeScriptInterface": true,
+            "hasExportDefault": true,
+            "hasJSXReturn": true,
+            "hasProperTyping": true
+          },
+          "score": "5/5",
+          "valid": true
+        },
+        {
+          "component": "SearchSuggestions.tsx",
+          "checks": {
+            "hasReactImport": true,
+            "hasTypeScriptInterface": true,
+            "hasExportDefault": true,
+            "hasJSXReturn": true,
+            "hasProperTyping": true
+          },
+          "score": "5/5",
+          "valid": true
+        }
+      ]
+    },
+    {
+      "name": "State Management Stores",
+      "status": "PASS",
+      "duration": 0,
+      "timestamp": "2025-06-19T21:34:13.306Z",
+      "validStores": 6,
+      "totalStores": 6,
+      "details": [
+        {
+          "store": "memoryStore.ts",
+          "checks": {
+            "hasZustandImport": true,
+            "hasCreateFunction": true,
+            "hasInterface": true,
+            "hasDevtools": true,
+            "hasActions": true,
+            "hasTypeScript": true
+          },
+          "score": "6/6",
+          "valid": true
+        },
+        {
+          "store": "searchStore.ts",
+          "checks": {
+            "hasZustandImport": true,
+            "hasCreateFunction": true,
+            "hasInterface": true,
+            "hasDevtools": true,
+            "hasActions": true,
+            "hasTypeScript": true
+          },
+          "score": "6/6",
+          "valid": true
+        },
+        {
+          "store": "authStore.ts",
+          "checks": {
+            "hasZustandImport": true,
+            "hasCreateFunction": true,
+            "hasInterface": true,
+            "hasDevtools": true,
+            "hasActions": true,
+            "hasTypeScript": true
+          },
+          "score": "6/6",
+          "valid": true
+        },
+        {
+          "store": "collectionStore.ts",
+          "checks": {
+            "hasZustandImport": true,
+            "hasCreateFunction": true,
+            "hasInterface": true,
+            "hasDevtools": true,
+            "hasActions": true,
+            "hasTypeScript": true
+          },
+          "score": "6/6",
+          "valid": true
+        },
+        {
+          "store": "userStore.ts",
+          "checks": {
+            "hasZustandImport": true,
+            "hasCreateFunction": true,
+            "hasInterface": true,
+            "hasDevtools": true,
+            "hasActions": true,
+            "hasTypeScript": true
+          },
+          "score": "6/6",
+          "valid": true
+        },
+        {
+          "store": "uiStore.ts",
+          "checks": {
+            "hasZustandImport": true,
+            "hasCreateFunction": true,
+            "hasInterface": true,
+            "hasDevtools": true,
+            "hasActions": true,
+            "hasTypeScript": true
+          },
+          "score": "6/6",
+          "valid": true
+        }
+      ]
+    },
+    {
+      "name": "API Client Configuration",
+      "status": "PASS",
+      "duration": 0,
+      "timestamp": "2025-06-19T21:34:14.308Z",
+      "passedChecks": 8,
+      "totalChecks": 8,
+      "score": "8/8",
+      "details": {
+        "hasAxiosImport": true,
+        "hasBaseURLs": true,
+        "hasErrorHandling": true,
+        "hasAuthSupport": true,
+        "hasTypeImports": true,
+        "hasAPIFunctions": true,
+        "hasTimeoutConfig": true,
+        "hasMultipleServices": true
+      }
+    },
+    {
+      "name": "TypeScript Type Safety",
+      "status": "PASS",
+      "duration": 0,
+      "timestamp": "2025-06-19T21:34:15.310Z",
+      "passedChecks": 8,
+      "totalChecks": 8,
+      "score": "8/8",
+      "details": {
+        "hasMemoryInterface": true,
+        "hasSearchInterface": true,
+        "hasUserInterface": true,
+        "hasCollectionInterface": true,
+        "hasEntityInterface": true,
+        "hasAPIResponseTypes": true,
+        "hasProperExports": true,
+        "hasComplexTypes": true
+      }
+    },
+    {
+      "name": "Documentation Completeness",
+      "status": "PASS",
+      "duration": 3,
+      "timestamp": "2025-06-19T21:34:16.315Z",
+      "totalDocs": 6,
+      "existingDocs": 6,
+      "substantialDocs": 6,
+      "missingRequired": 0,
+      "details": [
+        {
+          "file": "README.md",
+          "exists": true,
+          "wordCount": 858,
+          "substantial": true,
+          "required": true
+        },
+        {
+          "file": "CHANGELOG.md",
+          "exists": true,
+          "wordCount": 704,
+          "substantial": true,
+          "required": true
+        },
+        {
+          "file": "PROJECT_STATE.md",
+          "exists": true,
+          "wordCount": 1138,
+          "substantial": true,
+          "required": true
+        },
+        {
+          "file": "CONTRIBUTING.md",
+          "exists": true,
+          "wordCount": 894,
+          "substantial": true,
+          "required": false
+        },
+        {
+          "file": "docs/ARCHITECTURE.md",
+          "exists": true,
+          "wordCount": 1396,
+          "substantial": true,
+          "required": false
+        },
+        {
+          "file": "docs/DESIGN.md",
+          "exists": true,
+          "wordCount": 1106,
+          "substantial": true,
+          "required": false
+        }
+      ]
+    }
+  ],
+  "environment": {
+    "nodeVersion": "v22.16.0",
+    "platform": "linux",
+    "timestamp": "2025-06-19T21:34:04.754Z"
+  },
+  "totalDuration": 12564
+}

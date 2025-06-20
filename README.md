@@ -1,0 +1,281 @@
+# Knowledge RAG Web UI
+
+A modern web interface for the Knowledge RAG System, inspired by [Mem0](https://github.com/mem0ai/mem0). This application provides an intuitive way to manage memories, search through your knowledge base, organize collections, and visualize entity relationships.
+
+## 🎯 Project Vision
+
+Create a beautiful, user-friendly interface that makes it easy to:
+- **Store Memories**: Save and organize your thoughts, documents, and knowledge
+- **Search Intelligently**: Use hybrid search to find exactly what you need
+- **Visualize Connections**: See how your knowledge is interconnected
+- **Manage Collections**: Organize memories into meaningful groups
+- **Track Insights**: Understand patterns in your knowledge base
+
+## 🏗️ Architecture
+
+```
+Frontend (React + TypeScript)
+    ↓
+API Gateway (Express)
+    ↓
+Knowledge RAG System
+    ├── RAG Server (8002)
+    ├── Knowledge Graph (8001)
+    ├── Vector DB (8003)
+    └── Unified DB (8004)
+```
+
+## ✨ Planned Features
+
+### Core Features
+- **Memory Management**
+  - Create, edit, and delete memories
+  - Rich text editor with markdown support
+  - Metadata and tagging system
+  - Version history
+
+- **Advanced Search**
+  - Hybrid search (vector + full-text)
+  - Filters and faceted search
+  - Search suggestions
+  - Saved searches
+
+- **Collections**
+  - Organize memories into collections
+  - Nested collections support
+  - Sharing and collaboration
+  - Collection templates
+
+- **Knowledge Graph**
+  - Interactive visualization
+  - Entity relationships
+  - Pattern discovery
+  - Graph exploration
+
+### User Experience
+- **Modern UI/UX**
+  - Clean, minimalist design
+  - Dark/light themes
+  - Responsive layout
+  - Keyboard shortcuts
+
+- **Performance**
+  - Fast search results
+  - Infinite scroll
+  - Optimistic updates
+  - Offline support
+
+- **Accessibility**
+  - ARIA compliance
+  - Keyboard navigation
+  - Screen reader support
+  - High contrast mode
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **React 18** - UI framework
+- **TypeScript** - Type safety
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **React Hook Form** - Form management  
+- **Yup** - Schema validation
+- **@uiw/react-md-editor** - Markdown editing
+- **Zustand** - State management
+- **TanStack Query** - Data fetching
+- **Lucide React** - Icons
+- **D3.js** - Knowledge graph visualization
+
+### Backend Integration
+- **MCP Servers** - Model Context Protocol integration
+  - RAG Server (8002) - Memory storage and retrieval
+  - Knowledge Graph (8001) - Entity extraction and relationships
+  - Vector DB (8003) - Semantic search capabilities
+  - Unified DB (8004) - Cross-database operations
+- **JSON-RPC** - Communication protocol
+- **WebSocket** - Real-time updates (planned)
+- **PostgreSQL** - Data persistence
+- **Redis** - Caching layer
+
+### Development Tools
+- **Vitest** - Unit testing
+- **Playwright** - E2E testing
+- **Storybook** - Component development
+- **ESLint/Prettier** - Code quality
+
+## 📋 Project Status
+
+**Project ID**: 9fbc487c-1b29-4f74-b235-4697cf9610e5
+
+**Current Phase**: Core Feature Development ✅
+
+**Total Tasks**: 30
+- High Priority: 10
+- Medium Priority: 13
+- Low Priority: 7
+
+**Estimated Hours**: ~110 hours
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Access to Knowledge RAG System API
+
+### Installation
+```bash
+# Clone the repository
+cd /opt/projects/projects/knowledge-rag-webui
+
+# Install dependencies
+npm install
+
+# Copy environment variables
+cp .env.example .env
+
+# Start development server
+npm run dev
+```
+
+### Configuration
+Edit `.env` file with your settings:
+```env
+VITE_API_URL=http://192.168.1.24:3001
+VITE_RAG_URL=http://192.168.1.24:8002
+VITE_KG_URL=http://192.168.1.24:8001
+VITE_VECTOR_URL=http://192.168.1.24:8003
+VITE_UNIFIED_URL=http://192.168.1.24:8004
+VITE_WS_URL=ws://192.168.1.24:3001
+```
+
+## 🔌 API Integration
+
+The web UI integrates with Knowledge RAG System through MCP (Model Context Protocol) servers:
+
+### MCP Adapter Architecture
+```typescript
+// Core MCP communication
+src/services/api/mcp-adapter.ts
+├── JSON-RPC protocol implementation
+├── Memory operations (CRUD, search)
+├── Knowledge Graph operations
+├── Collection management
+└── Connection health checks
+```
+
+### Available APIs
+- **Memory API** - Create, read, update, delete memories
+- **Search API** - Hybrid, vector, and full-text search
+- **Knowledge Graph API** - Entity extraction and graph visualization
+- **Collection API** - Organize memories into collections
+
+### Testing Integration
+Access the MCP test page at `/test-mcp` (development mode only) to:
+- Verify server connectivity
+- Test memory operations
+- Validate search functionality
+- Check knowledge graph extraction
+
+## 📐 Design Principles
+
+1. **Simplicity First**: Clean interface without clutter
+2. **Speed Matters**: Fast response times and smooth interactions
+3. **Privacy Focused**: Your data stays yours
+4. **Keyboard Friendly**: Power users can navigate without mouse
+5. **Mobile Ready**: Works great on all devices
+
+## 🎨 UI Mockups
+
+### Memory List View
+```
+┌─────────────────────────────────────────┐
+│ 🔍 Search memories...          [+ New]  │
+├─────────────────────────────────────────┤
+│ Filters: All ▼  Sort: Recent ▼         │
+├─────────────────────────────────────────┤
+│ ┌─────────────────────────────────────┐ │
+│ │ Title of Memory                      │ │
+│ │ Preview of content...                │ │
+│ │ 2 hours ago • Work • 3 entities     │ │
+│ └─────────────────────────────────────┘ │
+│ ┌─────────────────────────────────────┐ │
+│ │ Another Memory                       │ │
+│ │ More preview text...                 │ │
+│ │ Yesterday • Personal • 5 entities    │ │
+│ └─────────────────────────────────────┘ │
+└─────────────────────────────────────────┘
+```
+
+### Knowledge Graph View
+```
+┌─────────────────────────────────────────┐
+│          Knowledge Graph                 │
+├─────────────────────────────────────────┤
+│     ○───────○                           │
+│    ╱ ╲     ╱ ╲                         │
+│   ○   ○───○   ○                        │
+│    ╲ ╱     ╲ ╱                         │
+│     ○───────○                           │
+│                                         │
+│ Entities: 24  Relations: 37            │
+└─────────────────────────────────────────┘
+```
+
+## 🗺️ Roadmap
+
+### Phase 1: Foundation (Week 1-2)
+- [x] Project setup and configuration
+- [ ] Basic layout and navigation
+- [ ] Memory CRUD operations
+- [ ] Simple search functionality
+
+### Phase 2: Core Features (Week 3-4)
+- [ ] Advanced search with filters
+- [ ] Collections management
+- [ ] Rich text editor
+- [ ] Authentication system
+
+### Phase 3: Advanced Features (Week 5-6)
+- [ ] Knowledge graph visualization
+- [ ] Real-time updates
+- [ ] Import/export functionality
+- [ ] Analytics dashboard
+
+### Phase 4: Polish (Week 7-8)
+- [ ] Performance optimization
+- [ ] Mobile responsiveness
+- [ ] Accessibility improvements
+- [ ] Documentation and testing
+
+## 🤝 Contributing
+
+This project is part of the MCP-Enhanced Workspace ecosystem. Contributions are welcome!
+
+1. Check the task list in the project management system
+2. Pick a task and update its status
+3. Create a feature branch
+4. Implement with tests
+5. Submit for review
+
+## 📚 Documentation
+
+### Project Documentation
+- [Architecture Guide](./docs/ARCHITECTURE.md) - System design and patterns
+- [Development Guide](./docs/DEVELOPMENT.md) - Setup and development workflow
+- [API Documentation](./docs/API_DOCUMENTATION.md) - Complete API reference
+- [Testing Guide](./docs/TESTING.md) - Testing strategies and examples
+- [API Integration Tests](./docs/API_INTEGRATION_E2E_TESTS.md) - E2E test results
+
+### External Resources
+- [Knowledge RAG System Docs](/opt/projects/projects/knowledge-rag-system/README.md)
+- [Mem0 Inspiration](https://github.com/mem0ai/mem0)
+- [Task Management](http://192.168.1.24:5173)
+
+## 📄 License
+
+Part of the MCP-Enhanced Workspace project.
+
+---
+
+**Note**: This is a work in progress. Check the task management system for the latest status and upcoming features.

@@ -1,0 +1,227 @@
+{
+  "timestamp": "2025-06-19T18:23:44.508Z",
+  "summary": {
+    "total": 42,
+    "passed": 42,
+    "failed": 0,
+    "warnings": 0,
+    "passRate": "100.0%"
+  },
+  "tests": [
+    {
+      "name": "Development Server Response",
+      "success": true,
+      "message": "Server responding with status 200"
+    },
+    {
+      "name": "HTML Content Delivery",
+      "success": true,
+      "message": "HTML contains required React root and title elements"
+    },
+    {
+      "name": "File exists: src/App.tsx",
+      "success": true,
+      "message": "File exists (1597 bytes)"
+    },
+    {
+      "name": "File exists: src/main.tsx",
+      "success": true,
+      "message": "File exists (230 bytes)"
+    },
+    {
+      "name": "File exists: src/index.css",
+      "success": true,
+      "message": "File exists (3455 bytes)"
+    },
+    {
+      "name": "File exists: src/components/layout/Layout.tsx",
+      "success": true,
+      "message": "File exists (1051 bytes)"
+    },
+    {
+      "name": "File exists: src/components/layout/Header.tsx",
+      "success": true,
+      "message": "File exists (3983 bytes)"
+    },
+    {
+      "name": "File exists: src/components/layout/Sidebar.tsx",
+      "success": true,
+      "message": "File exists (4863 bytes)"
+    },
+    {
+      "name": "File exists: src/pages/HomePage.tsx",
+      "success": true,
+      "message": "File exists (3463 bytes)"
+    },
+    {
+      "name": "File exists: src/pages/MemoriesPage.tsx",
+      "success": true,
+      "message": "File exists (7644 bytes)"
+    },
+    {
+      "name": "File exists: src/pages/MemoryEditorPage.tsx",
+      "success": true,
+      "message": "File exists (3004 bytes)"
+    },
+    {
+      "name": "File exists: src/pages/MemoryDetailPage.tsx",
+      "success": true,
+      "message": "File exists (8879 bytes)"
+    },
+    {
+      "name": "File exists: src/components/memory/MemoryList.tsx",
+      "success": true,
+      "message": "File exists (1824 bytes)"
+    },
+    {
+      "name": "File exists: src/components/memory/MemoryCard.tsx",
+      "success": true,
+      "message": "File exists (5165 bytes)"
+    },
+    {
+      "name": "File exists: src/components/memory/MemoryEditor.tsx",
+      "success": true,
+      "message": "File exists (11118 bytes)"
+    },
+    {
+      "name": "File exists: src/components/common/MarkdownRenderer.tsx",
+      "success": true,
+      "message": "File exists (565 bytes)"
+    },
+    {
+      "name": "File exists: src/types/index.ts",
+      "success": true,
+      "message": "File exists (1795 bytes)"
+    },
+    {
+      "name": "File exists: src/lib/utils.ts",
+      "success": true,
+      "message": "File exists (165 bytes)"
+    },
+    {
+      "name": "File exists: package.json",
+      "success": true,
+      "message": "File exists (1179 bytes)"
+    },
+    {
+      "name": "File exists: tailwind.config.js",
+      "success": true,
+      "message": "File exists (1223 bytes)"
+    },
+    {
+      "name": "File exists: vite.config.ts",
+      "success": true,
+      "message": "File exists (306 bytes)"
+    },
+    {
+      "name": "File exists: tsconfig.json",
+      "success": true,
+      "message": "File exists (119 bytes)"
+    },
+    {
+      "name": "TypeScript Compilation",
+      "success": true,
+      "message": "TypeScript compilation successful"
+    },
+    {
+      "name": "ESLint Check",
+      "success": true,
+      "message": "ESLint checks passed"
+    },
+    {
+      "name": "Production Build",
+      "success": true,
+      "message": "Build completed successfully"
+    },
+    {
+      "name": "Route: Home Page (/)",
+      "success": true,
+      "message": "Route configured in App.tsx"
+    },
+    {
+      "name": "Route: Memories Page (/memories)",
+      "success": true,
+      "message": "Route configured in App.tsx"
+    },
+    {
+      "name": "Route: New Memory Page (/memories/new)",
+      "success": true,
+      "message": "Route configured in App.tsx"
+    },
+    {
+      "name": "Route: Memory Detail Page (/memories/1)",
+      "success": true,
+      "message": "Route uses dynamic parameter or placeholder"
+    },
+    {
+      "name": "Route: Edit Memory Page (/memories/1/edit)",
+      "success": true,
+      "message": "Route uses dynamic parameter or placeholder"
+    },
+    {
+      "name": "Route: Search Page (/search)",
+      "success": true,
+      "message": "Route configured in App.tsx"
+    },
+    {
+      "name": "Route: Collections Page (/collections)",
+      "success": true,
+      "message": "Route configured in App.tsx"
+    },
+    {
+      "name": "Route: Knowledge Graph Page (/graph)",
+      "success": true,
+      "message": "Route configured in App.tsx"
+    },
+    {
+      "name": "Route: Analytics Page (/analytics)",
+      "success": true,
+      "message": "Route configured in App.tsx"
+    },
+    {
+      "name": "Route: Settings Page (/settings)",
+      "success": true,
+      "message": "Route configured in App.tsx"
+    },
+    {
+      "name": "React Components Import Correctly",
+      "success": true,
+      "message": "All components have proper imports and exports"
+    },
+    {
+      "name": "TypeScript Types Definition",
+      "success": true,
+      "message": "All required types are defined"
+    },
+    {
+      "name": "Tailwind CSS Configuration",
+      "success": true,
+      "message": "Tailwind config properly configured"
+    },
+    {
+      "name": "CSS Variables for Theming",
+      "success": true,
+      "message": "CSS theming properly configured"
+    },
+    {
+      "name": "Package.json Dependencies",
+      "success": true,
+      "message": "All required dependencies are installed"
+    },
+    {
+      "name": "Memory Types and Interfaces",
+      "success": true,
+      "message": "Memory interface properly defined with required fields"
+    },
+    {
+      "name": "Memory Editor Form Validation",
+      "success": true,
+      "message": "Form validation properly implemented"
+    }
+  ],
+  "environment": {
+    "node": "v22.16.0",
+    "platform": "linux",
+    "arch": "x64"
+  }
+}
