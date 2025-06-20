@@ -4,6 +4,7 @@ import { useAccessibility } from '@/contexts/AccessibilityContext'
 import { ThemeRadioGroup, ThemeToggle } from '@/components/ThemeToggle'
 import { useAuthStore } from '@/stores'
 import { User, Palette, Shield, Download, Bell, Globe, Eye, Keyboard } from 'lucide-react'
+import { KeyboardShortcutsList } from '../hooks/useKeyboardShortcuts'
 
 export const SettingsPage: React.FC = () => {
   const { theme, resolvedTheme } = useTheme()
@@ -30,7 +31,8 @@ export const SettingsPage: React.FC = () => {
               { icon: Bell, label: 'Notifications', id: 'notifications' },
               { icon: Shield, label: 'Privacy', id: 'privacy' },
               { icon: Download, label: 'Data Export', id: 'export' },
-              { icon: Globe, label: 'Language', id: 'language' }
+              { icon: Globe, label: 'Language', id: 'language' },
+              { icon: Keyboard, label: 'Keyboard Shortcuts', id: 'shortcuts' }
             ].map(({ icon: Icon, label, id }) => (
               <button
                 key={id}
@@ -395,6 +397,22 @@ export const SettingsPage: React.FC = () => {
                   </button>
                 ))}
               </div>
+            </div>
+          </div>
+
+          {/* Keyboard Shortcuts Section */}
+          <div id="shortcuts" className="bg-card border rounded-lg p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <Keyboard className="h-5 w-5 text-primary" />
+              <h2 className="text-xl font-semibold">Keyboard Shortcuts</h2>
+            </div>
+            
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Navigate faster with keyboard shortcuts. Press <kbd className="px-2 py-1 text-xs font-mono bg-gray-200 dark:bg-gray-700 rounded">Shift+?</kbd> anytime to see this list.
+              </p>
+              
+              <KeyboardShortcutsList />
             </div>
           </div>
         </div>

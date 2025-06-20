@@ -167,6 +167,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           onFocus={handleFocus}
           placeholder={placeholder}
           disabled={loading}
+          data-testid="search-input"
           className={`
             flex-1 py-3 px-1 bg-transparent border-none outline-none
             text-gray-900 dark:text-gray-100

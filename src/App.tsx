@@ -12,6 +12,8 @@ import { ProtectedRoute } from './components/auth'
 import { HomePage } from './pages/HomePage'
 import { AuthPage } from './pages/AuthPage'
 import { WebSocketProvider } from './components/providers/WebSocketProvider'
+import { KeyboardShortcutsProvider } from './components/providers/KeyboardShortcutsProvider'
+import { KeyboardShortcutsHelp, KeyboardShortcutsButton } from './components/ui/KeyboardShortcutsHelp'
 
 // Lazy loaded components for code splitting
 const MemoriesPage = lazy(() => import('./pages/MemoriesPage').then(module => ({ default: module.MemoriesPage })))
@@ -233,6 +235,10 @@ function App() {
         </Routes>
                 <OnboardingOverlay />
                 <KeyboardNavHelper />
+                <KeyboardShortcutsProvider>
+                  <KeyboardShortcutsHelp />
+                  <KeyboardShortcutsButton />
+                </KeyboardShortcutsProvider>
               </BrowserRouter>
             </WebSocketProvider>
           </OnboardingProvider>
