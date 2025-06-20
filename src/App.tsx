@@ -1,25 +1,38 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { lazy } from 'react'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { AccessibilityProvider } from './contexts/AccessibilityContext'
 import { OnboardingProvider } from './contexts/OnboardingContext'
 import { OnboardingOverlay } from './components/onboarding/OnboardingOverlay'
+import { SkipToMain, KeyboardNavHelper } from './components/accessibility/AccessibilityComponents'
+import { LazyLoadWrapper, LazyLoadErrorBoundary } from './components/performance/LazyLoadWrapper'
 import { Layout } from './components/layout/Layout'
 import { ProtectedRoute } from './components/auth'
 import { HomePage } from './pages/HomePage'
-import { MemoriesPage } from './pages/MemoriesPage'
-import { MemoryEditorPage } from './pages/MemoryEditorPage'
-import { MemoryDetailPage } from './pages/MemoryDetailPage'
-import { SearchPage } from './pages/SearchPage'
 import { AuthPage } from './pages/AuthPage'
-import { CollectionsPage } from './pages/CollectionsPage'
-import { GraphPage } from './pages/GraphPage'
-import { SettingsPage } from './pages/SettingsPage'
-import { TestMCPPage } from './pages/TestMCP'
+
+// Lazy loaded components for code splitting
+const MemoriesPage = lazy(() => import('./pages/MemoriesPage').then(module => ({ default: module.MemoriesPage })))
+const MemoryEditorPage = lazy(() => import('./pages/MemoryEditorPage').then(module => ({ default: module.MemoryEditorPage })))
+const MemoryDetailPage = lazy(() => import('./pages/MemoryDetailPage').then(module => ({ default: module.MemoryDetailPage })))
+const SearchPage = lazy(() => import('./pages/SearchPage').then(module => ({ default: module.SearchPage })))
+const CollectionsPage = lazy(() => import('./pages/CollectionsPage').then(module => ({ default: module.CollectionsPage })))
+const GraphPage = lazy(() => import('./pages/GraphPage').then(module => ({ default: module.GraphPage })))
+const SettingsPage = lazy(() => import('./pages/SettingsPage').then(module => ({ default: module.SettingsPage })))
+const TestMCPPage = lazy(() => import('./pages/TestMCP').then(module => ({ default: module.TestMCPPage })))
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes (was cacheTime)
+      retry: 1,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: true,
+      refetchOnMount: false,
+    },
+    mutations: {
       retry: 1,
     },
   },
@@ -29,8 +42,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <OnboardingProvider>
-          <BrowserRouter>
+        <AccessibilityProvider>
+          <OnboardingProvider>
+            <BrowserRouter>
+              <SkipToMain />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
@@ -49,7 +64,11 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <MemoriesPage />
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <MemoriesPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
                 </Layout>
               </ProtectedRoute>
             } 
@@ -59,7 +78,11 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <SearchPage />
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <SearchPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
                 </Layout>
               </ProtectedRoute>
             } 
@@ -69,7 +92,11 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <CollectionsPage />
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <CollectionsPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
                 </Layout>
               </ProtectedRoute>
             } 
@@ -79,7 +106,11 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <GraphPage />
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <GraphPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
                 </Layout>
               </ProtectedRoute>
             } 
@@ -99,7 +130,11 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <SettingsPage />
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <SettingsPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
                 </Layout>
               </ProtectedRoute>
             } 
@@ -109,7 +144,11 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <MemoryEditorPage />
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <MemoryEditorPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
                 </Layout>
               </ProtectedRoute>
             } 
@@ -119,7 +158,11 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <MemoryDetailPage />
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <MemoryDetailPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
                 </Layout>
               </ProtectedRoute>
             } 
@@ -129,7 +172,11 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <MemoryEditorPage />
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <MemoryEditorPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
                 </Layout>
               </ProtectedRoute>
             } 
@@ -138,14 +185,20 @@ function App() {
             path="/test-mcp" 
             element={
               <ProtectedRoute>
-                <TestMCPPage />
+                <LazyLoadErrorBoundary>
+                  <LazyLoadWrapper>
+                    <TestMCPPage />
+                  </LazyLoadWrapper>
+                </LazyLoadErrorBoundary>
               </ProtectedRoute>
             } 
           />
         </Routes>
-          <OnboardingOverlay />
-          </BrowserRouter>
-        </OnboardingProvider>
+              <OnboardingOverlay />
+              <KeyboardNavHelper />
+            </BrowserRouter>
+          </OnboardingProvider>
+        </AccessibilityProvider>
       </ThemeProvider>
     </QueryClientProvider>
   )

@@ -1,14 +1,21 @@
-module.exports = {
-  preset: 'ts-jest',
+export default {
+  preset: 'ts-jest/presets/default-esm',
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
   },
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
-    '^.+\\.(js|jsx)$': 'babel-jest'
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      useESM: true,
+      tsconfig: {
+        jsx: 'react-jsx',
+        esModuleInterop: true,
+        allowSyntheticDefaultImports: true
+      }
+    }]
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   collectCoverageFrom: [
@@ -42,12 +49,5 @@ module.exports = {
   ],
   transformIgnorePatterns: [
     'node_modules/(?!(.*\\.mjs$|@testing-library))'
-  ],
-  globals: {
-    'ts-jest': {
-      tsconfig: {
-        jsx: 'react-jsx'
-      }
-    }
-  }
+  ]
 }

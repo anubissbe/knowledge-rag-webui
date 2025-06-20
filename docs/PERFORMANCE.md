@@ -20,21 +20,57 @@ Guidelines and best practices for optimizing the Knowledge RAG Web UI performanc
 
 ## 🚀 Frontend Optimizations
 
-### Code Splitting
-Implement route-based code splitting:
+### Code Splitting & Lazy Loading
+Our implementation includes comprehensive code splitting with error boundaries:
 
 ```typescript
-// Lazy load pages
-const MemoriesPage = lazy(() => import('./pages/MemoriesPage'))
-const GraphPage = lazy(() => import('./pages/GraphPage'))
+// Route-based code splitting with error handling
+const MemoriesPage = lazy(() => import('./pages/MemoriesPage').then(module => ({ default: module.MemoriesPage })))
+const SearchPage = lazy(() => import('./pages/SearchPage').then(module => ({ default: module.SearchPage })))
 
-// Wrap with Suspense
-<Suspense fallback={<div>Loading...</div>}>
+// LazyLoadWrapper with error boundaries
+<LazyLoadWrapper fallback={<LoadingSpinner />}>
   <Routes>
     <Route path="/memories" element={<MemoriesPage />} />
-    <Route path="/graph" element={<GraphPage />} />
+    <Route path="/search" element={<SearchPage />} />
   </Routes>
-</Suspense>
+</LazyLoadWrapper>
+
+// LazyLoadErrorBoundary for component-level error handling
+<LazyLoadErrorBoundary fallback={<ErrorFallback />}>
+  <LazyComponent />
+</LazyLoadErrorBoundary>
+```
+
+### Performance Hooks
+We provide comprehensive performance optimization hooks:
+
+```typescript
+// Debounce user inputs
+const debouncedSearchTerm = useDebounce(searchTerm, 300)
+
+// Throttle high-frequency events
+const throttledScrollHandler = useThrottle(handleScroll, 16) // 60fps
+
+// Monitor performance
+const { start, end, measure } = usePerformanceMonitor('api-call')
+
+// Batch state updates for better performance
+const [state, setBatchedState] = useBatchedUpdates(initialState, 16)
+
+// Monitor memory usage
+const memoryInfo = useMemoryMonitor()
+
+// Stable callbacks with dependency tracking
+const stableCallback = useStableCallback(expensiveOperation, [dependency])
+
+// Dynamic imports for code splitting
+const { module, loading, error, loadModule } = useDynamicImport(
+  () => import('./ExpensiveComponent')
+)
+
+// Preload resources
+usePreloadResource('/critical-image.jpg', 'image')
 ```
 
 ### Component Optimization
@@ -90,28 +126,91 @@ const MemoryList = ({ memories, onMemoryUpdate }) => {
 ```
 
 ### Virtual Scrolling
-For large lists (1000+ items):
+We provide a built-in VirtualizedList component for optimal performance with large datasets:
 
 ```typescript
-import { FixedSizeList as List } from 'react-window'
+import { VirtualizedList, LazyImage } from '@/components/performance/VirtualizedList'
 
-const VirtualizedMemoryList = ({ memories }) => {
-  const Row = ({ index, style }) => (
-    <div style={style}>
-      <MemoryCard memory={memories[index]} />
+const MemoryListPage = ({ memories }) => {
+  const renderMemoryItem = (memory: Memory, index: number) => (
+    <div className="memory-item" key={memory.id}>
+      <LazyImage
+        src={memory.image}
+        alt={memory.title}
+        placeholder={<div className="image-placeholder">Loading...</div>}
+      />
+      <h3>{memory.title}</h3>
+      <p>{memory.content}</p>
     </div>
   )
 
   return (
-    <List
-      height={600}
-      itemCount={memories.length}
-      itemSize={120}
-      width="100%"
-    >
-      {Row}
-    </List>
+    <VirtualizedList
+      items={memories}
+      itemHeight={200}
+      containerHeight={600}
+      renderItem={renderMemoryItem}
+      overscan={5}
+      onScroll={(scrollTop) => console.log('Scrolled to:', scrollTop)}
+      className="memory-list"
+    />
   )
+}
+
+// LazyImage component with intersection observer
+const ImageGallery = ({ images }) => (
+  <div className="gallery">
+    {images.map(image => (
+      <LazyImage
+        key={image.id}
+        src={image.url}
+        alt={image.description}
+        className="gallery-image"
+        placeholder={<div className="skeleton-loader" />}
+        errorFallback={<div className="error-image">Failed to load</div>}
+      />
+    ))}
+  </div>
+)
+```
+
+### Performance Monitoring Utilities
+Built-in performance monitoring and optimization utilities:
+
+```typescript
+import { 
+  performanceMonitor, 
+  withPerformanceTracking, 
+  useAsyncPerformance,
+  trackMemoryUsage,
+  checkPerformanceBudget 
+} from '@/utils/performance'
+
+// Track component performance
+const OptimizedComponent = withPerformanceTracking(MyComponent, 'MyComponent')
+
+// Monitor async operations
+const MyAsyncComponent = () => {
+  const { startOperation, endOperation } = useAsyncPerformance('data-fetch')
+  
+  const handleFetch = async () => {
+    startOperation()
+    await fetchData()
+    const duration = endOperation()
+    console.log(`Fetch took ${duration}ms`)
+  }
+}
+
+// Check performance budget compliance
+const budget = checkPerformanceBudget()
+if (!budget.passed) {
+  console.warn('Performance budget violations:', budget.violations)
+}
+
+// Track memory usage
+const memoryStats = trackMemoryUsage()
+if (memoryStats && memoryStats.usagePercentage > 80) {
+  console.warn('High memory usage detected')
 }
 ```
 
