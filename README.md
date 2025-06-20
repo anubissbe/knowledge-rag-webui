@@ -317,6 +317,12 @@ This project is part of the MCP-Enhanced Workspace ecosystem. Contributions are 
 
 Part of the MCP-Enhanced Workspace project.
 
+## ☕ Support
+
+If you find this project helpful, consider buying me a coffee!
+
+<a href="https://buymeacoffee.com/anubissbe" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 ---
 
 **Note**: This is a work in progress. Check the task management system for the latest status and upcoming features.
