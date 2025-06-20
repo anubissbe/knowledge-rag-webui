@@ -91,6 +91,7 @@ Knowledge RAG System
   - Interactive onboarding flow with guided tour ✅
   - Responsive layout
   - Keyboard shortcuts for power users ✅
+  - Comprehensive user settings page ✅
 
 - **Performance** ✅
   - Code splitting with lazy loading for optimal bundle size
@@ -335,6 +336,7 @@ This project is part of the MCP-Enhanced Workspace ecosystem. Contributions are 
 - [MCP Integration Guide](./docs/MCP_INTEGRATION.md) - Complete MCP server integration documentation ✅
 - [Analytics Dashboard](./docs/ANALYTICS_DASHBOARD.md) - Comprehensive analytics and insights ✅
 - [Keyboard Shortcuts](./docs/KEYBOARD_SHORTCUTS.md) - Navigation and action shortcuts guide ✅
+- [User Settings](./docs/USER_SETTINGS.md) - Comprehensive settings and preferences guide ✅
 - [API Integration Tests](./docs/API_INTEGRATION_E2E_TESTS.md) - E2E test results
 
 ### External Resources

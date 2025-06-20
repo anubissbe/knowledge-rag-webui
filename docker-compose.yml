@@ -33,9 +33,9 @@ services:
   postgres:
     image: postgres:15-alpine
     environment:
-      POSTGRES_DB: knowledge_rag_db
-      POSTGRES_USER: rag_user
-      POSTGRES_PASSWORD: change_me_in_production
+      POSTGRES_DB: ${POSTGRES_DB:-knowledge_rag_db}
+      POSTGRES_USER: ${POSTGRES_USER:-rag_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
