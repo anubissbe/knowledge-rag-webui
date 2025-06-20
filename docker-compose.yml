@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Web UI
+  web-ui:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - example-rag-server
+    networks:
+      - knowledge-rag-network
+
+  # Example RAG Server
+  example-rag-server:
+    build: ./examples/mcp-servers
+    ports:
+      - "8002:8002"
+    environment:
+      - RAG_PORT=8002
+      - NODE_ENV=production
+    networks:
+      - knowledge-rag-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # PostgreSQL Database (optional, for production setup)
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: knowledge_rag_db
+      POSTGRES_USER: rag_user
+      POSTGRES_PASSWORD: change_me_in_production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - knowledge-rag-network
+    profiles:
+      - production
+
+  # Redis Cache (optional, for production setup)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - knowledge-rag-network
+    profiles:
+      - production
+
+networks:
+  knowledge-rag-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
