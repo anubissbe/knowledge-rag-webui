@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ThemeProvider } from './contexts/ThemeContext'
 import { Layout } from './components/layout/Layout'
 import { ProtectedRoute } from './components/auth'
 import { HomePage } from './pages/HomePage'
@@ -10,6 +11,7 @@ import { SearchPage } from './pages/SearchPage'
 import { AuthPage } from './pages/AuthPage'
 import { CollectionsPage } from './pages/CollectionsPage'
 import { GraphPage } from './pages/GraphPage'
+import { SettingsPage } from './pages/SettingsPage'
 import { TestMCPPage } from './pages/TestMCP'
 
 const queryClient = new QueryClient({
@@ -24,7 +26,8 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <ThemeProvider>
+        <BrowserRouter>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
@@ -93,7 +96,7 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <div>Settings Page (Coming Soon)</div>
+                  <SettingsPage />
                 </Layout>
               </ProtectedRoute>
             } 
@@ -137,7 +140,8 @@ function App() {
             } 
           />
         </Routes>
-      </BrowserRouter>
+        </BrowserRouter>
+      </ThemeProvider>
     </QueryClientProvider>
   )
 }

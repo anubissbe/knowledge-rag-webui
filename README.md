@@ -80,7 +80,7 @@ Knowledge RAG System
 ### User Experience
 - **Modern UI/UX**
   - Clean, minimalist design
-  - Dark/light themes
+  - Dark/light/system themes with auto-detection ✅
   - Responsive layout
   - Keyboard shortcuts
 
@@ -123,10 +123,10 @@ Knowledge RAG System
 - **Redis** - Caching layer
 
 ### Development Tools
-- **Vitest** - Unit testing
-- **Playwright** - E2E testing
-- **Storybook** - Component development
-- **ESLint/Prettier** - Code quality
+- **Jest** - Unit testing ✅
+- **Playwright** - E2E testing ✅  
+- **ESLint** - Code quality ✅
+- **TypeScript** - Type safety ✅
 
 ## 📋 Project Status
 
@@ -306,6 +306,7 @@ This project is part of the MCP-Enhanced Workspace ecosystem. Contributions are 
 - [Development Guide](./docs/DEVELOPMENT.md) - Setup and development workflow
 - [API Documentation](./docs/API_DOCUMENTATION.md) - Complete API reference
 - [Testing Guide](./docs/TESTING.md) - Testing strategies and examples
+- [Theme System](./docs/THEME_SYSTEM.md) - Dark/light theme implementation ✅
 - [API Integration Tests](./docs/API_INTEGRATION_E2E_TESTS.md) - E2E test results
 
 ### External Resources

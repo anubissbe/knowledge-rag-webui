@@ -1,29 +1,15 @@
 import { type FC, useState, useEffect, useRef } from 'react'
-import { Search, Moon, Sun, User, LogOut, Command, Settings } from 'lucide-react'
+import { Search, User, LogOut, Command, Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../stores'
+import { ThemeToggleButton } from '../ThemeToggle'
 import { cn } from '@/lib/utils'
 
 export const Header: FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    return document.documentElement.classList.contains('dark')
-  })
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const { user, isAuthenticated, logout } = useAuthStore()
-
-  const toggleTheme = () => {
-    const newMode = !isDarkMode
-    setIsDarkMode(newMode)
-    if (newMode) {
-      document.documentElement.classList.add('dark')
-      document.documentElement.setAttribute('data-color-mode', 'dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-      document.documentElement.setAttribute('data-color-mode', 'light')
-    }
-  }
 
   const handleLogout = async () => {
     try {
@@ -83,13 +69,7 @@ export const Header: FC = () => {
         {/* Right side actions */}
         <div className="flex items-center gap-4 ml-6">
           {/* Theme toggle */}
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-muted transition-colors"
-            aria-label="Toggle theme"
-          >
-            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
+          <ThemeToggleButton />
 
           {/* User menu - only show if authenticated */}
           {isAuthenticated ? (
