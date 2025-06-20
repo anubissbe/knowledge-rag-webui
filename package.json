@@ -24,7 +24,8 @@
     "performance": "npm run build && npm run bundle-analyze",
     "docker:build": "docker build -t knowledge-rag-webui .",
     "docker:run": "docker run -p 3000:3000 knowledge-rag-webui",
-    "docker:compose": "docker-compose up -d"
+    "docker:compose": "docker-compose up -d",
+    "test:mcp": "node scripts/test-mcp-integration.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -33,6 +34,7 @@
     "@types/socket.io-client": "^1.4.36",
     "@uiw/react-md-editor": "^4.0.7",
     "axios": "^1.10.0",
+    "chalk": "^5.4.1",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
     "lucide-react": "^0.518.0",

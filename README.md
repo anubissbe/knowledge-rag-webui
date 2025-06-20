@@ -332,6 +332,7 @@ This project is part of the MCP-Enhanced Workspace ecosystem. Contributions are 
 - [Performance Guide](./docs/PERFORMANCE.md) - Optimization strategies and monitoring ✅
 - [Import/Export Guide](./docs/IMPORT_EXPORT.md) - File import and memory export functionality ✅
 - [WebSocket Real-time Sync](./docs/WEBSOCKET_REALTIME.md) - Real-time synchronization with Socket.IO ✅
+- [MCP Integration Guide](./docs/MCP_INTEGRATION.md) - Complete MCP server integration documentation ✅
 - [API Integration Tests](./docs/API_INTEGRATION_E2E_TESTS.md) - E2E test results
 
 ### External Resources
