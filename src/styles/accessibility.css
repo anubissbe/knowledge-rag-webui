@@ -1,0 +1,331 @@
+/* Accessibility Styles */
+
+/* Screen Reader Only - hide visually but keep accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus visible when tabbing but not clicking */
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  --background: hsl(0 0% 0%);
+  --foreground: hsl(0 0% 100%);
+  --card: hsl(0 0% 5%);
+  --card-foreground: hsl(0 0% 100%);
+  --popover: hsl(0 0% 5%);
+  --popover-foreground: hsl(0 0% 100%);
+  --primary: hsl(60 100% 50%);
+  --primary-foreground: hsl(0 0% 0%);
+  --secondary: hsl(0 0% 20%);
+  --secondary-foreground: hsl(0 0% 100%);
+  --muted: hsl(0 0% 10%);
+  --muted-foreground: hsl(0 0% 90%);
+  --accent: hsl(0 0% 15%);
+  --accent-foreground: hsl(0 0% 100%);
+  --destructive: hsl(0 100% 50%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(0 0% 30%);
+  --input: hsl(0 0% 25%);
+  --ring: hsl(60 100% 50%);
+}
+
+.high-contrast * {
+  border-color: hsl(0 0% 40%) !important;
+}
+
+.high-contrast button,
+.high-contrast input,
+.high-contrast select,
+.high-contrast textarea {
+  border: 2px solid hsl(0 0% 70%) !important;
+}
+
+.high-contrast a {
+  color: hsl(180 100% 50%) !important;
+  text-decoration: underline !important;
+}
+
+.high-contrast a:hover,
+.high-contrast a:focus {
+  color: hsl(60 100% 50%) !important;
+  background-color: hsl(0 0% 20%) !important;
+}
+
+/* Reduced Motion */
+.reduced-motion,
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Large Text */
+.large-text {
+  font-size: 125%;
+}
+
+.large-text h1 { font-size: 3rem; }
+.large-text h2 { font-size: 2.5rem; }
+.large-text h3 { font-size: 2rem; }
+.large-text h4 { font-size: 1.75rem; }
+.large-text h5 { font-size: 1.5rem; }
+.large-text h6 { font-size: 1.25rem; }
+
+.large-text .text-xs { font-size: 0.875rem; }
+.large-text .text-sm { font-size: 1rem; }
+.large-text .text-base { font-size: 1.25rem; }
+.large-text .text-lg { font-size: 1.5rem; }
+.large-text .text-xl { font-size: 1.75rem; }
+.large-text .text-2xl { font-size: 2rem; }
+.large-text .text-3xl { font-size: 2.5rem; }
+
+/* Screen Reader Mode */
+.screen-reader-mode [aria-hidden="true"] {
+  display: none !important;
+}
+
+.screen-reader-mode .sr-only {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0.25rem !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  border: 1px solid hsl(var(--border)) !important;
+  background: hsl(var(--muted)) !important;
+  color: hsl(var(--muted-foreground)) !important;
+  font-size: 0.75rem !important;
+}
+
+/* Keyboard Navigation */
+.keyboard-navigation *:focus {
+  outline: none !important;
+}
+
+/* Focus Ring Styles */
+[data-focus-ring="default"] *:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+[data-focus-ring="enhanced"] *:focus-visible {
+  outline: 3px solid hsl(var(--ring));
+  outline-offset: 3px;
+  box-shadow: 0 0 0 1px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+}
+
+[data-focus-ring="high-contrast"] *:focus-visible {
+  outline: 4px solid hsl(60 100% 50%);
+  outline-offset: 2px;
+  background-color: hsl(0 0% 0%) !important;
+  color: hsl(60 100% 50%) !important;
+  box-shadow: 0 0 0 2px hsl(0 0% 100%), 0 0 0 6px hsl(60 100% 50%);
+}
+
+/* Skip Links */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  z-index: 9999;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* High Contrast Focus States */
+.high-contrast *:focus-visible {
+  outline: 3px solid hsl(60 100% 50%) !important;
+  outline-offset: 2px !important;
+  background-color: hsl(0 0% 0%) !important;
+  color: hsl(60 100% 50%) !important;
+}
+
+/* Ensure sufficient color contrast */
+.high-contrast .text-muted-foreground {
+  color: hsl(0 0% 80%) !important;
+}
+
+.high-contrast .border {
+  border-color: hsl(0 0% 50%) !important;
+}
+
+/* Enhanced Button States */
+.high-contrast button:hover {
+  background-color: hsl(60 100% 50%) !important;
+  color: hsl(0 0% 0%) !important;
+  border-color: hsl(60 100% 50%) !important;
+}
+
+.high-contrast button:active {
+  background-color: hsl(45 100% 40%) !important;
+  border-color: hsl(45 100% 40%) !important;
+}
+
+/* Form Elements */
+.high-contrast input:focus,
+.high-contrast textarea:focus,
+.high-contrast select:focus {
+  border-color: hsl(60 100% 50%) !important;
+  box-shadow: 0 0 0 2px hsl(60 100% 50%) !important;
+}
+
+/* Links in high contrast */
+.high-contrast .text-primary {
+  color: hsl(180 100% 60%) !important;
+}
+
+.high-contrast .bg-primary {
+  background-color: hsl(60 100% 50%) !important;
+  color: hsl(0 0% 0%) !important;
+}
+
+/* Status indicators */
+.high-contrast .bg-green-500 {
+  background-color: hsl(120 100% 50%) !important;
+}
+
+.high-contrast .bg-red-500 {
+  background-color: hsl(0 100% 50%) !important;
+}
+
+.high-contrast .bg-yellow-500 {
+  background-color: hsl(60 100% 50%) !important;
+  color: hsl(0 0% 0%) !important;
+}
+
+.high-contrast .bg-blue-500 {
+  background-color: hsl(240 100% 50%) !important;
+}
+
+/* Keyboard navigation helpers */
+kbd {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.high-contrast kbd {
+  background-color: hsl(0 0% 20%) !important;
+  border-color: hsl(0 0% 50%) !important;
+  color: hsl(0 0% 100%) !important;
+}
+
+/* Loading states */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+.reduced-motion .loading-spinner {
+  animation: none;
+}
+
+.reduced-motion .loading-spinner::after {
+  content: "Loading...";
+  display: block;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Progress bars */
+.progress-bar {
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background-color: hsl(var(--secondary));
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: hsl(var(--primary));
+  transition: width 0.3s ease;
+}
+
+.reduced-motion .progress-bar-fill {
+  transition: none;
+}
+
+/* Ensure text selection is visible in high contrast */
+.high-contrast ::selection {
+  background-color: hsl(60 100% 50%) !important;
+  color: hsl(0 0% 0%) !important;
+}
+
+.high-contrast ::-moz-selection {
+  background-color: hsl(60 100% 50%) !important;
+  color: hsl(0 0% 0%) !important;
+}
+
+/* Scrollbar styling for high contrast */
+.high-contrast ::-webkit-scrollbar {
+  background-color: hsl(0 0% 10%) !important;
+}
+
+.high-contrast ::-webkit-scrollbar-thumb {
+  background-color: hsl(0 0% 50%) !important;
+  border: 1px solid hsl(0 0% 70%) !important;
+}
+
+.high-contrast ::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(60 100% 50%) !important;
+}
+
+/* Focus indicators for complex components */
+.high-contrast [role="button"]:focus,
+.high-contrast [role="tab"]:focus,
+.high-contrast [role="menuitem"]:focus {
+  outline: 3px solid hsl(60 100% 50%) !important;
+  outline-offset: 2px !important;
+}
+
+/* Ensure disabled elements are clearly distinguishable */
+.high-contrast :disabled,
+.high-contrast [aria-disabled="true"] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  border-color: hsl(0 0% 30%) !important;
+}

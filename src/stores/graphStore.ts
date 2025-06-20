@@ -65,6 +65,14 @@ interface GraphState {
   setLoading: (loading: boolean) => void
   setError: (error: string | null) => void
   reset: () => void
+  
+  // Real-time update methods
+  addNode: (node: GraphNode) => void
+  updateNode: (nodeId: string, node: Partial<GraphNode>) => void
+  removeNode: (nodeId: string) => void
+  addEdge: (edge: GraphEdge) => void
+  updateEdge: (edgeId: string, edge: Partial<GraphEdge>) => void
+  removeEdge: (edgeId: string) => void
 }
 
 const initialState = {
@@ -490,6 +498,130 @@ export const useGraphStore = create<GraphState>()(
       setError: (error) => set({ error }),
 
       reset: () => set(initialState),
+      
+      // Real-time update methods
+      addNode: (node) => {
+        set(state => {
+          if (!state.graphData) return state
+          
+          const nodes = [...state.graphData.nodes, node]
+          const positionedNode = { ...node }
+          
+          // Position new node near center with some randomness
+          positionedNode.x = (Math.random() - 0.5) * 200
+          positionedNode.y = (Math.random() - 0.5) * 200
+          
+          return {
+            graphData: {
+              ...state.graphData,
+              nodes,
+              metadata: {
+                ...state.graphData.metadata,
+                totalNodes: nodes.length,
+              },
+            },
+          }
+        })
+      },
+
+      updateNode: (nodeId, nodeUpdate) => {
+        set(state => {
+          if (!state.graphData) return state
+          
+          const nodes = state.graphData.nodes.map(node =>
+            node.id === nodeId ? { ...node, ...nodeUpdate } : node
+          )
+          
+          return {
+            graphData: {
+              ...state.graphData,
+              nodes,
+            },
+          }
+        })
+      },
+
+      removeNode: (nodeId) => {
+        set(state => {
+          if (!state.graphData) return state
+          
+          const nodes = state.graphData.nodes.filter(node => node.id !== nodeId)
+          const edges = state.graphData.edges.filter(
+            edge => edge.source !== nodeId && edge.target !== nodeId
+          )
+          
+          return {
+            graphData: {
+              ...state.graphData,
+              nodes,
+              edges,
+              metadata: {
+                ...state.graphData.metadata,
+                totalNodes: nodes.length,
+                totalEdges: edges.length,
+              },
+            },
+            selectedNode: state.selectedNode?.id === nodeId ? null : state.selectedNode,
+            hoveredNode: state.hoveredNode?.id === nodeId ? null : state.hoveredNode,
+          }
+        })
+      },
+
+      addEdge: (edge) => {
+        set(state => {
+          if (!state.graphData) return state
+          
+          const edges = [...state.graphData.edges, edge]
+          
+          return {
+            graphData: {
+              ...state.graphData,
+              edges,
+              metadata: {
+                ...state.graphData.metadata,
+                totalEdges: edges.length,
+              },
+            },
+          }
+        })
+      },
+
+      updateEdge: (edgeId, edgeUpdate) => {
+        set(state => {
+          if (!state.graphData) return state
+          
+          const edges = state.graphData.edges.map(edge =>
+            edge.id === edgeId ? { ...edge, ...edgeUpdate } : edge
+          )
+          
+          return {
+            graphData: {
+              ...state.graphData,
+              edges,
+            },
+          }
+        })
+      },
+
+      removeEdge: (edgeId) => {
+        set(state => {
+          if (!state.graphData) return state
+          
+          const edges = state.graphData.edges.filter(edge => edge.id !== edgeId)
+          
+          return {
+            graphData: {
+              ...state.graphData,
+              edges,
+              metadata: {
+                ...state.graphData.metadata,
+                totalEdges: edges.length,
+              },
+            },
+            selectedEdge: state.selectedEdge?.id === edgeId ? null : state.selectedEdge,
+          }
+        })
+      },
     }),
     { name: 'GraphStore' }
   )

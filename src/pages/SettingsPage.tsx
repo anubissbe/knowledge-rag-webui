@@ -1,11 +1,13 @@
 import React from 'react'
 import { useTheme } from '@/contexts/ThemeContext'
+import { useAccessibility } from '@/contexts/AccessibilityContext'
 import { ThemeRadioGroup, ThemeToggle } from '@/components/ThemeToggle'
 import { useAuthStore } from '@/stores'
-import { User, Palette, Shield, Download, Bell, Globe } from 'lucide-react'
+import { User, Palette, Shield, Download, Bell, Globe, Eye, Keyboard } from 'lucide-react'
 
 export const SettingsPage: React.FC = () => {
   const { theme, resolvedTheme } = useTheme()
+  const { settings, updateSetting, resetSettings } = useAccessibility()
   const { user } = useAuthStore()
 
   return (
@@ -24,6 +26,7 @@ export const SettingsPage: React.FC = () => {
             {[
               { icon: User, label: 'Profile', id: 'profile' },
               { icon: Palette, label: 'Appearance', id: 'appearance' },
+              { icon: Eye, label: 'Accessibility', id: 'accessibility' },
               { icon: Bell, label: 'Notifications', id: 'notifications' },
               { icon: Shield, label: 'Privacy', id: 'privacy' },
               { icon: Download, label: 'Data Export', id: 'export' },
@@ -33,7 +36,7 @@ export const SettingsPage: React.FC = () => {
                 key={id}
                 className={`
                   w-full flex items-center gap-3 px-3 py-2 text-left rounded-lg transition-colors
-                  ${id === 'appearance' 
+                  ${id === 'accessibility' 
                     ? 'bg-primary/10 text-primary' 
                     : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                   }
@@ -120,6 +123,187 @@ export const SettingsPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Accessibility Section */}
+          <div className="bg-card border rounded-lg p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <Eye className="h-5 w-5 text-primary" />
+              <h2 className="text-xl font-semibold">Accessibility</h2>
+            </div>
+            
+            <div className="space-y-6">
+              {/* High Contrast */}
+              <div className="flex items-center justify-between py-3">
+                <div>
+                  <p className="font-medium">High Contrast Mode</p>
+                  <p className="text-sm text-muted-foreground">
+                    Increase contrast for better visibility
+                  </p>
+                </div>
+                <button
+                  onClick={() => updateSetting('highContrast', !settings.highContrast)}
+                  className={`
+                    relative inline-flex h-6 w-11 items-center rounded-full transition-colors
+                    ${settings.highContrast ? 'bg-primary' : 'bg-muted'}
+                  `}
+                  aria-pressed={settings.highContrast}
+                  aria-label="Toggle high contrast mode"
+                >
+                  <span
+                    className={`
+                      inline-block h-4 w-4 transform rounded-full bg-white transition-transform
+                      ${settings.highContrast ? 'translate-x-6' : 'translate-x-1'}
+                    `}
+                  />
+                </button>
+              </div>
+
+              {/* Reduced Motion */}
+              <div className="flex items-center justify-between py-3 border-t border-border">
+                <div>
+                  <p className="font-medium">Reduced Motion</p>
+                  <p className="text-sm text-muted-foreground">
+                    Minimize animations and transitions
+                  </p>
+                </div>
+                <button
+                  onClick={() => updateSetting('reducedMotion', !settings.reducedMotion)}
+                  className={`
+                    relative inline-flex h-6 w-11 items-center rounded-full transition-colors
+                    ${settings.reducedMotion ? 'bg-primary' : 'bg-muted'}
+                  `}
+                  aria-pressed={settings.reducedMotion}
+                  aria-label="Toggle reduced motion"
+                >
+                  <span
+                    className={`
+                      inline-block h-4 w-4 transform rounded-full bg-white transition-transform
+                      ${settings.reducedMotion ? 'translate-x-6' : 'translate-x-1'}
+                    `}
+                  />
+                </button>
+              </div>
+
+              {/* Large Text */}
+              <div className="flex items-center justify-between py-3 border-t border-border">
+                <div>
+                  <p className="font-medium">Large Text</p>
+                  <p className="text-sm text-muted-foreground">
+                    Increase text size for better readability
+                  </p>
+                </div>
+                <button
+                  onClick={() => updateSetting('largeText', !settings.largeText)}
+                  className={`
+                    relative inline-flex h-6 w-11 items-center rounded-full transition-colors
+                    ${settings.largeText ? 'bg-primary' : 'bg-muted'}
+                  `}
+                  aria-pressed={settings.largeText}
+                  aria-label="Toggle large text"
+                >
+                  <span
+                    className={`
+                      inline-block h-4 w-4 transform rounded-full bg-white transition-transform
+                      ${settings.largeText ? 'translate-x-6' : 'translate-x-1'}
+                    `}
+                  />
+                </button>
+              </div>
+
+              {/* Screen Reader Mode */}
+              <div className="flex items-center justify-between py-3 border-t border-border">
+                <div>
+                  <p className="font-medium">Screen Reader Mode</p>
+                  <p className="text-sm text-muted-foreground">
+                    Enhanced support for screen readers
+                  </p>
+                </div>
+                <button
+                  onClick={() => updateSetting('screenReaderMode', !settings.screenReaderMode)}
+                  className={`
+                    relative inline-flex h-6 w-11 items-center rounded-full transition-colors
+                    ${settings.screenReaderMode ? 'bg-primary' : 'bg-muted'}
+                  `}
+                  aria-pressed={settings.screenReaderMode}
+                  aria-label="Toggle screen reader mode"
+                >
+                  <span
+                    className={`
+                      inline-block h-4 w-4 transform rounded-full bg-white transition-transform
+                      ${settings.screenReaderMode ? 'translate-x-6' : 'translate-x-1'}
+                    `}
+                  />
+                </button>
+              </div>
+
+              {/* Keyboard Navigation */}
+              <div className="flex items-center justify-between py-3 border-t border-border">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Keyboard className="h-4 w-4" />
+                    <p className="font-medium">Keyboard Navigation</p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Show keyboard shortcuts and enhance tab navigation
+                  </p>
+                </div>
+                <button
+                  onClick={() => updateSetting('keyboardNavigation', !settings.keyboardNavigation)}
+                  className={`
+                    relative inline-flex h-6 w-11 items-center rounded-full transition-colors
+                    ${settings.keyboardNavigation ? 'bg-primary' : 'bg-muted'}
+                  `}
+                  aria-pressed={settings.keyboardNavigation}
+                  aria-label="Toggle keyboard navigation help"
+                >
+                  <span
+                    className={`
+                      inline-block h-4 w-4 transform rounded-full bg-white transition-transform
+                      ${settings.keyboardNavigation ? 'translate-x-6' : 'translate-x-1'}
+                    `}
+                  />
+                </button>
+              </div>
+
+              {/* Focus Ring Style */}
+              <div className="py-3 border-t border-border">
+                <div className="mb-3">
+                  <p className="font-medium">Focus Ring Style</p>
+                  <p className="text-sm text-muted-foreground">
+                    Choose how focus indicators appear
+                  </p>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {(['default', 'enhanced', 'high-contrast'] as const).map((style) => (
+                    <button
+                      key={style}
+                      onClick={() => updateSetting('focusRing', style)}
+                      className={`
+                        px-3 py-2 text-sm rounded-md border transition-colors capitalize
+                        ${settings.focusRing === style
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'bg-background border-input hover:bg-muted'
+                        }
+                      `}
+                      aria-pressed={settings.focusRing === style}
+                    >
+                      {style.replace('-', ' ')}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Reset Button */}
+              <div className="pt-4 border-t border-border">
+                <button
+                  onClick={resetSettings}
+                  className="px-4 py-2 text-sm bg-muted text-muted-foreground rounded-md hover:bg-muted/80 transition-colors"
+                >
+                  Reset Accessibility Settings
+                </button>
               </div>
             </div>
           </div>

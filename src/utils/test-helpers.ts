@@ -72,12 +72,10 @@ export const renderWithProviders = (
     }
   }), ...renderOptions } = options
 
-  const Wrapper = ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        {children}
-      </BrowserRouter>
-    </QueryClientProvider>
+  const Wrapper = ({ children }: { children: React.ReactNode }) => React.createElement(
+    QueryClientProvider,
+    { client: queryClient },
+    React.createElement(BrowserRouter, null, children)
   )
 
   return render(ui, { wrapper: Wrapper, ...renderOptions })

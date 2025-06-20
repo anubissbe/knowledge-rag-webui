@@ -77,6 +77,13 @@ Knowledge RAG System
   - Pattern discovery
   - Graph exploration
 
+- **Import/Export** ✅
+  - Import documents (Text, Markdown, JSON)
+  - Export memories (JSON, Markdown, PDF)
+  - Batch processing with progress tracking
+  - Drag-and-drop file upload interface
+  - Error handling and validation
+
 ### User Experience
 - **Modern UI/UX**
   - Clean, minimalist design
@@ -125,7 +132,11 @@ Knowledge RAG System
   - Vector DB (8003) - Semantic search capabilities
   - Unified DB (8004) - Cross-database operations
 - **JSON-RPC** - Communication protocol
-- **WebSocket** - Real-time updates (planned)
+- **WebSocket** - Real-time updates with Socket.IO ✅
+  - Live memory synchronization
+  - Collection updates
+  - Knowledge graph real-time changes
+  - User presence tracking
 - **PostgreSQL** - Data persistence
 - **Redis** - Caching layer
 
@@ -179,7 +190,7 @@ VITE_RAG_URL=http://localhost:8002
 VITE_KG_URL=http://localhost:8001
 VITE_VECTOR_URL=http://localhost:8003
 VITE_UNIFIED_URL=http://localhost:8004
-VITE_WS_URL=ws://localhost:3001
+VITE_WEBSOCKET_URL=ws://localhost:8005
 ```
 
 ## 🔌 API Integration
@@ -319,6 +330,8 @@ This project is part of the MCP-Enhanced Workspace ecosystem. Contributions are 
 - [Onboarding System](./docs/ONBOARDING_SYSTEM.md) - Interactive user onboarding ✅
 - [Accessibility Features](./docs/ACCESSIBILITY_FEATURES.md) - Comprehensive accessibility implementation ✅
 - [Performance Guide](./docs/PERFORMANCE.md) - Optimization strategies and monitoring ✅
+- [Import/Export Guide](./docs/IMPORT_EXPORT.md) - File import and memory export functionality ✅
+- [WebSocket Real-time Sync](./docs/WEBSOCKET_REALTIME.md) - Real-time synchronization with Socket.IO ✅
 - [API Integration Tests](./docs/API_INTEGRATION_E2E_TESTS.md) - E2E test results
 
 ### External Resources

@@ -11,6 +11,7 @@ import { Layout } from './components/layout/Layout'
 import { ProtectedRoute } from './components/auth'
 import { HomePage } from './pages/HomePage'
 import { AuthPage } from './pages/AuthPage'
+import { WebSocketProvider } from './components/providers/WebSocketProvider'
 
 // Lazy loaded components for code splitting
 const MemoriesPage = lazy(() => import('./pages/MemoriesPage').then(module => ({ default: module.MemoriesPage })))
@@ -20,7 +21,9 @@ const SearchPage = lazy(() => import('./pages/SearchPage').then(module => ({ def
 const CollectionsPage = lazy(() => import('./pages/CollectionsPage').then(module => ({ default: module.CollectionsPage })))
 const GraphPage = lazy(() => import('./pages/GraphPage').then(module => ({ default: module.GraphPage })))
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then(module => ({ default: module.SettingsPage })))
+const ImportExportPage = lazy(() => import('./pages/ImportExportPage').then(module => ({ default: module.default })))
 const TestMCPPage = lazy(() => import('./pages/TestMCP').then(module => ({ default: module.TestMCPPage })))
+const TestWebSocketPage = lazy(() => import('./pages/TestWebSocket').then(module => ({ default: module.TestWebSocketPage })))
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,9 +47,10 @@ function App() {
       <ThemeProvider>
         <AccessibilityProvider>
           <OnboardingProvider>
-            <BrowserRouter>
-              <SkipToMain />
-        <Routes>
+            <WebSocketProvider>
+              <BrowserRouter>
+                <SkipToMain />
+          <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
           <Route 
@@ -126,6 +130,20 @@ function App() {
             } 
           />
           <Route 
+            path="/import-export" 
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <ImportExportPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
+                </Layout>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
             path="/settings" 
             element={
               <ProtectedRoute>
@@ -193,10 +211,25 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          <Route 
+            path="/test-websocket" 
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <LazyLoadErrorBoundary>
+                    <LazyLoadWrapper>
+                      <TestWebSocketPage />
+                    </LazyLoadWrapper>
+                  </LazyLoadErrorBoundary>
+                </Layout>
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
-              <OnboardingOverlay />
-              <KeyboardNavHelper />
-            </BrowserRouter>
+                <OnboardingOverlay />
+                <KeyboardNavHelper />
+              </BrowserRouter>
+            </WebSocketProvider>
           </OnboardingProvider>
         </AccessibilityProvider>
       </ThemeProvider>

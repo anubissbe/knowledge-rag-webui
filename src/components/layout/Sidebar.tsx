@@ -11,7 +11,8 @@ import {
   Plus,
   Home,
   BarChart3,
-  TestTube
+  TestTube,
+  Upload
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -28,12 +29,14 @@ const navItems: NavItem[] = [
   { id: 'search', label: 'Search', icon: Search, href: '/search' },
   { id: 'collections', label: 'Collections', icon: FolderOpen, href: '/collections' },
   { id: 'graph', label: 'Knowledge Graph', icon: Network, href: '/graph' },
+  { id: 'import-export', label: 'Import/Export', icon: Upload, href: '/import-export' },
   { id: 'analytics', label: 'Analytics', icon: BarChart3, href: '/analytics' },
 ]
 
-// Add test page in development mode
+// Add test pages in development mode
 if (import.meta.env.DEV) {
   navItems.push({ id: 'test-mcp', label: 'Test MCP', icon: TestTube, href: '/test-mcp' })
+  navItems.push({ id: 'test-websocket', label: 'Test WebSocket', icon: TestTube, href: '/test-websocket' })
 }
 
 export const Sidebar: FC = () => {

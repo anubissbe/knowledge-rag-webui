@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../stores'
 import { ThemeToggleButton } from '../ThemeToggle'
 import { OnboardingTrigger } from '../onboarding/OnboardingTrigger'
+import { WebSocketStatus } from '../common/WebSocketStatus'
 import { cn } from '@/lib/utils'
 
 export const Header: FC = () => {
@@ -69,6 +70,9 @@ export const Header: FC = () => {
 
         {/* Right side actions */}
         <div className="flex items-center gap-4 ml-6">
+          {/* WebSocket status */}
+          <WebSocketStatus />
+          
           {/* Help/Tutorial */}
           <OnboardingTrigger variant="help" />
           

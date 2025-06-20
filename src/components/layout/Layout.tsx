@@ -2,6 +2,7 @@ import { type FC, type ReactNode } from 'react'
 import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 import { cn } from '@/lib/utils'
+import { useRealtimeSync } from '../../hooks/useRealtimeSync'
 
 interface LayoutProps {
   children: ReactNode
@@ -9,6 +10,9 @@ interface LayoutProps {
 }
 
 export const Layout: FC<LayoutProps> = ({ children, className }) => {
+  // Setup real-time sync based on current route
+  useRealtimeSync();
+  
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile header */}
@@ -30,7 +34,7 @@ export const Layout: FC<LayoutProps> = ({ children, className }) => {
           </div>
           
           {/* Content */}
-          <div className={cn("flex-1 overflow-auto p-6", className)}>
+          <div id="main-content" className={cn("flex-1 overflow-auto p-6", className)}>
             {children}
           </div>
         </main>
