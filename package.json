@@ -30,7 +30,7 @@
     "@hookform/resolvers": "^5.1.1",
     "@tanstack/react-query": "^5.80.10",
     "@types/d3": "^7.4.3",
-    "@types/socket.io-client": "^1.4.36",
+    "@types/socket.io-client": "^3.0.0",
     "@uiw/react-md-editor": "^4.0.7",
     "axios": "^1.10.0",
     "clsx": "^2.1.1",
