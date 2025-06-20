@@ -1,5 +1,11 @@
 # Knowledge RAG Web UI
 
+[![CI](https://github.com/anubissbe/knowledge-rag-webui/actions/workflows/ci.yml/badge.svg)](https://github.com/anubissbe/knowledge-rag-webui/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![React](https://img.shields.io/badge/React-19.1.0-blue.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-brightgreen.svg)](https://hub.docker.com/)
+
 A modern web interface for the Knowledge RAG System, inspired by [Mem0](https://github.com/mem0ai/mem0). This application provides an intuitive way to manage memories, search through your knowledge base, organize collections, and visualize entity relationships.
 
 ## 🎯 Project Vision
@@ -10,6 +16,25 @@ Create a beautiful, user-friendly interface that makes it easy to:
 - **Visualize Connections**: See how your knowledge is interconnected
 - **Manage Collections**: Organize memories into meaningful groups
 - **Track Insights**: Understand patterns in your knowledge base
+
+## 📸 Screenshots
+
+<details>
+<summary>View Screenshots</summary>
+
+### Memory List
+Clean, organized view of all your memories with search and filtering capabilities.
+
+### Knowledge Graph
+Interactive visualization showing connections between entities and memories.
+
+### Memory Editor
+Rich markdown editor with live preview and metadata management.
+
+### Collections
+Organize your memories into themed collections with custom colors and icons.
+
+</details>
 
 ## 🏗️ Architecture
 
