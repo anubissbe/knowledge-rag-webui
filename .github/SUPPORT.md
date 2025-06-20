@@ -14,13 +14,13 @@ Start with our comprehensive documentation:
 ### 🔍 Search Existing Issues
 
 Before creating a new issue, please search existing issues:
-- [Open Issues](https://github.com/anubissbe/knowledge-rag-webui/issues)
-- [Closed Issues](https://github.com/anubissbe/knowledge-rag-webui/issues?q=is%3Aissue+is%3Aclosed)
+- [Open Issues](https://github.com/username/knowledge-rag-webui/issues)
+- [Closed Issues](https://github.com/username/knowledge-rag-webui/issues?q=is%3Aissue+is%3Aclosed)
 
 ### 💬 Community Discussion
 
 Join our community:
-- [GitHub Discussions](https://github.com/anubissbe/knowledge-rag-webui/discussions) - General discussions
+- [GitHub Discussions](https://github.com/username/knowledge-rag-webui/discussions) - General discussions
 - [Discord Server](#) - Real-time chat (coming soon)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/knowledge-rag) - Technical Q&A
 

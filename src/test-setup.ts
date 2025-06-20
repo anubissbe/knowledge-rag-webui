@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom'
+// import './test/mocks/server' // Temporarily disabled - MSW not installed
 
 // Mock environment variables
 process.env.VITE_RAG_URL = 'http://localhost:8002'

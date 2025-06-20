@@ -130,7 +130,7 @@ This roadmap outlines the planned features and improvements for the Knowledge RA
 
 ## Community Requested Features
 
-Track community requests at: [GitHub Issues](https://github.com/anubissbe/knowledge-rag-webui/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+Track community requests at: [GitHub Issues](https://github.com/username/knowledge-rag-webui/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
 
 ### Top Requested
 1. Dark mode improvements
@@ -178,7 +178,7 @@ We measure success through:
 ## Get Involved
 
 - **Discord**: [Join our community](#)
-- **GitHub Discussions**: [Participate in planning](https://github.com/anubissbe/knowledge-rag-webui/discussions)
+- **GitHub Discussions**: [Participate in planning](https://github.com/username/knowledge-rag-webui/discussions)
 - **Twitter**: Follow updates @KnowledgeRAG
 
 ---

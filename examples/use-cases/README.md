@@ -228,4 +228,4 @@ Connect with enterprise systems:
 
 ---
 
-Need help with a specific use case? [Create an issue](https://github.com/anubissbe/knowledge-rag-webui/issues/new) and we'll add an example!
+Need help with a specific use case? [Create an issue](https://github.com/username/knowledge-rag-webui/issues/new) and we'll add an example!

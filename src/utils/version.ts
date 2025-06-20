@@ -25,7 +25,7 @@ export class VersionChecker {
       }
 
       // In production, this would check against GitHub releases API
-      const response = await fetch('https://api.github.com/repos/anubissbe/knowledge-rag-webui/releases/latest')
+      const response = await fetch('https://api.github.com/repos/username/knowledge-rag-webui/releases/latest')
       
       if (response.ok) {
         const data = await response.json()

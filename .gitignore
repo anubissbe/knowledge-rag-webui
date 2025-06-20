@@ -28,6 +28,17 @@ dist-ssr
 .env.local
 .env.production
 
+# Test results and coverage
+coverage/
+test-results/
+*.tsbuildinfo
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # Test reports and scripts
 *E2E*.md
 *TEST*.md
@@ -40,3 +51,9 @@ test-*.cjs
 # Implementation summaries
 *SUMMARY.md
 COMPLETION_SUMMARY.md
+
+# Reports directory (contains potentially sensitive data)
+reports/
+
+# SQL maintenance scripts (may contain private IPs)
+scripts/maintenance/*.sql

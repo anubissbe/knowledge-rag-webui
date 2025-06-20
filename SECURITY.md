@@ -193,7 +193,7 @@ We appreciate security researchers who help keep our project secure. Contributor
 
 For security concerns, contact:
 - Email: security@knowledge-rag.dev
-- GitHub Security Advisories: [Create Advisory](https://github.com/anubissbe/knowledge-rag-webui/security/advisories/new)
+- GitHub Security Advisories: [Create Advisory](https://github.com/username/knowledge-rag-webui/security/advisories/new)
 
 ---
 

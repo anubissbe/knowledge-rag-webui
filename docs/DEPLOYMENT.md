@@ -418,4 +418,4 @@ if (import.meta.env.VITE_DEBUG) {
 
 ---
 
-For additional help, please refer to the [GitHub Issues](https://github.com/anubissbe/knowledge-rag-webui/issues) or create a new issue.
+For additional help, please refer to the [GitHub Issues](https://github.com/username/knowledge-rag-webui/issues) or create a new issue.

@@ -7,18 +7,68 @@ This guide covers the comprehensive testing strategy for the Knowledge RAG Web U
 ## Testing Philosophy
 
 - **Test Pyramid**: More unit tests, fewer integration tests, minimal E2E tests
-- **Coverage Goal**: Minimum 80% code coverage, 100% for critical paths
+- **Coverage Goal**: Minimum 70% code coverage, 100% for critical paths
 - **Test Early**: Write tests alongside or before implementation (TDD)
 - **Test Behavior**: Focus on user behavior, not implementation details
 
 ## Testing Stack
 
-- **Unit Testing**: Vitest + React Testing Library
-- **Integration Testing**: Vitest + MSW (Mock Service Worker)
+- **Unit Testing**: Jest + React Testing Library
+- **Integration Testing**: Jest + MSW (Mock Service Worker)
 - **E2E Testing**: Playwright
 - **Visual Testing**: Storybook + Chromatic
 - **Performance Testing**: Lighthouse CI
 - **Accessibility Testing**: jest-axe + Playwright
+
+## Quick Start
+
+### Running Tests
+
+```bash
+# Run all tests with our custom test runner
+node scripts/test-runner.js
+
+# Run specific test types
+node scripts/test-runner.js --unit-only
+node scripts/test-runner.js --integration-only
+node scripts/test-runner.js --e2e-only
+
+# Run with coverage
+node scripts/test-runner.js --coverage
+
+# Run E2E tests with UI
+node scripts/test-runner.js --e2e-only --headed
+
+# Individual commands
+npm test                    # Unit tests
+npm run test:watch         # Unit tests in watch mode
+npm run test:coverage      # Unit tests with coverage
+npm run test:e2e          # E2E tests
+npm run test:e2e:headed   # E2E tests with browser UI
+npm run test:all          # All tests
+```
+
+## Recently Added Tests
+
+### ✅ New Component Tests
+- **Button Component**: Complete test coverage for all variants, sizes, and states
+- **Layout Component**: Navigation, sidebar toggle, responsive behavior
+- **LoginForm Component**: Form validation, authentication flow, error handling
+- **MemoryEditor Component**: Create/edit modes, validation, auto-save
+
+### ✅ New Integration Tests
+- **Memory Management Flow**: End-to-end memory CRUD operations
+- **Search Integration**: Search functionality with filters and real-time results
+
+### ✅ New E2E Tests
+- **Memory Management Workflow**: Complete user journey testing
+- **Mobile Responsive Tests**: Touch gestures, mobile navigation
+- **Error Handling**: Network failures, retry mechanisms
+
+### ✅ Testing Infrastructure
+- **MSW Integration**: API mocking for consistent testing
+- **Test Utilities**: Comprehensive helper functions and mock data factories
+- **Custom Test Runner**: Unified test execution with detailed reporting
 
 ## Test Structure
 

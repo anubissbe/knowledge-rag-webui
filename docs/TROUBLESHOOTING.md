@@ -313,8 +313,8 @@ npx lighthouse http://localhost:5173
 ## 🆘 Getting Help
 
 ### 1. Check Known Issues
-- [GitHub Issues](https://github.com/anubissbe/knowledge-rag-webui/issues)
-- [Discussions](https://github.com/anubissbe/knowledge-rag-webui/discussions)
+- [GitHub Issues](https://github.com/username/knowledge-rag-webui/issues)
+- [Discussions](https://github.com/username/knowledge-rag-webui/discussions)
 
 ### 2. Provide Information
 When reporting issues, include:
@@ -331,7 +331,7 @@ When reporting issues, include:
 - Provide minimal example
 
 ### 4. Use Support Channels
-- [GitHub Issues](https://github.com/anubissbe/knowledge-rag-webui/issues/new)
+- [GitHub Issues](https://github.com/username/knowledge-rag-webui/issues/new)
 - [Support Guide](./.github/SUPPORT.md)
 
 ## 🧪 Testing Commands
@@ -369,4 +369,4 @@ curl http://localhost:8002/health
 
 ---
 
-Still having issues? [Create a GitHub issue](https://github.com/anubissbe/knowledge-rag-webui/issues/new/choose) with details!
+Still having issues? [Create a GitHub issue](https://github.com/username/knowledge-rag-webui/issues/new/choose) with details!

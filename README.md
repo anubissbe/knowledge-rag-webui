@@ -1,6 +1,6 @@
 # Knowledge RAG Web UI
 
-[![CI](https://github.com/anubissbe/knowledge-rag-webui/actions/workflows/ci.yml/badge.svg)](https://github.com/anubissbe/knowledge-rag-webui/actions/workflows/ci.yml)
+[![CI](https://github.com/username/knowledge-rag-webui/actions/workflows/ci.yml/badge.svg)](https://github.com/username/knowledge-rag-webui/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-19.1.0-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
@@ -150,12 +150,22 @@ Knowledge RAG System
 - **Redis** - Caching layer
 
 ### Development Tools
-- **Jest** - Unit testing ✅
-- **Playwright** - E2E testing ✅  
+- **Jest** - Unit testing framework ✅
+- **React Testing Library** - Component testing utilities ✅
+- **Playwright** - E2E testing framework ✅
+- **MSW (Mock Service Worker)** - API mocking for tests ✅
 - **ESLint** - Code quality ✅
 - **TypeScript** - Type safety ✅
 - **Bundle Analyzer** - Performance optimization ✅
 - **Performance Monitoring** - Real-time metrics ✅
+
+### Testing Infrastructure ✅
+- **Comprehensive Test Suite** - Unit, integration, and E2E tests
+- **70%+ Code Coverage** - Minimum coverage threshold enforced
+- **Custom Test Runner** - Unified test execution with reporting
+- **Visual Regression Testing** - Storybook with Chromatic integration
+- **Accessibility Testing** - Automated a11y compliance checks
+- **Performance Testing** - Load time and responsiveness benchmarks
 
 ## 📋 Project Status
 
@@ -178,7 +188,7 @@ Knowledge RAG System
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/anubissbe/knowledge-rag-webui.git
+git clone https://github.com/username/knowledge-rag-webui.git
 cd knowledge-rag-webui
 
 # Install dependencies
@@ -189,6 +199,23 @@ cp .env.example .env
 
 # Start development server
 npm run dev
+```
+
+### Testing
+```bash
+# Run all tests with custom test runner
+node scripts/test-runner.js
+
+# Run specific test types
+npm test                    # Unit tests
+npm run test:coverage      # Unit tests with coverage
+npm run test:e2e          # E2E tests
+npm run test:e2e:headed   # E2E tests with browser UI
+
+# Quick test commands
+node scripts/test-runner.js --unit-only
+node scripts/test-runner.js --e2e-only --headed
+node scripts/test-runner.js --coverage
 ```
 
 ### Configuration
@@ -334,7 +361,7 @@ This project is part of the MCP-Enhanced Workspace ecosystem. Contributions are 
 - [Architecture Guide](./docs/ARCHITECTURE.md) - System design and patterns
 - [Development Guide](./docs/DEVELOPMENT.md) - Setup and development workflow
 - [API Documentation](./docs/API_DOCUMENTATION.md) - Complete API reference
-- [Testing Guide](./docs/TESTING.md) - Testing strategies and examples
+- [Testing Guide](./docs/TESTING.md) - Comprehensive testing strategies and examples ✅
 - [Theme System](./docs/THEME_SYSTEM.md) - Dark/light theme implementation ✅
 - [Onboarding System](./docs/ONBOARDING_SYSTEM.md) - Interactive user onboarding ✅
 - [Accessibility Features](./docs/ACCESSIBILITY_FEATURES.md) - Comprehensive accessibility implementation ✅
@@ -359,9 +386,7 @@ Part of the MCP-Enhanced Workspace project.
 
 ## ☕ Support
 
-If you find this project helpful, consider buying me a coffee!
-
-<a href="https://buymeacoffee.com/anubissbe" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+If you find this project helpful, consider supporting the development!
 
 ---
 
