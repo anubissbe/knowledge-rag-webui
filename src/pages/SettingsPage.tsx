@@ -3,13 +3,18 @@ import { useTheme } from '@/contexts/ThemeContext'
 import { useAccessibility } from '@/contexts/AccessibilityContext'
 import { ThemeRadioGroup, ThemeToggle } from '@/components/ThemeToggle'
 import { useAuthStore } from '@/stores'
-import { User, Palette, Shield, Download, Bell, Globe, Eye, Keyboard } from 'lucide-react'
+import { User, Palette, Shield, Download, Bell, Globe, Eye, Keyboard, Brain, Key } from 'lucide-react'
 import { KeyboardShortcutsList } from '../hooks/useKeyboardShortcuts'
+import { MemoryPreferences } from '../components/settings/MemoryPreferences'
+import { ApiKeysSection } from '../components/settings/ApiKeysSection'
+import { AccountSettings } from '../components/settings/AccountSettings'
+import { LanguageSettings } from '../components/settings/LanguageSettings'
 
 export const SettingsPage: React.FC = () => {
   const { theme, resolvedTheme } = useTheme()
   const { settings, updateSetting, resetSettings } = useAccessibility()
   const { user } = useAuthStore()
+  const [activeSection, setActiveSection] = React.useState('profile')
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
@@ -25,9 +30,12 @@ export const SettingsPage: React.FC = () => {
         <div className="space-y-1">
           <nav className="space-y-2">
             {[
+              { icon: User, label: 'Account', id: 'account' },
               { icon: User, label: 'Profile', id: 'profile' },
+              { icon: Brain, label: 'Memory Preferences', id: 'memory' },
               { icon: Palette, label: 'Appearance', id: 'appearance' },
               { icon: Eye, label: 'Accessibility', id: 'accessibility' },
+              { icon: Key, label: 'API Keys', id: 'api-keys' },
               { icon: Bell, label: 'Notifications', id: 'notifications' },
               { icon: Shield, label: 'Privacy', id: 'privacy' },
               { icon: Download, label: 'Data Export', id: 'export' },
@@ -36,9 +44,10 @@ export const SettingsPage: React.FC = () => {
             ].map(({ icon: Icon, label, id }) => (
               <button
                 key={id}
+                onClick={() => setActiveSection(id)}
                 className={`
                   w-full flex items-center gap-3 px-3 py-2 text-left rounded-lg transition-colors
-                  ${id === 'accessibility' 
+                  ${id === activeSection 
                     ? 'bg-primary/10 text-primary' 
                     : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                   }
@@ -53,12 +62,22 @@ export const SettingsPage: React.FC = () => {
 
         {/* Settings Content */}
         <div className="md:col-span-2 space-y-6">
+          {/* Account Section */}
+          {activeSection === 'account' && <AccountSettings />}
+          
+          {/* Memory Preferences Section */}
+          {activeSection === 'memory' && <MemoryPreferences />}
+          
+          {/* API Keys Section */}
+          {activeSection === 'api-keys' && <ApiKeysSection />}
+          
           {/* Profile Section */}
-          <div className="bg-card border rounded-lg p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <User className="h-5 w-5 text-primary" />
-              <h2 className="text-xl font-semibold">Profile</h2>
-            </div>
+          {activeSection === 'profile' && (
+            <div className="bg-card border rounded-lg p-6 space-y-4">
+              <div className="flex items-center gap-3">
+                <User className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-semibold">Profile</h2>
+              </div>
             
             <div className="grid gap-4">
               <div>
@@ -81,8 +100,10 @@ export const SettingsPage: React.FC = () => {
               </div>
             </div>
           </div>
+          )}
 
           {/* Appearance Section */}
+          {activeSection === 'appearance' && (
           <div className="bg-card border rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-3">
               <Palette className="h-5 w-5 text-primary" />
@@ -128,8 +149,10 @@ export const SettingsPage: React.FC = () => {
               </div>
             </div>
           </div>
+          )}
 
           {/* Accessibility Section */}
+          {activeSection === 'accessibility' && (
           <div className="bg-card border rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-3">
               <Eye className="h-5 w-5 text-primary" />
@@ -309,8 +332,10 @@ export const SettingsPage: React.FC = () => {
               </div>
             </div>
           </div>
+          )}
 
           {/* Notifications Section */}
+          {activeSection === 'notifications' && (
           <div className="bg-card border rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-3">
               <Bell className="h-5 w-5 text-primary" />
@@ -337,8 +362,10 @@ export const SettingsPage: React.FC = () => {
               ))}
             </div>
           </div>
+          )}
 
           {/* Privacy Section */}
+          {activeSection === 'privacy' && (
           <div className="bg-card border rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-3">
               <Shield className="h-5 w-5 text-primary" />
@@ -374,8 +401,10 @@ export const SettingsPage: React.FC = () => {
               </div>
             </div>
           </div>
+          )}
 
           {/* Data Export Section */}
+          {activeSection === 'export' && (
           <div className="bg-card border rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-3">
               <Download className="h-5 w-5 text-primary" />
@@ -399,9 +428,11 @@ export const SettingsPage: React.FC = () => {
               </div>
             </div>
           </div>
+          )}
 
           {/* Keyboard Shortcuts Section */}
-          <div id="shortcuts" className="bg-card border rounded-lg p-6 space-y-4">
+          {activeSection === 'shortcuts' && (
+            <div className="bg-card border rounded-lg p-6 space-y-4">
             <div className="flex items-center gap-3">
               <Keyboard className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Keyboard Shortcuts</h2>
@@ -415,6 +446,10 @@ export const SettingsPage: React.FC = () => {
               <KeyboardShortcutsList />
             </div>
           </div>
+          )}
+          
+          {/* Language Section */}
+          {activeSection === 'language' && <LanguageSettings />}
         </div>
       </div>
     </div>

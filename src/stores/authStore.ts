@@ -23,6 +23,8 @@ interface AuthState {
   // User profile
   updateProfile: (profile: Partial<User>) => Promise<void>
   updatePreferences: (preferences: any) => Promise<void>
+  updateUser: (userData: Partial<User>) => Promise<void>
+  deleteAccount: () => Promise<void>
   
   // State management
   setUser: (user: User | null) => void
@@ -190,6 +192,26 @@ export const useAuthStore = create<AuthState>()(
           } catch (error: any) {
             set({
               error: error.response?.data?.message || error.message || 'Failed to update preferences',
+              loading: false,
+            })
+            throw error
+          }
+        },
+
+        updateUser: async (userData: Partial<User>) => {
+          return get().updateProfile(userData)
+        },
+
+        deleteAccount: async () => {
+          set({ loading: true, error: null })
+          try {
+            await userApi.deleteAccount()
+            // Clear all data
+            localStorage.removeItem('auth-token')
+            get().reset()
+          } catch (error: any) {
+            set({
+              error: error.response?.data?.message || error.message || 'Failed to delete account',
               loading: false,
             })
             throw error

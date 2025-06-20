@@ -3,9 +3,23 @@ import { devtools, persist } from 'zustand/middleware'
 import type { UserPreferences } from '../types'
 import { userApi } from '../services/api/client'
 
+interface ApiKey {
+  id: string;
+  name: string;
+  key: string;
+  createdAt: string;
+  lastUsed?: string;
+  permissions: string[];
+}
+
 interface UserState {
   // User preferences
   preferences: UserPreferences
+  
+  // API Keys
+  apiKeys: ApiKey[]
+  createApiKey: (apiKey: ApiKey) => void
+  deleteApiKey: (keyId: string) => void
   
   // Actions
   updatePreferences: (preferences: Partial<UserPreferences>) => Promise<void>
@@ -63,6 +77,7 @@ const defaultPreferences: UserPreferences = {
 
 const initialState = {
   preferences: defaultPreferences,
+  apiKeys: [] as ApiKey[],
   theme: 'system' as const,
   defaultSearchType: 'hybrid' as const,
   keyboardShortcuts: true,
@@ -80,6 +95,18 @@ export const useUserStore = create<UserState>()(
     persist(
       (set, get) => ({
         ...initialState,
+
+        createApiKey: (apiKey: ApiKey) => {
+          set(state => ({
+            apiKeys: [...state.apiKeys, apiKey]
+          }))
+        },
+
+        deleteApiKey: (keyId: string) => {
+          set(state => ({
+            apiKeys: state.apiKeys.filter(key => key.id !== keyId)
+          }))
+        },
 
         updatePreferences: async (newPreferences: Partial<UserPreferences>) => {
           set({ loading: true, error: null })

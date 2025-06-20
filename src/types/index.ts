@@ -150,10 +150,12 @@ export interface User {
   id: string
   email: string
   name: string
+  bio?: string
   avatar?: string
   preferences?: UserPreferences
   created_at: string
   updated_at: string
+  createdAt?: string
   lastLogin?: string
   isActive: boolean
 }
@@ -164,9 +166,18 @@ export interface UserPreferences {
   keyboardShortcuts: boolean
   autoSave: boolean
   resultsPerPage: number
-  defaultView: 'grid' | 'list'
+  defaultView: 'grid' | 'list' | 'compact'
+  defaultSort?: 'recent' | 'oldest' | 'alphabetical' | 'updated'
+  itemsPerPage?: string
   showPreview: boolean
+  showTags?: boolean
   compactMode: boolean
+  autoArchive?: boolean
+  language?: string
+  dateFormat?: string
+  timeFormat?: string
+  timezone?: string
+  numberFormat?: string
 }
 
 // Authentication types

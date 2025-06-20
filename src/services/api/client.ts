@@ -254,6 +254,11 @@ export const userApi = {
     const response = await apiClient.put('/user/preferences', preferences)
     return response.data
   },
+
+  // Delete user account
+  deleteAccount: async (): Promise<void> => {
+    await apiClient.delete('/user/account')
+  },
 }
 
 // Authentication API
