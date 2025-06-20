@@ -101,6 +101,14 @@ Knowledge RAG System
   - Bundle analysis and optimization tools
   - Progressive loading with error boundaries
 
+- **Bulk Operations** ✅
+  - Select multiple memories for batch actions
+  - Bulk delete with confirmation dialog
+  - Add tags to multiple items simultaneously
+  - Move selections to collections
+  - Export in multiple formats (JSON, CSV, Markdown)
+  - Visual selection indicators and counters
+
 - **Accessibility** ✅
   - High contrast mode with customizable colors
   - Reduced motion preferences for sensitive users
@@ -337,6 +345,7 @@ This project is part of the MCP-Enhanced Workspace ecosystem. Contributions are 
 - [Analytics Dashboard](./docs/ANALYTICS_DASHBOARD.md) - Comprehensive analytics and insights ✅
 - [Keyboard Shortcuts](./docs/KEYBOARD_SHORTCUTS.md) - Navigation and action shortcuts guide ✅
 - [User Settings](./docs/USER_SETTINGS.md) - Comprehensive settings and preferences guide ✅
+- [Bulk Operations](./docs/features/bulk-operations.md) - Batch actions for memory management ✅
 - [API Integration Tests](./docs/API_INTEGRATION_E2E_TESTS.md) - E2E test results
 
 ### External Resources
