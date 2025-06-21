@@ -15,7 +15,8 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Mobile Features**: Floating action buttons, swipe gestures, and mobile-optimized navigation
 - **Accessibility**: WCAG 2.1 AA compliant with full keyboard navigation and 44px touch targets
 - **Real-time Updates**: WebSocket support for live updates
-- **Export/Import**: Export memories in multiple formats (JSON, CSV, PDF, Markdown)
+- **Bulk Operations**: Select multiple memories for bulk delete, export, collection assignment, and tag management
+- **Export/Import**: Export memories in multiple formats (JSON, CSV, PDF, Markdown) with bulk export support
 - **Touch Optimized**: Enhanced mobile experience with proper touch targets and gestures
 
 ## 📋 Prerequisites
@@ -56,6 +57,7 @@ The application will be available at `http://localhost:5173`
 knowledge-rag-webui/
 ├── src/
 │   ├── components/         # Reusable UI components
+│   │   ├── bulk/          # Bulk operations components
 │   │   ├── memory/        # Memory-specific components
 │   │   ├── mobile/        # Mobile-specific components
 │   │   ├── search/        # Search-related components
@@ -162,6 +164,18 @@ Themes can be customized in `tailwind.config.js`. The application supports:
 1. Use the search bar to find memories by content
 2. Click on tags to filter by specific tags
 3. Use the faceted search for advanced filtering
+
+### Bulk Operations
+
+1. Navigate to the Memories page
+2. Click "Select" to enable bulk selection mode
+3. Choose memories by clicking their checkboxes
+4. Use the bulk toolbar to:
+   - Export selected memories (JSON, Markdown, CSV)
+   - Add memories to collections
+   - Add tags to multiple memories
+   - Delete selected memories
+5. Click "Cancel" to exit bulk mode
 
 ### Managing Settings
 
