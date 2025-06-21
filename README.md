@@ -75,6 +75,12 @@ knowledge-rag-webui/
 │   ├── unit/             # Unit tests
 │   └── e2e/              # End-to-end tests
 └── docs/                  # Documentation
+    ├── DESIGN_SYSTEM.md   # Design principles and component guidelines
+    ├── COMPONENT_ARCHITECTURE.md # Component patterns and architecture
+    ├── UI_MOCKUPS.md      # Wireframes and layout specifications
+    ├── STYLE_GUIDE.md     # CSS implementation and styling standards
+    ├── MOBILE.md          # Mobile-specific features and responsive design
+    └── README.md          # Documentation hub and navigation
 ```
 
 ## 🧪 Testing
@@ -207,9 +213,19 @@ npm run test:e2e -- tests/e2e/mobile-basic.spec.ts
 - **Tablet**: 768px - 1023px
 - **Desktop**: ≥ 1024px
 
+## 📚 Documentation
+
+For comprehensive design and development documentation, see the [docs directory](docs/):
+
+- **[Design System](docs/DESIGN_SYSTEM.md)** - Design principles, color palette, typography, and component guidelines
+- **[Component Architecture](docs/COMPONENT_ARCHITECTURE.md)** - Component patterns, state management, and development practices
+- **[UI Mockups](docs/UI_MOCKUPS.md)** - Wireframes and layout specifications for all pages and components
+- **[Style Guide](docs/STYLE_GUIDE.md)** - CSS implementation details, animations, and accessibility standards
+- **[Mobile Guide](docs/MOBILE.md)** - Mobile-specific features and responsive design patterns
+
 ## 🤝 Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests. Also review our [Design System](docs/DESIGN_SYSTEM.md) and [Component Architecture](docs/COMPONENT_ARCHITECTURE.md) documentation for development guidelines.
 
 ## 📄 License
 
