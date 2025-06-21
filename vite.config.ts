@@ -4,6 +4,20 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks for better caching
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['lucide-react'],
+          'chart-vendor': ['recharts'],
+          'utils-vendor': ['socket.io-client', 'zustand', 'axios'],
+          'form-vendor': ['react-hook-form', '@hookform/resolvers', 'yup']
+        }
+      }
+    }
+  },
   plugins: [
     react(),
     VitePWA({

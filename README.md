@@ -31,6 +31,7 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Centralized Logging**: Structured logging system with environment-aware behavior and external service integration
 - **API Key Security**: Secure API key display with masking, auto-hide, and security warnings
 - **Memory Leak Prevention**: Comprehensive WebSocket and interval cleanup to prevent memory leaks
+- **Code Splitting**: Intelligent bundle splitting reducing initial load from 904KB to 208KB (77% reduction)
 
 ## 📋 Prerequisites
 
@@ -306,6 +307,7 @@ For comprehensive design and development documentation, see the [docs directory]
 - **[WebSocket Memory Management](docs/WEBSOCKET_MEMORY_LEAK_FIXES.md)** - Memory leak prevention and cleanup strategies
 - **[API Key Security](docs/API_KEY_SECURITY.md)** - Secure API key handling and display
 - **[Logging Implementation](docs/LOGGING_IMPLEMENTATION.md)** - Centralized logging system and best practices
+- **[Code Splitting](docs/CODE_SPLITTING.md)** - Bundle optimization and lazy loading implementation
 
 ## 🤝 Contributing
 

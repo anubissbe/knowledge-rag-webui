@@ -1,20 +1,26 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { WebSocketProvider } from './contexts/WebSocketContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
-import Settings from './pages/Settings';
-import Memories from './pages/Memories';
-import MemoryDetail from './pages/MemoryDetail';
-import Search from './pages/Search';
 import { useGlobalKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
-import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import { useKeyboardShortcutsModal } from './hooks/useKeyboardShortcutsModal';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
 import RealtimeNotification from './components/RealtimeNotification';
 import ToastNotification from './components/ToastNotification';
+import LoadingSpinner from './components/LoadingSpinner';
+
+// Lazy load page components for code splitting
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Memories = lazy(() => import('./pages/Memories'));
+const MemoryDetail = lazy(() => import('./pages/MemoryDetail'));
+const Search = lazy(() => import('./pages/Search'));
+
+// Lazy load modal components that are conditionally rendered
+const KeyboardShortcutsModal = lazy(() => import('./components/KeyboardShortcutsModal'));
 
 function AppContent() {
   const globalShortcuts = useGlobalKeyboardShortcuts();
@@ -24,20 +30,26 @@ function AppContent() {
     <>
       <Layout>
         <main id="main-content">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/memories" element={<Memories />} />
-            <Route path="/memories/:id" element={<MemoryDetail />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
+          <Suspense fallback={<LoadingSpinner size="lg" message="Loading page..." />}>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/memories" element={<Memories />} />
+              <Route path="/memories/:id" element={<MemoryDetail />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/settings" element={<Settings />} />
+            </Routes>
+          </Suspense>
         </main>
       </Layout>
-      <KeyboardShortcutsModal
-        isOpen={isOpen}
-        onClose={close}
-        shortcuts={{ global: globalShortcuts }}
-      />
+      {isOpen && (
+        <Suspense fallback={<div />}>
+          <KeyboardShortcutsModal
+            isOpen={isOpen}
+            onClose={close}
+            shortcuts={{ global: globalShortcuts }}
+          />
+        </Suspense>
+      )}
       <PWAInstallPrompt />
       <OfflineIndicator />
       <RealtimeNotification />

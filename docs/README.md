@@ -22,6 +22,7 @@ Welcome to the comprehensive documentation for the Knowledge RAG WebUI project. 
 - **[WebSocket Memory Management](WEBSOCKET_MEMORY_LEAK_FIXES.md)** - Memory leak prevention and cleanup strategies
 - **[API Key Security](API_KEY_SECURITY.md)** - Secure API key handling and display
 - **[Logging Implementation](LOGGING_IMPLEMENTATION.md)** - Centralized logging system and best practices
+- **[Code Splitting](CODE_SPLITTING.md)** - Bundle optimization and lazy loading implementation
 
 ### User Documentation
 - **[Mobile Guide](MOBILE.md)** - Mobile-specific features, responsive design, and touch interactions
