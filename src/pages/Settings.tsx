@@ -28,22 +28,44 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Settings</h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Settings</h1>
+          <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
             Manage your account settings and preferences
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           {/* Sidebar Navigation */}
           <nav 
             className="w-full lg:w-64 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4"
             role="navigation"
             aria-label="Settings navigation"
           >
-            <ul className="space-y-1" role="list">
+            {/* Mobile dropdown for settings sections */}
+            <div className="lg:hidden mb-4">
+              <label htmlFor="mobile-settings-nav" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Settings Section
+              </label>
+              <select
+                id="mobile-settings-nav"
+                value={activeTab}
+                onChange={(e) => setActiveTab(e.target.value as SettingsTab)}
+                className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
+                         bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                         focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                         min-h-[44px] touch-manipulation"
+              >
+                {settingsTabs.map((tab) => (
+                  <option key={tab.id} value={tab.id}>
+                    {tab.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <ul className="hidden lg:block space-y-1" role="list">
               {settingsTabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -54,7 +76,7 @@ export default function Settings() {
                       onClick={() => setActiveTab(tab.id)}
                       className={`
                         w-full flex items-center justify-between px-4 py-3 rounded-lg
-                        transition-colors duration-200
+                        transition-colors duration-200 min-h-[44px] touch-manipulation
                         ${isActive 
                           ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' 
                           : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
@@ -78,8 +100,8 @@ export default function Settings() {
           </nav>
 
           {/* Main Content Area */}
-          <main className="flex-1">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <main className="flex-1 min-w-0">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 sm:p-6">
               {activeTab === 'profile' && <ProfileSettings />}
               {activeTab === 'api-keys' && <ApiKeysSettings />}
               {activeTab === 'preferences' && <PreferencesSettings />}

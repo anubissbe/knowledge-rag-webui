@@ -172,7 +172,7 @@ export default function Search() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Search Header */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex flex-col gap-4">
             {/* Search Input */}
             <div className="relative">
@@ -182,16 +182,18 @@ export default function Search() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search your memories..."
-                className="w-full pl-12 pr-4 py-3 text-lg border border-gray-300 dark:border-gray-600 
+                className="w-full pl-12 pr-12 py-4 sm:py-3 text-base sm:text-lg border border-gray-300 dark:border-gray-600 
                          rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                         focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                         focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                         min-h-[52px] touch-manipulation"
                 autoFocus
               />
               {query && (
                 <button
                   onClick={() => setQuery('')}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 
-                           hover:text-gray-600 dark:hover:text-gray-300"
+                           hover:text-gray-600 dark:hover:text-gray-300 p-1 min-h-[44px] min-w-[44px]
+                           flex items-center justify-center touch-manipulation"
                   aria-label="Clear search"
                 >
                   <X className="w-5 h-5" />
@@ -200,12 +202,13 @@ export default function Search() {
             </div>
 
             {/* Filter Toggle and Active Filters */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg
+                className="inline-flex items-center justify-center px-4 py-3 sm:py-2 text-sm font-medium rounded-lg
                          text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700
-                         hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                         hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors
+                         min-h-[44px] touch-manipulation"
               >
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
@@ -221,7 +224,7 @@ export default function Search() {
                 <button
                   onClick={handleClearFilters}
                   className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 
-                           dark:hover:text-blue-300"
+                           dark:hover:text-blue-300 px-2 py-1 min-h-[36px] touch-manipulation"
                 >
                   Clear all filters
                 </button>
@@ -234,14 +237,16 @@ export default function Search() {
                 {filters.tags.map(tag => (
                   <span
                     key={tag}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-sm
-                             bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                    className="inline-flex items-center px-3 py-2 rounded-full text-sm
+                             bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300
+                             min-h-[36px]"
                   >
                     <Tag className="w-3 h-3 mr-1" />
                     {tag}
                     <button
                       onClick={() => handleTagClick(tag)}
-                      className="ml-2 hover:text-blue-900 dark:hover:text-blue-100"
+                      className="ml-2 hover:text-blue-900 dark:hover:text-blue-100 p-0.5
+                               min-h-[20px] min-w-[20px] flex items-center justify-center touch-manipulation"
                       aria-label={`Remove ${tag} filter`}
                     >
                       <X className="w-3 h-3" />
@@ -264,7 +269,7 @@ export default function Search() {
       </div>
 
       {/* Results Section */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {isLoading ? (
           <div className="flex justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>

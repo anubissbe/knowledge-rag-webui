@@ -19,9 +19,9 @@ export default function MemoryCard({ memory }: MemoryCardProps) {
   return (
     <article className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md 
                       transition-shadow duration-200 overflow-hidden">
-      <Link to={`/memories/${memory.id}`} className="block p-6">
+      <Link to={`/memories/${memory.id}`} className="block p-4 sm:p-6 touch-manipulation">
         <div className="flex items-start justify-between mb-3">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2 flex-1">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white line-clamp-2 flex-1 leading-tight">
             {memory.title}
           </h3>
           <ContentIcon className="w-5 h-5 text-gray-400 ml-2 flex-shrink-0" />
@@ -33,7 +33,7 @@ export default function MemoryCard({ memory }: MemoryCardProps) {
           </p>
         )}
         
-        <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 space-x-4 mb-4">
+        <div className="flex flex-wrap items-center text-xs text-gray-500 dark:text-gray-400 gap-x-4 gap-y-1 mb-4">
           <span className="flex items-center">
             <Calendar className="w-3 h-3 mr-1" />
             {new Date(memory.createdAt).toLocaleDateString()}

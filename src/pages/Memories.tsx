@@ -4,6 +4,7 @@ import { Plus, Search, Filter, Grid, List } from 'lucide-react';
 import type { Memory } from '../types';
 import MemoryCard from '../components/memory/MemoryCard';
 import MemoryListItem from '../components/memory/MemoryListItem';
+import MobileFloatingActionButton from '../components/mobile/MobileFloatingActionButton';
 
 // Mock memories for development
 const mockMemories: Memory[] = [
@@ -88,20 +89,22 @@ export default function Memories() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               My Memories
             </h1>
             
             <Link
               to="/memories/new"
-              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg
+              className="inline-flex items-center justify-center px-4 py-3 sm:py-2 bg-blue-600 text-white rounded-lg
                        hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-                       focus:ring-blue-500 transition-colors"
+                       focus:ring-blue-500 transition-colors font-medium text-sm sm:text-base
+                       min-h-[44px] touch-manipulation"
             >
               <Plus className="w-5 h-5 mr-2" />
-              New Memory
+              <span className="hidden xs:inline">New Memory</span>
+              <span className="xs:hidden">New</span>
             </Link>
           </div>
         </div>
@@ -109,85 +112,94 @@ export default function Memories() {
 
       {/* Filters and Search */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex flex-col sm:flex-row gap-4">
-            {/* Search */}
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search memories..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 
-                           rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                           focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex flex-col gap-4">
+            {/* Search and View Toggle Row */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              {/* Search */}
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search memories..."
+                    className="w-full pl-10 pr-4 py-3 sm:py-2 border border-gray-300 dark:border-gray-600 
+                             rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                             focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base
+                             min-h-[44px] touch-manipulation"
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* View Mode Toggle */}
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewMode === 'grid'
-                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-                }`}
-                aria-label="Grid view"
-              >
-                <Grid className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewMode === 'list'
-                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-                }`}
-                aria-label="List view"
-              >
-                <List className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Tag Filters */}
-          {allTags.length > 0 && (
-            <div className="mt-4 flex items-center space-x-2">
-              <Filter className="w-4 h-4 text-gray-500" />
-              <div className="flex flex-wrap gap-2">
-                {allTags.map(tag => (
+              {/* View Mode Toggle */}
+              <div className="flex items-center justify-center sm:justify-start">
+                <div className="inline-flex rounded-lg border border-gray-200 dark:border-gray-600 p-1 bg-gray-50 dark:bg-gray-700">
                   <button
-                    key={tag}
-                    onClick={() => {
-                      setSelectedTags(prev =>
-                        prev.includes(tag)
-                          ? prev.filter(t => t !== tag)
-                          : [...prev, tag]
-                      );
-                    }}
-                    className={`
-                      px-3 py-1 text-sm rounded-full transition-colors
-                      ${selectedTags.includes(tag)
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                      }
-                    `}
+                    onClick={() => setViewMode('grid')}
+                    className={`p-2 rounded-md transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                      viewMode === 'grid'
+                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                    aria-label="Grid view"
                   >
-                    {tag}
+                    <Grid className="w-5 h-5" />
                   </button>
-                ))}
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`p-2 rounded-md transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                      viewMode === 'list'
+                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                    aria-label="List view"
+                  >
+                    <List className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             </div>
-          )}
+
+            {/* Tag Filters */}
+            {allTags.length > 0 && (
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <div className="flex items-center space-x-2 flex-shrink-0">
+                  <Filter className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tags:</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {allTags.map(tag => (
+                    <button
+                      key={tag}
+                      onClick={() => {
+                        setSelectedTags(prev =>
+                          prev.includes(tag)
+                            ? prev.filter(t => t !== tag)
+                            : [...prev, tag]
+                        );
+                      }}
+                      className={`
+                        px-3 py-2 text-sm rounded-full transition-colors min-h-[36px] touch-manipulation
+                        ${selectedTags.includes(tag)
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                        }
+                      `}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {filteredMemories.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 dark:text-gray-400 mb-4">
@@ -208,19 +220,25 @@ export default function Memories() {
             )}
           </div>
         ) : viewMode === 'grid' ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {filteredMemories.map(memory => (
               <MemoryCard key={memory.id} memory={memory} />
             ))}
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {filteredMemories.map(memory => (
               <MemoryListItem key={memory.id} memory={memory} />
             ))}
           </div>
         )}
       </main>
+      
+      {/* Mobile Floating Action Button */}
+      <MobileFloatingActionButton 
+        to="/memories/new" 
+        label="Create new memory"
+      />
     </div>
   );
 }
