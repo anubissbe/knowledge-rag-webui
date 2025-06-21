@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, Brain, Search, Settings as SettingsIcon, 
+  BarChart3, Brain, Search, Settings as SettingsIcon, 
   Menu, X, Moon, Sun 
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
@@ -17,7 +17,7 @@ export default function Layout({ children }: LayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigation = [
-    { name: 'Home', href: '/', icon: Home },
+    { name: 'Dashboard', href: '/', icon: BarChart3 },
     { name: 'Memories', href: '/memories', icon: Brain },
     { name: 'Search', href: '/search', icon: Search },
     { name: 'Settings', href: '/settings', icon: SettingsIcon },
