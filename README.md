@@ -26,7 +26,7 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/knowledge-rag-webui.git
+git clone https://github.com/anubissbe/knowledge-rag-webui.git
 cd knowledge-rag-webui
 ```
 
@@ -183,6 +183,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- Documentation: [https://docs.knowledge-rag.ai](https://docs.knowledge-rag.ai)
-- Issues: [GitHub Issues](https://github.com/yourusername/knowledge-rag-webui/issues)
-- Discussions: [GitHub Discussions](https://github.com/yourusername/knowledge-rag-webui/discussions)
+- Issues: [GitHub Issues](https://github.com/anubissbe/knowledge-rag-webui/issues)
+- Discussions: [GitHub Discussions](https://github.com/anubissbe/knowledge-rag-webui/discussions)
