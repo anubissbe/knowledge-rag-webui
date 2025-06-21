@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Copy, Trash2, Eye, EyeOff, RefreshCw } from 'lucide-react';
+import { Plus, Copy, Trash2, Eye, EyeOff } from 'lucide-react';
 import type { ApiKey } from '../../types';
 
 export default function ApiKeysSettings() {

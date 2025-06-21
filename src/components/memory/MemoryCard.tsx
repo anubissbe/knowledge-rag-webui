@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, Tag, FileText, Code, Type } from 'lucide-react';
+import { Calendar, Clock, FileText, Code, Type } from 'lucide-react';
 import type { Memory } from '../../types';
 import TagList from './TagList';
 

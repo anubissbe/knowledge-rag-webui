@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { 
   User, Settings as SettingsIcon, Key, Download, Shield, Bell, 
-  Globe, Palette, ChevronRight, Save, Trash2 
+  ChevronRight
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import ProfileSettings from '../components/settings/ProfileSettings';
@@ -24,7 +24,7 @@ const settingsTabs: Array<{ id: SettingsTab; label: string; icon: React.ElementT
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
-  const { theme } = useTheme();
+  useTheme();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

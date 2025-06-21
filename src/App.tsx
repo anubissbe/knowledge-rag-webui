@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Settings from './pages/Settings';
 import Memories from './pages/Memories';
 import MemoryDetail from './pages/MemoryDetail';
+import Search from './pages/Search';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/memories" element={<Memories />} />
               <Route path="/memories/:id" element={<MemoryDetail />} />
+              <Route path="/search" element={<Search />} />
               <Route path="/settings" element={<Settings />} />
             </Routes>
           </main>
@@ -42,6 +44,14 @@ function Home() {
                    transition-colors duration-200"
         >
           View Memories
+        </Link>
+        <Link
+          to="/search"
+          className="inline-block px-6 py-3 bg-green-600 text-white font-medium rounded-lg
+                   hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500
+                   transition-colors duration-200"
+        >
+          Search
         </Link>
         <Link
           to="/settings"

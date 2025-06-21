@@ -7,7 +7,7 @@ import { Camera, Save } from 'lucide-react';
 const profileSchema = yup.object({
   name: yup.string().required('Name is required').min(2, 'Name must be at least 2 characters'),
   email: yup.string().required('Email is required').email('Invalid email address'),
-  bio: yup.string().max(500, 'Bio must be less than 500 characters'),
+  bio: yup.string().optional().max(500, 'Bio must be less than 500 characters'),
 });
 
 type ProfileFormData = yup.InferType<typeof profileSchema>;
@@ -16,7 +16,7 @@ export default function ProfileSettings() {
   const [isLoading, setIsLoading] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string>('/api/placeholder/150/150');
 
-  const { register, handleSubmit, formState: { errors } } = useForm<ProfileFormData>({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(profileSchema),
     defaultValues: {
       name: 'John Doe',

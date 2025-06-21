@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
-  ArrowLeft, Calendar, Clock, Tag, User, Globe, 
+  ArrowLeft, Calendar, Clock, User, 
   Edit, Trash2, Share2, Copy, ExternalLink, 
-  FileText, Code, Hash, Building, MapPin, Users
+  FileText
 } from 'lucide-react';
-import type { Memory, Entity } from '../types';
+import type { Memory } from '../types';
 import { formatDistanceToNow } from '../utils/date';
 import MarkdownContent from '../components/MarkdownContent';
 import RelatedMemories from '../components/memory/RelatedMemories';
@@ -150,14 +150,6 @@ export default function MemoryDetail() {
     );
   }
 
-  const entityIcons = {
-    person: User,
-    place: MapPin,
-    organization: Building,
-    concept: Hash,
-    event: Calendar,
-    other: Tag
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
