@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Search, Filter, Grid, List } from 'lucide-react';
 import type { Memory } from '../types';
 import MemoryCard from '../components/memory/MemoryCard';
@@ -9,6 +9,10 @@ import BulkSelectionHeader from '../components/bulk/BulkSelectionHeader';
 import BulkSelectionToolbar from '../components/bulk/BulkSelectionToolbar';
 import BulkSelectableMemoryCard from '../components/bulk/BulkSelectableMemoryCard';
 import { useBulkSelection } from '../hooks/useBulkSelection';
+import { usePageKeyboardShortcuts, useGlobalKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import KeyboardShortcutsModal from '../components/KeyboardShortcutsModal';
+import { useKeyboardShortcutsModal } from '../hooks/useKeyboardShortcutsModal';
+import KeyboardShortcutIndicator from '../components/KeyboardShortcutIndicator';
 
 // Mock memories for development
 const mockMemories: Memory[] = [
@@ -71,6 +75,8 @@ export default function Memories() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isBulkMode, setIsBulkMode] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   // Get all unique tags
   const allTags = Array.from(
@@ -180,6 +186,30 @@ export default function Memories() {
     }
   };
 
+  // Keyboard shortcuts
+  const pageShortcuts = usePageKeyboardShortcuts('memories');
+  const globalShortcuts = useGlobalKeyboardShortcuts();
+  const { isOpen: isShortcutsOpen, close: closeShortcuts } = useKeyboardShortcutsModal();
+
+  // Custom page-specific shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Focus search with /
+      if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+      // Create new memory with n
+      if (e.key === 'n' && !e.ctrlKey && !e.metaKey && !['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) {
+        e.preventDefault();
+        navigate('/memories/new');
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, [navigate]);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
@@ -190,17 +220,24 @@ export default function Memories() {
               My Memories
             </h1>
             
-            <Link
-              to="/memories/new"
-              className="inline-flex items-center justify-center px-4 py-3 sm:py-2 bg-blue-600 text-white rounded-lg
-                       hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-                       focus:ring-blue-500 transition-colors font-medium text-sm sm:text-base
-                       min-h-[44px] touch-manipulation"
-            >
-              <Plus className="w-5 h-5 mr-2" />
-              <span className="hidden xs:inline">New Memory</span>
-              <span className="xs:hidden">New</span>
-            </Link>
+            <div className="relative group">
+              <Link
+                to="/memories/new"
+                className="inline-flex items-center justify-center px-4 py-3 sm:py-2 bg-blue-600 text-white rounded-lg
+                         hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                         focus:ring-blue-500 transition-colors font-medium text-sm sm:text-base
+                         min-h-[44px] touch-manipulation"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                <span className="hidden xs:inline">New Memory</span>
+                <span className="xs:hidden">New</span>
+                <KeyboardShortcutIndicator 
+                  shortcut={{ key: 'n' }} 
+                  showOnHover 
+                  className="ml-2 hidden sm:inline-flex"
+                />
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -220,6 +257,7 @@ export default function Memories() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search memories..."
+                    ref={searchInputRef}
                     className="w-full pl-10 pr-4 py-3 sm:py-2 border border-gray-300 dark:border-gray-600 
                              rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                              focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base
@@ -319,6 +357,7 @@ export default function Memories() {
           isBulkMode={isBulkMode}
           onSelectAll={selectAll}
           onClearSelection={clearSelection}
+          data-select-all={isBulkMode}
         />
       )}
 
@@ -353,6 +392,8 @@ export default function Memories() {
                   isSelected={selectedItems.includes(memory.id)}
                   onToggleSelect={toggleItem}
                   isBulkMode={isBulkMode}
+                  data-memory-item
+                  data-memory-id={memory.id}
                 />
               ) : (
                 <MemoryCard key={memory.id} memory={memory} />
@@ -372,6 +413,21 @@ export default function Memories() {
       <MobileFloatingActionButton 
         to="/memories/new" 
         label="Create new memory"
+      />
+
+      {/* Keyboard Shortcuts Modal */}
+      <KeyboardShortcutsModal
+        isOpen={isShortcutsOpen}
+        onClose={closeShortcuts}
+        shortcuts={{ 
+          global: globalShortcuts,
+          page: [
+            ...pageShortcuts,
+            { key: '/', description: 'Focus search', action: () => searchInputRef.current?.focus() },
+            { key: 'n', description: 'Create new memory', action: () => navigate('/memories/new') }
+          ],
+          pageName: 'Memories'
+        }}
       />
     </div>
   );

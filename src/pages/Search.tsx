@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   Search as SearchIcon, Filter, X, ChevronDown, Tag
@@ -8,6 +8,10 @@ import SearchResultCard from '../components/search/SearchResultCard';
 import SearchFilters from '../components/search/SearchFilters';
 import SearchStats from '../components/search/SearchStats';
 import { useDebounce } from '../hooks/useDebounce';
+import { usePageKeyboardShortcuts, useGlobalKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import KeyboardShortcutsModal from '../components/KeyboardShortcutsModal';
+import { useKeyboardShortcutsModal } from '../hooks/useKeyboardShortcutsModal';
+import KeyboardShortcutIndicator from '../components/KeyboardShortcutIndicator';
 
 // Mock search function for development
 interface SearchFiltersInterface {
@@ -91,6 +95,7 @@ const mockSearch = async (query: string, filters: SearchFiltersInterface): Promi
 export default function Search() {
   const location = useLocation();
   const navigate = useNavigate();
+  const searchInputRef = useRef<HTMLInputElement>(null);
   
   // Parse query params
   const params = new URLSearchParams(location.search);
@@ -180,6 +185,35 @@ export default function Search() {
     filters.contentType ? 1 : 0
   ].reduce((sum, count) => sum + count, 0);
 
+  // Keyboard shortcuts
+  const pageShortcuts = usePageKeyboardShortcuts('search');
+  const globalShortcuts = useGlobalKeyboardShortcuts();
+  const { isOpen: isShortcutsOpen, close: closeShortcuts } = useKeyboardShortcutsModal();
+
+  // Focus search input on mount
+  useEffect(() => {
+    searchInputRef.current?.focus();
+  }, []);
+
+  // Custom keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Clear search with Escape when focused
+      if (e.key === 'Escape' && document.activeElement === searchInputRef.current) {
+        e.preventDefault();
+        setQuery('');
+      }
+      // Toggle filters with f
+      if (e.key === 'f' && !e.ctrlKey && !e.metaKey && !['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) {
+        e.preventDefault();
+        setShowFilters(!showFilters);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, [showFilters]);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Search Header */}
@@ -190,6 +224,7 @@ export default function Search() {
             <div className="relative">
               <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
+                ref={searchInputRef}
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -217,10 +252,10 @@ export default function Search() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="inline-flex items-center justify-center px-4 py-3 sm:py-2 text-sm font-medium rounded-lg
+                className="group inline-flex items-center justify-center px-4 py-3 sm:py-2 text-sm font-medium rounded-lg
                          text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700
                          hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors
-                         min-h-[44px] touch-manipulation"
+                         min-h-[44px] touch-manipulation relative"
               >
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
@@ -230,6 +265,11 @@ export default function Search() {
                   </span>
                 )}
                 <ChevronDown className={`w-4 h-4 ml-2 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                <KeyboardShortcutIndicator 
+                  shortcut={{ key: 'f' }} 
+                  showOnHover 
+                  className="ml-2 hidden sm:inline-flex"
+                />
               </button>
 
               {activeFilterCount > 0 && (
@@ -377,6 +417,20 @@ export default function Search() {
           </div>
         )}
       </main>
+
+      {/* Keyboard Shortcuts Modal */}
+      <KeyboardShortcutsModal
+        isOpen={isShortcutsOpen}
+        onClose={closeShortcuts}
+        shortcuts={{ 
+          global: globalShortcuts,
+          page: [
+            ...pageShortcuts,
+            { key: 'f', description: 'Toggle filters', action: () => setShowFilters(!showFilters) }
+          ],
+          pageName: 'Search'
+        }}
+      />
     </div>
   );
 }

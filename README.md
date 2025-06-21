@@ -204,6 +204,18 @@ The dashboard (home page) provides comprehensive analytics:
 3. Manage API keys for programmatic access
 4. Set up notification preferences
 
+## ⌨️ Keyboard Shortcuts
+
+Knowledge RAG WebUI provides comprehensive keyboard shortcuts for efficient navigation:
+
+### Quick Start
+- Press `?` anywhere to view all available shortcuts
+- `Cmd/Ctrl + K` - Quick search
+- `Cmd/Ctrl + N` - Create new memory
+- `Shift + M/S/G` - Navigate to Memories/Search/Dashboard
+
+For a complete list of shortcuts, see the [Keyboard Shortcuts Guide](docs/KEYBOARD_SHORTCUTS.md) or press `?` in the application.
+
 ## 📱 Mobile Experience
 
 ### Mobile Features

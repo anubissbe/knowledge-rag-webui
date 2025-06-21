@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   BarChart3, Brain, Search, Settings as SettingsIcon, 
-  Menu, X, Moon, Sun 
+  Menu, X, Moon, Sun, Keyboard 
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { useState } from 'react';
@@ -66,7 +66,20 @@ export default function Layout({ children }: LayoutProps) {
             </div>
 
             {/* Right side buttons */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              {/* Keyboard shortcuts */}
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent('show-keyboard-shortcuts'))}
+                className="hidden sm:flex p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 
+                         dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 
+                         rounded-lg transition-colors items-center gap-1"
+                aria-label="Show keyboard shortcuts"
+                title="Keyboard shortcuts (?)"
+              >
+                <Keyboard className="w-5 h-5" />
+                <span className="text-xs font-mono">?</span>
+              </button>
+
               {/* Theme toggle */}
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
