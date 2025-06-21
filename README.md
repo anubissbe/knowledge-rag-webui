@@ -34,6 +34,7 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Code Splitting**: Intelligent bundle splitting reducing initial load from 904KB to 208KB (77% reduction)
 - **Professional Confirmation Dialogs**: Custom modal dialogs with loading states, accessibility features, and consistent styling replacing browser's default confirm()
 - **External Logging Integration**: Sentry error tracking with performance monitoring, session replay, and comprehensive error context
+- **Backend API Server**: Full Express.js backend with TypeScript, JWT authentication, WebSocket support, and RESTful API endpoints
 
 ## 📋 Prerequisites
 
@@ -49,19 +50,30 @@ git clone https://github.com/anubissbe/knowledge-rag-webui.git
 cd knowledge-rag-webui
 ```
 
-2. Install dependencies:
+2. Install frontend dependencies:
 ```bash
 npm install
 ```
 
-3. Create a `.env` file in the root directory:
-```env
-VITE_API_URL=http://localhost:3001
-VITE_WEBSOCKET_URL=ws://localhost:3001
+3. Install and start the backend server:
+```bash
+cd backend
+npm install
+npm run build
+npm run dev
 ```
 
-4. Start the development server:
+The backend API will run on `http://localhost:5002`
+
+4. Create a `.env` file in the root directory:
+```env
+VITE_API_URL=http://localhost:5002/api
+VITE_WEBSOCKET_URL=ws://localhost:5002
+```
+
+5. Start the frontend development server:
 ```bash
+# From the root directory
 npm run dev
 ```
 
@@ -69,22 +81,33 @@ The application will be available at `http://localhost:5173`
 
 ## 🔌 API Backend
 
-This web UI requires a compatible backend API server. The backend should implement the following endpoints:
+The project includes a full-featured backend API server built with Express.js and TypeScript:
 
+### Backend Features:
+- **RESTful API**: Versioned endpoints (`/api/v1/*`)
+- **WebSocket Support**: Real-time updates for collaborative features
+- **JWT Authentication**: Secure user authentication (ready for implementation)
+- **In-Memory Database**: Fast development with sample data
+- **Rate Limiting**: API protection against abuse
+- **CORS Support**: Cross-origin resource sharing
+- **Request Validation**: Input validation using express-validator
+
+### Key Endpoints:
 - **Memory Management**: CRUD operations for memories
-- **Search**: Full-text and vector similarity search
+- **Search**: Full-text search with suggestions
 - **Analytics**: Dashboard statistics and metrics
-- **Export**: Data export in multiple formats
-- **WebSocket**: Real-time updates for memory changes
+- **Export**: Data export in JSON, Markdown, and CSV formats
+- **Collections**: Organize memories into collections
+- **Authentication**: User login/register with JWT tokens
 
-See [API Integration Documentation](./docs/API_INTEGRATION.md) for detailed endpoint specifications.
+See [Backend Documentation](./backend/README.md) for detailed API specifications and [API Integration Documentation](./docs/API_INTEGRATION.md) for frontend integration details.
 
 ## 🏗️ Project Structure
 
 ```
 knowledge-rag-webui/
-├── src/
-│   ├── components/         # Reusable UI components
+├── src/                   # Frontend source code
+│   ├── components/        # Reusable UI components
 │   │   ├── bulk/          # Bulk operations components
 │   │   ├── dashboard/     # Dashboard and analytics components
 │   │   ├── memory/        # Memory-specific components
@@ -103,6 +126,15 @@ knowledge-rag-webui/
 │   ├── utils/             # Utility functions and centralized logger
 │   │   └── logger.ts     # Structured logging system with context support
 │   └── styles/            # Global styles and mobile CSS
+├── backend/               # Backend API server
+│   ├── src/              # Backend source code
+│   │   ├── middleware/   # Express middleware
+│   │   ├── models/       # TypeScript interfaces
+│   │   ├── routes/       # API route definitions
+│   │   ├── services/     # Business logic
+│   │   └── index.ts      # Server entry point
+│   ├── package.json      # Backend dependencies
+│   └── README.md         # Backend documentation
 ├── public/                # Static assets
 ├── tests/                 # Test files
 │   ├── unit/             # Unit tests
