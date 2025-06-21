@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 test.describe('Backend API Integration', () => {
   const API_URL = 'http://localhost:5002/api';

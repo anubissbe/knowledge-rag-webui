@@ -35,6 +35,7 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Professional Confirmation Dialogs**: Custom modal dialogs with loading states, accessibility features, and consistent styling replacing browser's default confirm()
 - **External Logging Integration**: Sentry error tracking with performance monitoring, session replay, and comprehensive error context
 - **Backend API Server**: Full Express.js backend with TypeScript, JWT authentication, WebSocket support, and RESTful API endpoints
+- **JWT Authentication**: Complete user authentication system with login/register, protected routes, and secure token management
 
 ## 📋 Prerequisites
 
@@ -100,7 +101,7 @@ The project includes a full-featured backend API server built with Express.js an
 - **Collections**: Organize memories into collections
 - **Authentication**: User login/register with JWT tokens
 
-See [Backend Documentation](./backend/README.md) for detailed API specifications and [API Integration Documentation](./docs/API_INTEGRATION.md) for frontend integration details.
+See [Backend Documentation](./backend/README.md) for detailed API specifications, [Authentication Documentation](./docs/AUTHENTICATION.md) for security implementation details, and [API Integration Documentation](./docs/API_INTEGRATION.md) for frontend integration details.
 
 ## 🏗️ Project Structure
 
