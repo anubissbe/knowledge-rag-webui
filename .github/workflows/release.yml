@@ -1,0 +1,289 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Is this a pre-release?'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  validate-release:
+    name: Validate Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      is-prerelease: ${{ steps.version.outputs.is-prerelease }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            IS_PRERELEASE="${{ github.event.inputs.prerelease }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/v}"
+            if [[ "$VERSION" =~ (alpha|beta|rc) ]]; then
+              IS_PRERELEASE="true"
+            else
+              IS_PRERELEASE="false"
+            fi
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "is-prerelease=$IS_PRERELEASE" >> $GITHUB_OUTPUT
+          
+          echo "## 🏷️ Release Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: $VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "- **Pre-release**: $IS_PRERELEASE" >> $GITHUB_STEP_SUMMARY
+
+      - name: Validate version format
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+.*$ ]]; then
+            echo "❌ Invalid version format: $VERSION"
+            echo "Version must follow semantic versioning (e.g., 1.0.0, 1.0.0-beta.1)"
+            exit 1
+          fi
+          echo "✅ Version format is valid: $VERSION"
+
+      - name: Check for existing tag
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          VERSION="v${{ steps.version.outputs.version }}"
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "❌ Tag $VERSION already exists"
+            exit 1
+          fi
+          echo "✅ Tag $VERSION is available"
+
+  build-release:
+    name: Build Release Assets
+    runs-on: ubuntu-latest
+    needs: validate-release
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update version in package.json
+        run: |
+          npm version ${{ needs.validate-release.outputs.version }} --no-git-tag-version
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to ${{ needs.validate-release.outputs.version }}" || true
+
+      - name: Run quality checks
+        run: |
+          npm run lint
+          npx tsc --noEmit
+
+      - name: Build application
+        run: npm run build
+
+      - name: Create build info
+        run: |
+          cat > dist/build-info.json << EOF
+          {
+            "version": "${{ needs.validate-release.outputs.version }}",
+            "buildDate": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "commit": "${{ github.sha }}",
+            "branch": "${{ github.ref_name }}",
+            "buildNumber": "${{ github.run_number }}"
+          }
+          EOF
+
+      - name: Create release archive
+        run: |
+          cd dist
+          tar -czf ../knowledge-rag-webui-${{ needs.validate-release.outputs.version }}.tar.gz .
+          cd ..
+          zip -r knowledge-rag-webui-${{ needs.validate-release.outputs.version }}.zip dist/
+
+      - name: Generate checksums
+        run: |
+          sha256sum knowledge-rag-webui-${{ needs.validate-release.outputs.version }}.tar.gz > checksums.txt
+          sha256sum knowledge-rag-webui-${{ needs.validate-release.outputs.version }}.zip >> checksums.txt
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-${{ needs.validate-release.outputs.version }}
+          path: |
+            knowledge-rag-webui-*.tar.gz
+            knowledge-rag-webui-*.zip
+            checksums.txt
+          retention-days: 30
+
+  test-release:
+    name: Test Release Build
+    runs-on: ubuntu-latest
+    needs: build-release
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-assets-${{ needs.validate-release.outputs.version }}
+
+      - name: Extract and test build
+        run: |
+          tar -xzf knowledge-rag-webui-${{ needs.validate-release.outputs.version }}.tar.gz
+          test -f index.html
+          test -f build-info.json
+          echo "✅ Build artifacts are valid"
+
+      - name: Install and run E2E tests
+        run: |
+          npm ci
+          npx playwright install chromium
+          npx serve . -p 4173 &
+          npx wait-on http://localhost:4173 --timeout 60000
+          npm run test:e2e
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [validate-release, build-release, test-release]
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-assets-${{ needs.validate-release.outputs.version }}
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          VERSION="v${{ needs.validate-release.outputs.version }}"
+          
+          # Get the previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          
+          echo "## 🚀 Release Notes for $VERSION" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          
+          if [ -n "$PREV_TAG" ]; then
+            echo "### 📋 Changes since $PREV_TAG" >> CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            
+            # Generate commit log
+            git log --pretty=format:"- %s (%h)" $PREV_TAG..HEAD >> CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            
+            # Count changes
+            COMMIT_COUNT=$(git rev-list --count $PREV_TAG..HEAD)
+            echo "### 📊 Statistics" >> CHANGELOG.md
+            echo "- **Commits**: $COMMIT_COUNT" >> CHANGELOG.md
+            echo "- **Contributors**: $(git shortlog -sn $PREV_TAG..HEAD | wc -l)" >> CHANGELOG.md
+          else
+            echo "### 🎉 Initial Release" >> CHANGELOG.md
+            echo "This is the first release of Knowledge RAG WebUI." >> CHANGELOG.md
+          fi
+          
+          echo "" >> CHANGELOG.md
+          echo "### 📦 Assets" >> CHANGELOG.md
+          echo "- \`knowledge-rag-webui-${{ needs.validate-release.outputs.version }}.tar.gz\` - Compressed build (tar.gz)" >> CHANGELOG.md
+          echo "- \`knowledge-rag-webui-${{ needs.validate-release.outputs.version }}.zip\` - Compressed build (zip)" >> CHANGELOG.md
+          echo "- \`checksums.txt\` - SHA256 checksums for verification" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "### 🔍 Verification" >> CHANGELOG.md
+          echo "Verify download integrity using the provided checksums:" >> CHANGELOG.md
+          echo '```bash' >> CHANGELOG.md
+          echo 'sha256sum -c checksums.txt' >> CHANGELOG.md
+          echo '```' >> CHANGELOG.md
+
+      - name: Create Git tag
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "v${{ needs.validate-release.outputs.version }}" -m "Release v${{ needs.validate-release.outputs.version }}"
+          git push origin "v${{ needs.validate-release.outputs.version }}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.validate-release.outputs.version }}
+          name: Release v${{ needs.validate-release.outputs.version }}
+          body_path: CHANGELOG.md
+          prerelease: ${{ needs.validate-release.outputs.is-prerelease == 'true' }}
+          files: |
+            knowledge-rag-webui-*.tar.gz
+            knowledge-rag-webui-*.zip
+            checksums.txt
+          generate_release_notes: true
+
+      - name: Update release summary
+        run: |
+          echo "## 🎉 Release Created Successfully" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: v${{ needs.validate-release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Pre-release**: ${{ needs.validate-release.outputs.is-prerelease }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release URL**: https://github.com/${{ github.repository }}/releases/tag/v${{ needs.validate-release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+
+  deploy-release:
+    name: Deploy Release
+    runs-on: ubuntu-latest
+    needs: [validate-release, create-release]
+    if: needs.validate-release.outputs.is-prerelease == 'false'
+    environment: production
+    
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-assets-${{ needs.validate-release.outputs.version }}
+
+      - name: Deploy to production
+        run: |
+          echo "🚀 Deploying release v${{ needs.validate-release.outputs.version }} to production..."
+          # Here you would add your actual deployment commands
+          # Examples:
+          # - Upload to S3/CDN
+          # - Deploy to Kubernetes
+          # - Update Docker images
+          # - Notify deployment services
+          
+          echo "## 🌟 Production Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "Release v${{ needs.validate-release.outputs.version }} deployed to production!" >> $GITHUB_STEP_SUMMARY
+          echo "- **Production URL**: https://knowledge-rag-webui.dev" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployment Time**: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY

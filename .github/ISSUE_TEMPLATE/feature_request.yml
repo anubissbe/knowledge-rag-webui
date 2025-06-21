@@ -1,0 +1,198 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement for the Knowledge RAG WebUI
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please fill out this form as completely as possible.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm you have completed the following
+      options:
+        - label: I have searched for existing feature requests that might be the same
+          required: true
+        - label: I have read the documentation to understand current capabilities
+          required: true
+        - label: This feature would benefit multiple users, not just my specific use case
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like
+      placeholder: A clear and concise description of what you want to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Describe alternatives you've considered
+      placeholder: A clear and concise description of any alternative solutions or features you've considered.
+
+  - type: dropdown
+    id: feature-category
+    attributes:
+      label: Feature Category
+      description: What category does this feature belong to?
+      options:
+        - Search & Discovery
+        - Memory Management
+        - User Interface
+        - Data Import/Export
+        - Performance
+        - Accessibility
+        - Mobile Experience
+        - API/Integration
+        - Settings/Preferences
+        - Security/Privacy
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Low - Nice to have
+        - Medium - Would improve my workflow
+        - High - Important for my use case
+        - Critical - Blocking my use of the application
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Estimated Complexity
+      description: How complex do you think this feature would be to implement?
+      options:
+        - Simple - Small UI change or minor enhancement
+        - Medium - New component or moderate functionality
+        - Complex - Major feature requiring significant development
+        - Unknown - I'm not sure about the technical complexity
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User Story
+      description: Describe this feature as a user story
+      placeholder: |
+        As a [type of user],
+        I want [goal/desire]
+        So that [benefit/value]
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What conditions must be met for this feature to be considered complete?
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] Criterion 3
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups/Wireframes
+      description: If you have any mockups, wireframes, or visual examples, please share them
+      placeholder: Drag and drop or paste images here, or describe the visual design you envision
+
+  - type: checkboxes
+    id: platform-support
+    attributes:
+      label: Platform Support
+      description: Which platforms should this feature support?
+      options:
+        - label: Desktop browsers
+        - label: Mobile browsers
+        - label: Tablet browsers
+        - label: All platforms
+
+  - type: textarea
+    id: implementation-ideas
+    attributes:
+      label: Implementation Ideas
+      description: If you have ideas about how this could be implemented, please share them
+      placeholder: Any technical suggestions or approaches you think might work
+
+  - type: checkboxes
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      description: Would this feature require breaking changes?
+      options:
+        - label: This feature would require breaking changes to existing functionality
+        - label: This feature can be implemented without breaking existing functionality
+        - label: I'm not sure about the impact on existing functionality
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: Use Cases
+      description: Describe specific use cases where this feature would be helpful
+      placeholder: |
+        1. Use case 1: [description]
+        2. Use case 2: [description]
+        3. Use case 3: [description]
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Benefits
+      description: What benefits would this feature provide?
+      placeholder: |
+        - Improved user experience because...
+        - Better performance by...
+        - Enhanced accessibility through...
+        - etc.
+
+  - type: textarea
+    id: resources
+    attributes:
+      label: Additional Resources
+      description: Any additional resources, links, or references that might help
+      placeholder: Links to similar features in other applications, research papers, design patterns, etc.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context or information about the feature request
+      placeholder: Any other information that might be helpful for understanding this request
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Are you willing to contribute to this feature?
+      options:
+        - label: I would be willing to help implement this feature
+        - label: I would be willing to help test this feature
+        - label: I would be willing to help with documentation for this feature
+        - label: I can provide feedback during development

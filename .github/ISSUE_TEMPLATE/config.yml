@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentation
+    url: https://github.com/username/knowledge-rag-webui/blob/main/README.md
+    about: Please check our documentation first
+  - name: 💬 General Questions
+    url: https://github.com/username/knowledge-rag-webui/discussions
+    about: For general questions and discussions, please use GitHub Discussions
+  - name: 🔒 Security Issues
+    url: https://github.com/username/knowledge-rag-webui/security/advisories/new
+    about: Report security vulnerabilities privately

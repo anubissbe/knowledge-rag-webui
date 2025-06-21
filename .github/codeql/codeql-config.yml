@@ -1,0 +1,24 @@
+name: "Knowledge RAG WebUI CodeQL Config"
+
+queries:
+  - uses: security-and-quality
+  - uses: security-extended
+
+paths-ignore:
+  - "dist/**"
+  - "node_modules/**"
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts"
+  - "tests/**"
+  - "playwright-report/**"
+  - ".github/**"
+
+paths:
+  - "src/**"
+
+query-filters:
+  - exclude:
+      id: js/useless-assignment-to-local
+  - exclude:
+      id: js/unused-local-variable

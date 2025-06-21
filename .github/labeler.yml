@@ -1,0 +1,93 @@
+# Configuration for GitHub's labeler action
+# https://github.com/actions/labeler
+
+# Frontend related changes
+frontend:
+  - src/**/*.tsx
+  - src/**/*.ts
+  - src/components/**/*
+  - src/pages/**/*
+  - src/hooks/**/*
+
+# Styling changes
+styling:
+  - "**/*.css"
+  - src/styles/**/*
+  - tailwind.config.js
+  - postcss.config.mjs
+
+# Testing related changes
+testing:
+  - tests/**/*
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts"
+  - playwright.config.ts
+  - playwright-report/**/*
+
+# Documentation changes
+documentation:
+  - "**/*.md"
+  - docs/**/*
+  - README.md
+  - CONTRIBUTING.md
+
+# Configuration changes
+configuration:
+  - "**/*.json"
+  - "**/*.yml"
+  - "**/*.yaml"
+  - vite.config.ts
+  - tsconfig*.json
+  - eslint.config.js
+  - package.json
+  - package-lock.json
+
+# GitHub Actions / CI changes
+ci/cd:
+  - .github/**/*
+
+# Security related
+security:
+  - .github/workflows/codeql.yml
+  - .github/workflows/dependency-updates.yml
+
+# Mobile/responsive changes
+mobile:
+  - src/components/mobile/**/*
+  - src/styles/mobile.css
+  - src/hooks/useResponsive.ts
+
+# Search functionality
+search:
+  - src/pages/Search.tsx
+  - src/components/search/**/*
+  - src/utils/search.ts
+
+# Settings/preferences
+settings:
+  - src/pages/Settings.tsx
+  - src/components/settings/**/*
+
+# Bulk operations
+bulk-operations:
+  - src/components/bulk/**/*
+  - src/hooks/useBulkSelection.ts
+
+# TypeScript changes
+typescript:
+  - src/types/**/*
+  - "**/*.ts"
+  - "**/*.tsx"
+  - tsconfig*.json
+
+# Build/deployment
+build:
+  - vite.config.ts
+  - dist/**/*
+  - .lighthouserc.json
+
+# Dependencies
+dependencies:
+  - package.json
+  - package-lock.json
