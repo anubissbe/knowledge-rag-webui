@@ -31,6 +31,7 @@
   "devDependencies": {
     "@eslint/js": "^9.25.0",
     "@playwright/test": "^1.53.1",
+    "@types/node": "^24.0.3",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vite-pwa/assets-generator": "^1.0.0",

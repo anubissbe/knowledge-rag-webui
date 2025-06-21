@@ -36,6 +36,8 @@ export class WebSocketService {
   private listeners: Map<string, Set<(data: unknown) => void>> = new Map();
   private isConnecting = false;
   private url: string;
+  private latencyInterval: NodeJS.Timeout | null = null;
+  private connectionCheckIntervals: Set<NodeJS.Timeout> = new Set();
 
   constructor(url?: string) {
     this.url = url || import.meta.env.VITE_WEBSOCKET_URL || 'ws://localhost:3001';
@@ -52,10 +54,20 @@ export class WebSocketService {
         // Wait for ongoing connection
         const checkConnection = setInterval(() => {
           if (this.socket?.connected) {
-            clearInterval(checkConnection);
+            this.clearConnectionCheckInterval(checkConnection);
             resolve();
           }
         }, 100);
+        
+        // Store interval for cleanup and set a timeout to prevent infinite waiting
+        this.connectionCheckIntervals.add(checkConnection);
+        setTimeout(() => {
+          if (this.connectionCheckIntervals.has(checkConnection)) {
+            this.clearConnectionCheckInterval(checkConnection);
+            reject(new Error('Connection timeout - another connection is in progress'));
+          }
+        }, 10000); // 10 second timeout
+        
         return;
       }
 
@@ -71,7 +83,9 @@ export class WebSocketService {
         });
 
         this.socket.on('connect', () => {
-          console.log('WebSocket connected');
+          if (import.meta.env.DEV) {
+            console.log('WebSocket connected');
+          }
           this.reconnectAttempts = 0;
           this.isConnecting = false;
           this.emit('connection:status', { connected: true });
@@ -79,13 +93,18 @@ export class WebSocketService {
         });
 
         this.socket.on('disconnect', (reason) => {
-          console.log('WebSocket disconnected:', reason);
+          if (import.meta.env.DEV) {
+            console.log('WebSocket disconnected:', reason);
+          }
           this.isConnecting = false;
+          this.clearLatencyMonitoring(); // Clear latency monitoring on disconnect
           this.emit('connection:status', { connected: false });
         });
 
         this.socket.on('connect_error', (error) => {
-          console.error('WebSocket connection error:', error);
+          if (import.meta.env.DEV) {
+            console.error('WebSocket connection error:', error);
+          }
           this.reconnectAttempts++;
           this.isConnecting = false;
           
@@ -114,16 +133,8 @@ export class WebSocketService {
           });
         });
 
-        // Latency monitoring
-        setInterval(() => {
-          if (this.socket?.connected) {
-            const start = Date.now();
-            this.socket.emit('ping', () => {
-              const latency = Date.now() - start;
-              this.emit('connection:status', { connected: true, latency });
-            });
-          }
-        }, 30000); // Check every 30 seconds
+        // Latency monitoring - store interval for cleanup
+        this.startLatencyMonitoring();
 
       } catch (error) {
         this.isConnecting = false;
@@ -133,11 +144,23 @@ export class WebSocketService {
   }
 
   disconnect(): void {
+    // Clear all intervals
+    this.clearLatencyMonitoring();
+    this.clearAllConnectionCheckIntervals();
+    
+    // Disconnect socket and remove all listeners
     if (this.socket) {
+      this.socket.removeAllListeners();
       this.socket.disconnect();
       this.socket = null;
     }
+    
+    // Clear event listeners
     this.listeners.clear();
+    
+    // Reset connection state
+    this.isConnecting = false;
+    this.reconnectAttempts = 0;
   }
 
   on<T extends WebSocketEvent>(event: T, callback: (data: WebSocketEventData[T]) => void): () => void {
@@ -166,7 +189,9 @@ export class WebSocketService {
         try {
           callback(data);
         } catch (error) {
-          console.error(`Error in WebSocket event handler for ${event}:`, error);
+          if (import.meta.env.DEV) {
+            console.error(`Error in WebSocket event handler for ${event}:`, error);
+          }
         }
       });
     }
@@ -199,6 +224,41 @@ export class WebSocketService {
     return {
       connected: this.isConnected(),
     };
+  }
+
+  // Helper methods for interval management
+  private startLatencyMonitoring(): void {
+    // Clear any existing interval first
+    this.clearLatencyMonitoring();
+    
+    this.latencyInterval = setInterval(() => {
+      if (this.socket?.connected) {
+        const start = Date.now();
+        this.socket.emit('ping', () => {
+          const latency = Date.now() - start;
+          this.emit('connection:status', { connected: true, latency });
+        });
+      }
+    }, 30000); // Check every 30 seconds
+  }
+
+  private clearLatencyMonitoring(): void {
+    if (this.latencyInterval) {
+      clearInterval(this.latencyInterval);
+      this.latencyInterval = null;
+    }
+  }
+
+  private clearConnectionCheckInterval(interval: NodeJS.Timeout): void {
+    clearInterval(interval);
+    this.connectionCheckIntervals.delete(interval);
+  }
+
+  private clearAllConnectionCheckIntervals(): void {
+    this.connectionCheckIntervals.forEach(interval => {
+      clearInterval(interval);
+    });
+    this.connectionCheckIntervals.clear();
   }
 }
 

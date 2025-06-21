@@ -16,17 +16,14 @@ export function useRealtimeMemories({
   const { on, isConnected } = useWebSocket();
 
   const handleMemoryCreated = useCallback((memory: Memory) => {
-    console.log('Memory created:', memory);
     onMemoryCreated?.(memory);
   }, [onMemoryCreated]);
 
   const handleMemoryUpdated = useCallback((memory: Memory) => {
-    console.log('Memory updated:', memory);
     onMemoryUpdated?.(memory);
   }, [onMemoryUpdated]);
 
   const handleMemoryDeleted = useCallback((data: { id: string }) => {
-    console.log('Memory deleted:', data);
     onMemoryDeleted?.(data);
   }, [onMemoryDeleted]);
 
