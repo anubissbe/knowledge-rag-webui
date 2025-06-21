@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { hookLogger } from '../utils/logger';
 
 export function useOfflineDetection() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -9,7 +10,7 @@ export function useOfflineDetection() {
       setIsOnline(true);
       if (wasOffline) {
         // User came back online after being offline
-        console.log('Connection restored');
+        hookLogger.info('Internet connection restored');
       }
     };
 

@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { hookLogger } from '../utils/logger';
 
 export interface ShortcutConfig {
   key: string;
@@ -133,7 +134,7 @@ export function useGlobalKeyboardShortcuts() {
       description: 'New Memory',
       action: () => {
         // This would open the new memory modal/page
-        console.log('New memory shortcut triggered');
+        hookLogger.debug('New memory shortcut triggered');
         // TODO: Implement when memory creation modal is available
       },
       global: true

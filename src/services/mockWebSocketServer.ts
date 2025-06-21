@@ -1,12 +1,14 @@
 // Mock WebSocket server for development
 // This simulates real-time events for testing
 
+import { logger } from '../utils/logger';
+
 class MockWebSocketServer {
   private intervalId: number | null = null;
   private eventCallbacks: Map<string, Set<(data: unknown) => void>> = new Map();
 
   start() {
-    console.log('Mock WebSocket server started');
+    logger.debug('Mock WebSocket server started', 'MockWS');
     
     // Simulate random events every 10-30 seconds
     this.intervalId = window.setInterval(() => {
@@ -32,7 +34,7 @@ class MockWebSocketServer {
       window.clearInterval(this.intervalId);
       this.intervalId = null;
     }
-    console.log('Mock WebSocket server stopped');
+    logger.debug('Mock WebSocket server stopped', 'MockWS');
   }
 
   private simulateMemoryCreated() {

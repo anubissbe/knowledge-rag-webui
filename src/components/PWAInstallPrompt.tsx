@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Download, Smartphone } from 'lucide-react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
+import { pwLogger } from '../utils/logger';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -19,10 +20,10 @@ export default function PWAInstallPrompt() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r: ServiceWorkerRegistration | undefined) {
-      console.log('SW Registered:', r);
+      pwLogger.info('Service Worker registered successfully', r);
     },
     onRegisterError(error: unknown) {
-      console.log('SW registration error', error);
+      pwLogger.error('Service Worker registration failed', error);
     },
   });
 
@@ -90,9 +91,9 @@ export default function PWAInstallPrompt() {
       const { outcome } = await deferredPrompt.userChoice;
       
       if (outcome === 'accepted') {
-        console.log('User accepted the install prompt');
+        pwLogger.info('User accepted the install prompt');
       } else {
-        console.log('User dismissed the install prompt');
+        pwLogger.info('User dismissed the install prompt');
       }
       
       setDeferredPrompt(null);

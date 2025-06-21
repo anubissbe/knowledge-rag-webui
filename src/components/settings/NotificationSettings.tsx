@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { componentLogger } from '../../utils/logger';
 import { Bell, Mail, MessageSquare, Calendar, TrendingUp, Users, Shield } from 'lucide-react';
 
 interface NotificationCategory {
@@ -59,7 +60,7 @@ export default function NotificationSettings() {
   };
 
   const handleSaveSettings = () => {
-    console.log('Saving notification settings:', { notifications, emailDigest });
+    componentLogger.info('Saving notification settings', { notifications, emailDigest });
   };
 
   return (

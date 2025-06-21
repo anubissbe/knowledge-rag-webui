@@ -1,4 +1,5 @@
 import { io, Socket } from 'socket.io-client';
+import { wsLogger } from '../utils/logger';
 import type { Memory, Collection, Tag } from '../types';
 
 export type WebSocketEvent = 
@@ -83,9 +84,7 @@ export class WebSocketService {
         });
 
         this.socket.on('connect', () => {
-          if (import.meta.env.DEV) {
-            console.log('WebSocket connected');
-          }
+          wsLogger.info('WebSocket connected');
           this.reconnectAttempts = 0;
           this.isConnecting = false;
           this.emit('connection:status', { connected: true });
@@ -93,9 +92,7 @@ export class WebSocketService {
         });
 
         this.socket.on('disconnect', (reason) => {
-          if (import.meta.env.DEV) {
-            console.log('WebSocket disconnected:', reason);
-          }
+          wsLogger.info('WebSocket disconnected', { reason });
           this.isConnecting = false;
           this.clearLatencyMonitoring(); // Clear latency monitoring on disconnect
           this.emit('connection:status', { connected: false });

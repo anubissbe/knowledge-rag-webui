@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { componentLogger } from '../../utils/logger';
 import { Shield, Eye, Users, Trash2, AlertCircle } from 'lucide-react';
 
 export default function PrivacySettings() {
@@ -22,7 +23,7 @@ export default function PrivacySettings() {
   const handleDeleteAccount = () => {
     if (confirm('Are you sure you want to delete your account? This action is permanent and cannot be undone.')) {
       // Handle account deletion
-      console.log('Deleting account...');
+      componentLogger.warn('Account deletion initiated by user');
     }
   };
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { componentLogger } from '../../utils/logger';
 import { useTheme } from '../../hooks/useTheme';
 import { Monitor, Moon, Sun, Globe, Clock } from 'lucide-react';
 
@@ -31,7 +32,7 @@ export default function PreferencesSettings() {
 
   const handleSavePreferences = () => {
     // Save preferences to API
-    console.log('Saving preferences:', { theme, language, timezone, dateFormat, timeFormat });
+    componentLogger.info('Saving user preferences', { theme, language, timezone, dateFormat, timeFormat });
   };
 
   return (
