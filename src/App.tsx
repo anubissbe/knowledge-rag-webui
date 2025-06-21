@@ -14,6 +14,7 @@ import { useKeyboardShortcutsModal } from './hooks/useKeyboardShortcutsModal';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
 import RealtimeNotification from './components/RealtimeNotification';
+import ToastNotification from './components/ToastNotification';
 
 function AppContent() {
   const globalShortcuts = useGlobalKeyboardShortcuts();
@@ -40,6 +41,7 @@ function AppContent() {
       <PWAInstallPrompt />
       <OfflineIndicator />
       <RealtimeNotification />
+      <ToastNotification />
     </>
   );
 }

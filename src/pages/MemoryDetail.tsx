@@ -11,6 +11,7 @@ import MarkdownContent from '../components/MarkdownContent';
 import RelatedMemories from '../components/memory/RelatedMemories';
 import EntityList from '../components/memory/EntityList';
 import TagList from '../components/memory/TagList';
+import { useToast } from '../hooks/useToast';
 
 // Mock data for development
 const mockMemory: Memory = {
@@ -89,6 +90,7 @@ def rag_pipeline(query: str):
 export default function MemoryDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const toast = useToast();
   const [memory, setMemory] = useState<Memory | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -101,8 +103,12 @@ export default function MemoryDetail() {
 
   const handleCopy = async () => {
     if (memory) {
-      await navigator.clipboard.writeText(memory.content);
-      // Show toast notification
+      try {
+        await navigator.clipboard.writeText(memory.content);
+        toast.success('Copied!', 'Memory content copied to clipboard');
+      } catch (error) {
+        toast.error('Copy failed', 'Failed to copy content to clipboard');
+      }
     }
   };
 
@@ -122,9 +128,11 @@ export default function MemoryDetail() {
     setIsDeleting(true);
     try {
       // API call to delete memory
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      toast.success('Memory deleted', 'The memory has been permanently deleted');
       navigate('/memories');
     } catch (error) {
-      console.error('Failed to delete memory:', error);
+      toast.error('Delete failed', 'Failed to delete the memory. Please try again.');
       setIsDeleting(false);
     }
   };

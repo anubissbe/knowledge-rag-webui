@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Plus, Copy, Trash2, Eye, EyeOff } from 'lucide-react';
 import type { ApiKey } from '../../types';
+import { useToast } from '../../hooks/useToast';
 
 export default function ApiKeysSettings() {
+  const toast = useToast();
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([
     {
       id: '1',
@@ -26,13 +28,18 @@ export default function ApiKeysSettings() {
   const [newKeyName, setNewKeyName] = useState('');
 
   const handleCopyKey = async (key: string) => {
-    await navigator.clipboard.writeText(key);
-    // Show toast notification here
+    try {
+      await navigator.clipboard.writeText(key);
+      toast.success('Copied!', 'API key copied to clipboard');
+    } catch (error) {
+      toast.error('Copy failed', 'Failed to copy API key');
+    }
   };
 
   const handleDeleteKey = (id: string) => {
     if (confirm('Are you sure you want to delete this API key? This action cannot be undone.')) {
       setApiKeys(apiKeys.filter(key => key.id !== id));
+      toast.success('API key deleted', 'The API key has been removed');
     }
   };
 
@@ -52,6 +59,9 @@ export default function ApiKeysSettings() {
       
       setApiKeys([...apiKeys, newKey]);
       setNewKeyName('');
+      toast.success('API key created', `Successfully created "${newKey.name}"`);
+    } catch (error) {
+      toast.error('Creation failed', 'Failed to create API key. Please try again.');
     } finally {
       setIsCreating(false);
     }

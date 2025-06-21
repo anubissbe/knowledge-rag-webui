@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Camera, Save } from 'lucide-react';
+import { useToast } from '../../hooks/useToast';
 
 const profileSchema = yup.object({
   name: yup.string().required('Name is required').min(2, 'Name must be at least 2 characters'),
@@ -15,6 +16,7 @@ type ProfileFormData = yup.InferType<typeof profileSchema>;
 export default function ProfileSettings() {
   const [isLoading, setIsLoading] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string>('/api/placeholder/150/150');
+  const toast = useToast();
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(profileSchema),
@@ -25,12 +27,14 @@ export default function ProfileSettings() {
     },
   });
 
-  const onSubmit = async (data: ProfileFormData) => {
+  const onSubmit = async (_data: ProfileFormData) => {
     setIsLoading(true);
     try {
       // API call to update profile
-      console.log('Updating profile:', data);
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      toast.success('Profile updated', 'Your profile has been updated successfully.');
+    } catch (error) {
+      toast.error('Update failed', 'Failed to update profile. Please try again.');
     } finally {
       setIsLoading(false);
     }

@@ -4,6 +4,7 @@ import {
   Check, AlertTriangle
 } from 'lucide-react';
 import type { Memory } from '../../types';
+import { useToast } from '../../hooks/useToast';
 
 interface BulkSelectionToolbarProps {
   selectedCount: number;
@@ -26,6 +27,7 @@ export default function BulkSelectionToolbar({
   onBulkAddTags,
   className = ''
 }: BulkSelectionToolbarProps) {
+  const toast = useToast();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [showCollectionMenu, setShowCollectionMenu] = useState(false);
@@ -41,10 +43,14 @@ export default function BulkSelectionToolbar({
     setIsDeleting(true);
     try {
       await onBulkDelete(selectedIds);
+      toast.success(
+        'Memories deleted', 
+        `Successfully deleted ${selectedCount} ${selectedCount === 1 ? 'memory' : 'memories'}`
+      );
       onClearSelection();
       setShowDeleteConfirm(false);
     } catch (error) {
-      console.error('Failed to delete memories:', error);
+      toast.error('Delete failed', 'Failed to delete selected memories. Please try again.');
     } finally {
       setIsDeleting(false);
     }
@@ -52,6 +58,10 @@ export default function BulkSelectionToolbar({
 
   const handleExport = (format: 'json' | 'markdown' | 'csv') => {
     onBulkExport(selectedIds, format);
+    toast.success(
+      'Export started',
+      `Exporting ${selectedCount} ${selectedCount === 1 ? 'memory' : 'memories'} as ${format.toUpperCase()}`
+    );
     setShowExportMenu(false);
   };
 
