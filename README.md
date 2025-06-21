@@ -6,6 +6,7 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 
 ## 🚀 Features
 
+- **Analytics Dashboard**: Comprehensive analytics with memory growth charts, usage statistics, and performance insights
 - **Memory Management**: Create, view, edit, and delete memories with rich metadata
 - **Smart Search**: Full-text search with tag filtering and faceted search
 - **Entity Recognition**: Automatic entity extraction and relationship mapping
@@ -14,7 +15,7 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Responsive Design**: Mobile-first design with touch interactions and adaptive layouts
 - **Mobile Features**: Floating action buttons, swipe gestures, and mobile-optimized navigation
 - **Accessibility**: WCAG 2.1 AA compliant with full keyboard navigation and 44px touch targets
-- **Real-time Updates**: WebSocket support for live updates
+- **CI/CD Pipeline**: Automated testing, building, and deployment with GitHub Actions
 - **Bulk Operations**: Select multiple memories for bulk delete, export, collection assignment, and tag management
 - **Export/Import**: Export memories in multiple formats (JSON, CSV, PDF, Markdown) with bulk export support
 - **Touch Optimized**: Enhanced mobile experience with proper touch targets and gestures
@@ -58,6 +59,7 @@ knowledge-rag-webui/
 ├── src/
 │   ├── components/         # Reusable UI components
 │   │   ├── bulk/          # Bulk operations components
+│   │   ├── dashboard/     # Dashboard and analytics components
 │   │   ├── memory/        # Memory-specific components
 │   │   ├── mobile/        # Mobile-specific components
 │   │   ├── search/        # Search-related components
@@ -65,7 +67,7 @@ knowledge-rag-webui/
 │   │   └── Layout.tsx     # Main layout wrapper
 │   ├── contexts/          # React contexts (Theme, Auth, etc.)
 │   ├── hooks/             # Custom React hooks
-│   ├── pages/             # Page components
+│   ├── pages/             # Page components (Dashboard, Memories, Search, Settings)
 │   ├── services/          # API services
 │   ├── types/             # TypeScript type definitions
 │   ├── utils/             # Utility functions
@@ -156,6 +158,18 @@ Themes can be customized in `tailwind.config.js`. The application supports:
 - High contrast mode
 
 ## 🎯 Usage
+
+### Analytics Dashboard
+
+The dashboard (home page) provides comprehensive analytics:
+
+1. **Statistics Overview**: View total memories, collections, tags, and search count
+2. **Memory Growth Chart**: Interactive chart showing memory creation over time
+3. **Recent Activity**: Track recent actions with timestamps
+4. **Top Tags**: See most used tags with trend indicators
+5. **Search Insights**: Analyze search patterns and query frequency
+6. **Usage Metrics**: Monitor progress with goals and achievements
+7. **Time Range Filter**: Select 7d, 30d, 90d, or 1y views
 
 ### Creating a Memory
 
