@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { WebSocketProvider } from './contexts/WebSocketContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Settings from './pages/Settings';
@@ -45,13 +46,17 @@ function AppContent() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <WebSocketProvider>
-        <Router>
-          <AppContent />
-        </Router>
-      </WebSocketProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <WebSocketProvider>
+          <Router>
+            <ErrorBoundary>
+              <AppContent />
+            </ErrorBoundary>
+          </Router>
+        </WebSocketProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 
