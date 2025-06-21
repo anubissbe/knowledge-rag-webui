@@ -7,6 +7,7 @@ import { db } from '../services/database';
 import { User, CreateUserDto, LoginDto } from '../models/User';
 import { asyncHandler } from '../utils/asyncHandler';
 import { ApiError } from '../middleware/errorHandler';
+import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
 
@@ -119,10 +120,9 @@ router.post('/register',
 
 // Get current user
 router.get('/me',
+  authenticateToken,
   asyncHandler(async (req, res) => {
-    // In production, verify JWT and get user ID from token
-    const userId = 'user-1';
-    const user = await db.getUserById(userId);
+    const user = await db.getUserById(req.user!.id);
     
     if (!user) {
       throw new ApiError('User not found', 404, 'NOT_FOUND');

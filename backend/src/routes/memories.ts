@@ -6,6 +6,7 @@ import { wsService } from '../services/websocket';
 import { Memory, CreateMemoryDto } from '../models/Memory';
 import { asyncHandler } from '../utils/asyncHandler';
 import { ApiError } from '../middleware/errorHandler';
+import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
 
