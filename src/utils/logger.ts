@@ -95,14 +95,55 @@ class Logger {
     }
   }
 
-  private sendToExternalService(_entry: LogEntry): void {
-    // Placeholder for external logging service integration
-    // This would typically send logs to Sentry, DataDog, etc.
+  private sendToExternalService(entry: LogEntry): void {
+    // Send errors to external logging services
     try {
-      // Example: window.gtag?.('event', 'exception', { description: entry.message });
-      // Example: Sentry.captureException(entry.error || new Error(entry.message));
+      // Check if Sentry is available and initialized
+      if (typeof window !== 'undefined' && (window as any).Sentry) {
+        const Sentry = (window as any).Sentry;
+        
+        if (entry.level >= LogLevel.ERROR) {
+          // Send errors to Sentry
+          if (entry.data instanceof Error) {
+            Sentry.captureException(entry.data, {
+              level: entry.level === LogLevel.ERROR ? 'error' : 'fatal',
+              tags: {
+                category: entry.context || 'general',
+              },
+              extra: {
+                message: entry.message,
+                timestamp: entry.timestamp,
+              },
+            });
+          } else {
+            // Send error message if no Error object
+            Sentry.captureMessage(entry.message, {
+              level: entry.level === LogLevel.ERROR ? 'error' : 'fatal',
+              tags: {
+                category: entry.context || 'general',
+              },
+              extra: entry.data,
+            });
+          }
+        } else if (entry.level === LogLevel.WARN) {
+          // Send warnings as breadcrumbs for context
+          Sentry.addBreadcrumb({
+            message: entry.message,
+            category: entry.context || 'general',
+            level: 'warning',
+            data: entry.data,
+            timestamp: new Date(entry.timestamp).getTime() / 1000,
+          });
+        }
+      }
+      
+      // You can add other logging services here
+      // Example: LogRocket, DataDog, etc.
     } catch (error) {
       // Silently fail to avoid infinite loops
+      if (this.isDevelopment) {
+        console.error('Failed to send log to external service:', error);
+      }
     }
   }
 

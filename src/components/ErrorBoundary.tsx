@@ -29,8 +29,16 @@ export class ErrorBoundary extends Component<Props, State> {
       console.error('Error caught by boundary:', error, errorInfo);
     }
     
-    // In production, you would send this to an error reporting service
-    // Example: errorReportingService.logError(error, errorInfo);
+    // Send error to Sentry if available
+    if (typeof window !== 'undefined' && (window as any).Sentry) {
+      const Sentry = (window as any).Sentry;
+      Sentry.withScope((scope: any) => {
+        scope.setContext('errorBoundary', {
+          componentStack: errorInfo.componentStack,
+        });
+        Sentry.captureException(error);
+      });
+    }
     
     this.setState({
       error,

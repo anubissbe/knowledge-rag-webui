@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { WebSocketProvider } from './contexts/WebSocketContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -11,6 +11,7 @@ import OfflineIndicator from './components/OfflineIndicator';
 import RealtimeNotification from './components/RealtimeNotification';
 import ToastNotification from './components/ToastNotification';
 import LoadingSpinner from './components/LoadingSpinner';
+import { initializeSentry } from './services/sentry';
 
 // Lazy load page components for code splitting
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -61,6 +62,11 @@ function AppContent() {
 }
 
 function App() {
+  // Initialize Sentry on app start
+  useEffect(() => {
+    initializeSentry();
+  }, []);
+
   return (
     <ErrorBoundary>
       <ThemeProvider>
