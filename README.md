@@ -11,10 +11,12 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Entity Recognition**: Automatic entity extraction and relationship mapping
 - **Collections**: Organize memories into collections with custom icons and colors
 - **Dark Mode**: Full dark mode support with system preference detection
-- **Responsive Design**: Mobile-first design that works on all devices
-- **Accessibility**: WCAG 2.1 AA compliant with full keyboard navigation
+- **Responsive Design**: Mobile-first design with touch interactions and adaptive layouts
+- **Mobile Features**: Floating action buttons, swipe gestures, and mobile-optimized navigation
+- **Accessibility**: WCAG 2.1 AA compliant with full keyboard navigation and 44px touch targets
 - **Real-time Updates**: WebSocket support for live updates
 - **Export/Import**: Export memories in multiple formats (JSON, CSV, PDF, Markdown)
+- **Touch Optimized**: Enhanced mobile experience with proper touch targets and gestures
 
 ## 📋 Prerequisites
 
@@ -55,6 +57,8 @@ knowledge-rag-webui/
 ├── src/
 │   ├── components/         # Reusable UI components
 │   │   ├── memory/        # Memory-specific components
+│   │   ├── mobile/        # Mobile-specific components
+│   │   ├── search/        # Search-related components
 │   │   ├── settings/      # Settings page components
 │   │   └── Layout.tsx     # Main layout wrapper
 │   ├── contexts/          # React contexts (Theme, Auth, etc.)
@@ -63,7 +67,7 @@ knowledge-rag-webui/
 │   ├── services/          # API services
 │   ├── types/             # TypeScript type definitions
 │   ├── utils/             # Utility functions
-│   └── styles/            # Global styles
+│   └── styles/            # Global styles and mobile CSS
 ├── public/                # Static assets
 ├── tests/                 # Test files
 │   ├── unit/             # Unit tests
@@ -165,6 +169,29 @@ Themes can be customized in `tailwind.config.js`. The application supports:
 2. Configure your profile, preferences, and privacy settings
 3. Manage API keys for programmatic access
 4. Set up notification preferences
+
+## 📱 Mobile Experience
+
+### Mobile Features
+
+- **Responsive Navigation**: Hamburger menu for easy navigation on mobile devices
+- **Touch-Optimized Interface**: All interactive elements meet the 44px minimum touch target size
+- **Floating Action Button**: Quick access to create new memories on mobile
+- **Mobile-Optimized Forms**: Larger input fields and buttons for better touch interaction
+- **Swipe Gestures**: Enhanced navigation with touch gestures (where supported)
+
+### Mobile Testing
+
+Run mobile-specific E2E tests:
+```bash
+npm run test:e2e -- tests/e2e/mobile-basic.spec.ts
+```
+
+### Responsive Breakpoints
+
+- **Mobile**: < 768px (xs: < 480px for very small screens)
+- **Tablet**: 768px - 1023px
+- **Desktop**: ≥ 1024px
 
 ## 🤝 Contributing
 
