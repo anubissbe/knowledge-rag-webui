@@ -10,7 +10,14 @@ import SearchStats from '../components/search/SearchStats';
 import { useDebounce } from '../hooks/useDebounce';
 
 // Mock search function for development
-const mockSearch = async (query: string, filters: any): Promise<SearchResult> => {
+interface SearchFiltersInterface {
+  tags: string[];
+  collections: string[];
+  contentTypes: string[];
+  dateRange: string;
+}
+
+const mockSearch = async (query: string, filters: SearchFiltersInterface): Promise<SearchResult> => {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 300));
   
@@ -96,8 +103,8 @@ export default function Search() {
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     tags: initialTag ? [initialTag] : [],
-    entities: [],
-    collections: [],
+    entities: [] as string[],
+    collections: [] as string[],
     dateRange: '',
     contentType: '',
     sortBy: 'relevance' as 'relevance' | 'date' | 'title'
@@ -114,7 +121,12 @@ export default function Search() {
 
     setIsLoading(true);
     try {
-      const searchResults = await mockSearch(debouncedQuery, filters);
+      const searchResults = await mockSearch(debouncedQuery, {
+        tags: filters.tags,
+        collections: filters.collections,
+        contentTypes: [filters.contentType].filter(Boolean),
+        dateRange: filters.dateRange
+      });
       setResults(searchResults);
     } catch (error) {
       console.error('Search failed:', error);
@@ -301,7 +313,7 @@ export default function Search() {
                     <select
                       id="sort"
                       value={filters.sortBy}
-                      onChange={(e) => setFilters(prev => ({ ...prev, sortBy: e.target.value as any }))}
+                      onChange={(e) => setFilters(prev => ({ ...prev, sortBy: e.target.value as 'relevance' | 'date' | 'title' }))}
                       className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg 
                                bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                                focus:ring-2 focus:ring-blue-500 focus:border-transparent"

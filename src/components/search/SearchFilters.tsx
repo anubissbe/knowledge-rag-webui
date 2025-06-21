@@ -1,15 +1,17 @@
 import { Tag, Calendar, FileText, Folder } from 'lucide-react';
 
+interface SearchFilters {
+  tags: string[];
+  entities: string[];
+  collections: string[];
+  dateRange: string;
+  contentType: string;
+  sortBy: 'relevance' | 'date' | 'title';
+}
+
 interface SearchFiltersProps {
-  filters: {
-    tags: string[];
-    entities: string[];
-    collections: string[];
-    dateRange: string;
-    contentType: string;
-    sortBy: 'relevance' | 'date' | 'title';
-  };
-  onFiltersChange: (filters: any) => void;
+  filters: SearchFilters;
+  onFiltersChange: (filters: SearchFilters) => void;
   facets: {
     tags: Record<string, number>;
     entities: Record<string, number>;
@@ -19,7 +21,7 @@ interface SearchFiltersProps {
 }
 
 export default function SearchFilters({ filters, onFiltersChange, facets }: SearchFiltersProps) {
-  const handleFilterChange = (key: string, value: any) => {
+  const handleFilterChange = (key: keyof SearchFilters, value: string | string[]) => {
     onFiltersChange({ ...filters, [key]: value });
   };
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTheme } from '../../contexts/ThemeContext';
+import { useTheme } from '../../hooks/useTheme';
 import { Monitor, Moon, Sun, Globe, Clock } from 'lucide-react';
 
 const languages = [

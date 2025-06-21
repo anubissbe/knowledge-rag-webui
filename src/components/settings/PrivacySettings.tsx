@@ -15,7 +15,7 @@ export default function PrivacySettings() {
     retentionDays: 30,
   });
 
-  const handlePrivacyChange = (key: string, value: any) => {
+  const handlePrivacyChange = (key: string, value: string | boolean) => {
     setPrivacy({ ...privacy, [key]: value });
   };
 

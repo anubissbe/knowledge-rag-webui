@@ -8,8 +8,15 @@ interface SearchStatsProps {
     dateRanges: Record<string, number>;
   };
   totalCount: number;
-  filters: any;
-  onFilterChange: (key: string, value: any) => void;
+  filters: {
+    tags: string[];
+    entities: string[];
+    collections: string[];
+    dateRange: string;
+    contentType: string;
+    sortBy: 'relevance' | 'date' | 'title';
+  };
+  onFilterChange: (key: string, value: string | string[]) => void;
 }
 
 export default function SearchStats({ facets, totalCount, filters, onFilterChange }: SearchStatsProps) {

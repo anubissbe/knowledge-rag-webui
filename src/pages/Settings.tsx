@@ -3,7 +3,7 @@ import {
   User, Settings as SettingsIcon, Key, Download, Shield, Bell, 
   ChevronRight
 } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../hooks/useTheme';
 import ProfileSettings from '../components/settings/ProfileSettings';
 import ApiKeysSettings from '../components/settings/ApiKeysSettings';
 import PreferencesSettings from '../components/settings/PreferencesSettings';

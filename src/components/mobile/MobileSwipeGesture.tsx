@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 interface SwipeGestureProps {
   children: React.ReactNode;
@@ -39,7 +39,7 @@ export default function MobileSwipeGesture({
     });
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = useCallback(() => {
     if (!touchStart.x || !touchStart.y) return;
 
     const deltaX = touchStart.x - touchEnd.x;
@@ -71,7 +71,7 @@ export default function MobileSwipeGesture({
     // Reset touch positions
     setTouchStart({ x: 0, y: 0 });
     setTouchEnd({ x: 0, y: 0 });
-  };
+  }, [touchStart, touchEnd, threshold, onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown]);
 
   useEffect(() => {
     const element = ref.current;
@@ -86,7 +86,7 @@ export default function MobileSwipeGesture({
       element.removeEventListener('touchmove', handleTouchMove);
       element.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [touchStart, touchEnd, threshold, onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown]);
+  }, [handleTouchEnd]);
 
   return (
     <div ref={ref} className={className}>

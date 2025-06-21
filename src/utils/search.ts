@@ -44,8 +44,14 @@ export function extractSnippet(text: string, query: string, maxLength: number = 
 /**
  * Ranks search results based on relevance
  */
-export function rankResults(results: any[], query: string): any[] {
-  if (!query) return results;
+interface SearchableItem {
+  title: string;
+  content: string;
+  tags: string[];
+}
+
+export function rankResults<T extends SearchableItem>(results: T[], query: string): (T & { score: number })[] {
+  if (!query) return results.map(result => ({ ...result, score: 0 }));
   
   const lowerQuery = query.toLowerCase();
   

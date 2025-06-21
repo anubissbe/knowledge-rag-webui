@@ -130,7 +130,7 @@ export default function Memories() {
         ).join('\n');
         filename = 'memories.md';
         break;
-      case 'csv':
+      case 'csv': {
         const headers = 'Title,Content,Tags,Created';
         const rows = exportData.map(memory => 
           `"${memory.title}","${memory.content.replace(/"/g, '""')}","${memory.tags.join(';')}","${memory.createdAt}"`
@@ -138,6 +138,7 @@ export default function Memories() {
         content = [headers, ...rows].join('\n');
         filename = 'memories.csv';
         break;
+      }
     }
     
     // Create and download file

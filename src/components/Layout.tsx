@@ -4,7 +4,7 @@ import {
   Home, Brain, Search, Settings as SettingsIcon, 
   Menu, X, Moon, Sun 
 } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../hooks/useTheme';
 import { useState } from 'react';
 
 interface LayoutProps {
