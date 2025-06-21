@@ -1,15 +1,16 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import {
   BarChart3, Brain, Search, Tag,
   FileText, Zap
 } from 'lucide-react';
-import type { Memory } from '../types';
 import StatsCard from '../components/dashboard/StatsCard';
 import MemoryChart from '../components/dashboard/MemoryChart';
 import ActivityFeed from '../components/dashboard/ActivityFeed';
 import TopTags from '../components/dashboard/TopTags';
 import SearchInsights from '../components/dashboard/SearchInsights';
 import UsageMetrics from '../components/dashboard/UsageMetrics';
+import { analyticsApi } from '../services/api';
+import { useToast } from '../hooks/useToast';
 
 interface DashboardStats {
   totalMemories: number;
@@ -42,111 +43,95 @@ interface DashboardStats {
 }
 
 export default function Dashboard() {
-  // Mock data for now - in real app would come from stores/API
-  const memories: Memory[] = useMemo(() => [], []);
-  const collections: Array<{ id: string; name: string; }> = useMemo(() => [], []);
+  const toast = useToast();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate analytics calculation
-    const calculateStats = () => {
-      const now = new Date();
-      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const fetchAnalytics = async () => {
+      setIsLoading(true);
+      try {
+        // Fetch all analytics data in parallel
+        const [statsData, recentActivity, searchPatterns, memoryGrowth, tagDistribution] = await Promise.all([
+          analyticsApi.getDashboardStats(),
+          analyticsApi.getRecentActivity(10),
+          analyticsApi.getSearchPatterns(7),
+          analyticsApi.getMemoryGrowth(30),
+          analyticsApi.getTagDistribution(10)
+        ]);
 
-      // Calculate basic stats
-      const totalMemories = memories.length;
-      const totalCollections = collections.length;
-      const allTags = memories.flatMap(m => m.tags);
-      const uniqueTags = [...new Set(allTags)];
-      
-      const memoriesThisWeek = memories.filter((m: Memory) => 
-        new Date(m.createdAt) > weekAgo
-      ).length;
-      
-      const memoriesThisMonth = memories.filter((m: Memory) => 
-        new Date(m.createdAt) > monthAgo
-      ).length;
-
-      const averageMemoryLength = memories.length > 0 
-        ? Math.round(memories.reduce((sum: number, m: Memory) => sum + m.content.length, 0) / memories.length)
-        : 0;
-
-      // Generate memory growth data
-      const memoryGrowth = [];
-      for (let i = 29; i >= 0; i--) {
-        const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
-        const count = memories.filter((m: Memory) => 
-          new Date(m.createdAt) <= date
-        ).length;
-        memoryGrowth.push({
-          date: date.toISOString().split('T')[0],
-          count
-        });
-      }
-
-      // Calculate top tags
-      const tagCounts = allTags.reduce((acc: Record<string, number>, tag: string) => {
-        acc[tag] = (acc[tag] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
-
-      const topTags = Object.entries(tagCounts)
-        .sort(([, a], [, b]) => (b as number) - (a as number))
-        .slice(0, 10)
-        .map(([name, count]) => {
-          const rand = Math.random();
-          const trend: 'up' | 'down' | 'stable' = rand > 0.66 ? 'up' : rand > 0.33 ? 'down' : 'stable';
-          return {
-            name,
-            count: count as number,
-            trend
-          };
-        });
-
-      // Mock recent activity
-      const recentActivity = memories
-        .slice(0, 10)
-        .map((memory: Memory) => ({
-          id: memory.id,
-          type: 'created' as const,
-          title: memory.title,
-          timestamp: memory.createdAt
+        // Transform data to match component expectations
+        const topTags = tagDistribution.map(tag => ({
+          name: tag.tag,
+          count: tag.count,
+          trend: 'stable' as const // API should provide trend data
         }));
 
-      // Mock search patterns
-      const searchPatterns = [
-        { query: 'machine learning', count: 15, lastUsed: '2024-01-20T10:30:00Z' },
-        { query: 'typescript', count: 12, lastUsed: '2024-01-19T14:20:00Z' },
-        { query: 'react hooks', count: 8, lastUsed: '2024-01-18T09:15:00Z' },
-        { query: 'database design', count: 6, lastUsed: '2024-01-17T16:45:00Z' },
-        { query: 'api development', count: 5, lastUsed: '2024-01-16T11:30:00Z' }
-      ];
+        // Calculate additional stats from the data
+        const now = new Date();
+        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-      return {
-        totalMemories,
-        totalCollections,
-        totalTags: uniqueTags.length,
-        memoriesThisWeek,
-        memoriesThisMonth,
-        averageMemoryLength,
-        searchCount: 156, // Mock value
-        recentActivity,
-        memoryGrowth,
-        topTags,
-        searchPatterns
-      };
+        // Count memories from growth data
+        const memoriesThisWeek = memoryGrowth
+          .filter(item => new Date(item.date) > weekAgo)
+          .reduce((sum, item) => sum + item.count, 0);
+
+        const memoriesThisMonth = memoryGrowth
+          .filter(item => new Date(item.date) > monthAgo)
+          .reduce((sum, item) => sum + item.count, 0);
+
+        // Average memory length would come from API
+        const averageMemoryLength = 0; // TODO: Add to API response
+
+        setStats({
+          totalMemories: statsData.totalMemories,
+          totalCollections: statsData.totalCollections,
+          totalTags: statsData.totalTags,
+          memoriesThisWeek,
+          memoriesThisMonth,
+          averageMemoryLength,
+          searchCount: statsData.searchCount,
+          recentActivity: recentActivity.map(activity => ({
+            id: activity.timestamp, // Use timestamp as ID if not provided
+            type: activity.type === 'memory_created' ? 'created' :
+                  activity.type === 'memory_updated' ? 'updated' :
+                  activity.type === 'search' ? 'searched' : 'exported',
+            title: activity.title,
+            timestamp: activity.timestamp
+          })),
+          memoryGrowth,
+          topTags,
+          searchPatterns: searchPatterns.map(pattern => ({
+            query: pattern.query,
+            count: pattern.count,
+            lastUsed: pattern.lastSearched
+          }))
+        });
+      } catch (error) {
+        toast.error('Failed to load analytics', 'Please try refreshing the page');
+        // Set some default values to prevent empty state
+        setStats({
+          totalMemories: 0,
+          totalCollections: 0,
+          totalTags: 0,
+          memoriesThisWeek: 0,
+          memoriesThisMonth: 0,
+          averageMemoryLength: 0,
+          searchCount: 0,
+          recentActivity: [],
+          memoryGrowth: [],
+          topTags: [],
+          searchPatterns: []
+        });
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    setIsLoading(true);
-    // Simulate API delay
-    setTimeout(() => {
-      setStats(calculateStats());
-      setIsLoading(false);
-    }, 500);
-  }, [memories, collections, timeRange]);
+    fetchAnalytics();
+  }, [timeRange]);
 
   if (isLoading || !stats) {
     return (

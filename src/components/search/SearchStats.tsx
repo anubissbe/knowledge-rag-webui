@@ -1,4 +1,4 @@
-import { Tag, Hash, Building, Calendar } from 'lucide-react';
+import { Tag, Hash, Calendar } from 'lucide-react';
 
 interface SearchStatsProps {
   facets: {
@@ -25,13 +25,18 @@ export default function SearchStats({ facets, totalCount, filters, onFilterChang
     .sort(([, a], [, b]) => b - a)
     .slice(0, 10);
 
-  // Mock entity data for demonstration
-  const mockEntities = [
-    { name: 'RAG', type: 'concept', count: 8, icon: Hash },
-    { name: 'LangChain', type: 'organization', count: 5, icon: Building },
-    { name: 'OpenAI', type: 'organization', count: 4, icon: Building },
-    { name: 'Embeddings', type: 'concept', count: 3, icon: Hash },
-  ];
+  // Transform entities from facets if available
+  const entities = facets.entities 
+    ? Object.entries(facets.entities)
+        .map(([name, count]) => ({
+          name,
+          type: 'concept',
+          count: count as number,
+          icon: Hash
+        }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5)
+    : [];
 
   return (
     <div className="space-y-6">
@@ -104,7 +109,7 @@ export default function SearchStats({ facets, totalCount, filters, onFilterChang
         </h3>
         
         <div className="space-y-2">
-          {mockEntities.map((entity) => {
+          {entities.map((entity) => {
             const Icon = entity.icon;
             return (
               <div

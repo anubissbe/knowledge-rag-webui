@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Download, FileJson, FileText, FileSpreadsheet, Calendar, Package } from 'lucide-react';
 import type { ExportOptions } from '../../types';
+import { exportApi } from '../../services/api';
+import { useToast } from '../../hooks/useToast';
 
 export default function DataExportSettings() {
+  const toast = useToast();
   const [exportOptions, setExportOptions] = useState<ExportOptions>({
     format: 'json',
     includeMetadata: true,
@@ -19,23 +22,24 @@ export default function DataExportSettings() {
   const handleExport = async () => {
     setIsExporting(true);
     try {
-      // Simulate export process
-      const options = {
-        ...exportOptions,
-        dateRange: dateRange.enabled ? { from: dateRange.from, to: dateRange.to } : undefined,
-      };
+      const blob = await exportApi.exportAll({
+        format: exportOptions.format as 'json' | 'markdown' | 'csv',
+        includeMetadata: exportOptions.includeMetadata,
+        includeTags: true,
+        includeRelated: false,
+        dateFrom: dateRange.enabled && dateRange.from ? dateRange.from : undefined,
+        dateTo: dateRange.enabled && dateRange.to ? dateRange.to : undefined,
+      });
       
-      console.log('Exporting data with options:', options);
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const filename = exportApi.getFilename(
+        exportOptions.format as 'json' | 'markdown' | 'csv',
+        'data-export'
+      );
+      exportApi.downloadBlob(blob, filename);
       
-      // Trigger download
-      const blob = new Blob(['Export data here'], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `data-export-${new Date().toISOString().split('T')[0]}.${exportOptions.format}`;
-      a.click();
-      URL.revokeObjectURL(url);
+      toast.success('Export complete', 'Your data has been exported successfully');
+    } catch (error) {
+      toast.error('Export failed', 'Failed to export data. Please try again.');
     } finally {
       setIsExporting(false);
     }

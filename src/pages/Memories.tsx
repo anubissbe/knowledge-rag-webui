@@ -14,8 +14,11 @@ import KeyboardShortcutsModal from '../components/KeyboardShortcutsModal';
 import { useKeyboardShortcutsModal } from '../hooks/useKeyboardShortcutsModal';
 import KeyboardShortcutIndicator from '../components/KeyboardShortcutIndicator';
 import { useRealtimeMemories } from '../hooks/useRealtimeMemories';
+import { memoryApi, exportApi } from '../services/api';
+import { useToast } from '../hooks/useToast';
 
-// Mock memories for development
+// Mock memories for development - DEPRECATED: Now using real API
+/*
 const mockMemories: Memory[] = [
   {
     id: '1',
@@ -69,15 +72,45 @@ const mockMemories: Memory[] = [
     updatedAt: '2024-01-13T14:30:00Z'
   }
 ];
+*/
 
 export default function Memories() {
-  const [memories, setMemories] = useState<Memory[]>(mockMemories);
+  const toast = useToast();
+  const [memories, setMemories] = useState<Memory[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isBulkMode, setIsBulkMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [page] = useState(1);
+  const [totalMemories, setTotalMemories] = useState(0);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  // Fetch memories on component mount and when filters change
+  useEffect(() => {
+    const fetchMemories = async () => {
+      setIsLoading(true);
+      try {
+        const response = await memoryApi.getMemories(
+          page,
+          20,
+          {
+            tags: selectedTags.length > 0 ? selectedTags : undefined,
+            search: searchQuery || undefined
+          }
+        );
+        setMemories(response.memories);
+        setTotalMemories(response.total);
+      } catch (error) {
+        toast.error('Failed to load memories', 'Please try refreshing the page');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMemories();
+  }, [page, selectedTags, searchQuery, toast]);
 
   // Real-time updates
   useRealtimeMemories({
@@ -129,70 +162,53 @@ export default function Memories() {
   
   // Bulk operations handlers
   const handleBulkDelete = async (memoryIds: string[]) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setMemories(prev => prev.filter(memory => !memoryIds.includes(memory.id)));
-    console.log('Deleted memories:', memoryIds);
+    try {
+      await memoryApi.bulkDelete(memoryIds);
+      setMemories(prev => prev.filter(memory => !memoryIds.includes(memory.id)));
+      setTotalMemories(prev => prev - memoryIds.length);
+    } catch (error) {
+      toast.error('Failed to delete memories', 'Some memories could not be deleted');
+    }
   };
   
-  const handleBulkExport = (memoryIds: string[], format: 'json' | 'markdown' | 'csv') => {
-    const exportData = memories.filter(memory => memoryIds.includes(memory.id));
-    
-    let content = '';
-    let filename = '';
-    
-    switch (format) {
-      case 'json':
-        content = JSON.stringify(exportData, null, 2);
-        filename = 'memories.json';
-        break;
-      case 'markdown':
-        content = exportData.map(memory => 
-          `# ${memory.title}\n\n${memory.content}\n\n---\n`
-        ).join('\n');
-        filename = 'memories.md';
-        break;
-      case 'csv': {
-        const headers = 'Title,Content,Tags,Created';
-        const rows = exportData.map(memory => 
-          `"${memory.title}","${memory.content.replace(/"/g, '""')}","${memory.tags.join(';')}","${memory.createdAt}"`
-        );
-        content = [headers, ...rows].join('\n');
-        filename = 'memories.csv';
-        break;
-      }
+  const handleBulkExport = async (memoryIds: string[], format: 'json' | 'markdown' | 'csv') => {
+    try {
+      const blob = await exportApi.exportMemories({
+        format,
+        memoryIds,
+        includeMetadata: true,
+        includeTags: true,
+        includeRelated: false
+      });
+      
+      const filename = exportApi.getFilename(format, 'memories');
+      exportApi.downloadBlob(blob, filename);
+    } catch (error) {
+      toast.error('Export failed', 'Failed to export memories. Please try again.');
     }
-    
-    // Create and download file
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    console.log('Exported memories:', memoryIds, 'as', format);
   };
   
   const handleBulkMoveToCollection = async (memoryIds: string[], collectionId: string) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-    console.log('Moved memories to collection:', memoryIds, collectionId);
-    // In real app, update memories with collection assignment
+    try {
+      await memoryApi.bulkMoveToCollection(memoryIds, collectionId);
+      toast.success('Memories moved', `Moved ${memoryIds.length} memories to collection`);
+    } catch (error) {
+      toast.error('Move failed', 'Failed to move memories. Please try again.');
+    }
   };
   
   const handleBulkAddTags = async (memoryIds: string[], tags: string[]) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-    setMemories(prev => prev.map(memory => 
-      memoryIds.includes(memory.id) 
-        ? { ...memory, tags: [...new Set([...memory.tags, ...tags])] }
-        : memory
-    ));
-    console.log('Added tags to memories:', memoryIds, tags);
+    try {
+      await memoryApi.bulkAddTags(memoryIds, tags);
+      setMemories(prev => prev.map(memory => 
+        memoryIds.includes(memory.id) 
+          ? { ...memory, tags: [...new Set([...memory.tags, ...tags])] }
+          : memory
+      ));
+      toast.success('Tags added', `Added ${tags.length} tags to ${memoryIds.length} memories`);
+    } catch (error) {
+      toast.error('Failed to add tags', 'Some tags could not be added');
+    }
   };
   
   const handleToggleBulkMode = () => {
@@ -232,9 +248,16 @@ export default function Memories() {
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
-              My Memories
-            </h1>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                My Memories
+              </h1>
+              {totalMemories > 0 && (
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  {totalMemories} {totalMemories === 1 ? 'memory' : 'memories'} total
+                </p>
+              )}
+            </div>
             
             <div className="relative group">
               <Link
@@ -379,7 +402,11 @@ export default function Memories() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {filteredMemories.length === 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        ) : filteredMemories.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 dark:text-gray-400 mb-4">
               {searchQuery || selectedTags.length > 0

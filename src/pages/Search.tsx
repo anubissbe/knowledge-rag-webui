@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   Search as SearchIcon, Filter, X, ChevronDown, Tag
 } from 'lucide-react';
-import type { Memory, SearchResult } from '../types';
+import type { SearchResult } from '../types';
 import SearchResultCard from '../components/search/SearchResultCard';
 import SearchFilters from '../components/search/SearchFilters';
 import SearchStats from '../components/search/SearchStats';
@@ -12,15 +12,12 @@ import { usePageKeyboardShortcuts, useGlobalKeyboardShortcuts } from '../hooks/u
 import KeyboardShortcutsModal from '../components/KeyboardShortcutsModal';
 import { useKeyboardShortcutsModal } from '../hooks/useKeyboardShortcutsModal';
 import KeyboardShortcutIndicator from '../components/KeyboardShortcutIndicator';
+import { searchApi } from '../services/api';
+import { useToast } from '../hooks/useToast';
 
-// Mock search function for development
-interface SearchFiltersInterface {
-  tags: string[];
-  collections: string[];
-  contentTypes: string[];
-  dateRange: string;
-}
 
+// Mock search function - DEPRECATED: Now using real API
+/*
 const mockSearch = async (query: string, filters: SearchFiltersInterface): Promise<SearchResult> => {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 300));
@@ -91,11 +88,13 @@ const mockSearch = async (query: string, filters: SearchFiltersInterface): Promi
     pageSize: 20
   };
 };
+*/
 
 export default function Search() {
   const location = useLocation();
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const toast = useToast();
   
   // Parse query params
   const params = new URLSearchParams(location.search);
@@ -126,15 +125,45 @@ export default function Search() {
 
     setIsLoading(true);
     try {
-      const searchResults = await mockSearch(debouncedQuery, {
-        tags: filters.tags,
-        collections: filters.collections,
-        contentTypes: [filters.contentType].filter(Boolean),
-        dateRange: filters.dateRange
+      const searchResults = await searchApi.search(
+        debouncedQuery,
+        1, // page
+        20, // pageSize
+        {
+          tags: filters.tags.length > 0 ? filters.tags : undefined,
+          entities: filters.entities.length > 0 ? filters.entities : undefined,
+          dateFrom: filters.dateRange ? filters.dateRange.split(',')[0] : undefined,
+          dateTo: filters.dateRange ? filters.dateRange.split(',')[1] : undefined,
+          sortBy: filters.sortBy
+        }
+      );
+      
+      // Transform API response to match component expectations
+      const transformedFacets = {
+        tags: searchResults.facets.tags.reduce((acc, item) => {
+          acc[item.value] = item.count;
+          return acc;
+        }, {} as Record<string, number>),
+        entities: searchResults.facets.entities.reduce((acc, item) => {
+          acc[item.value] = item.count;
+          return acc;
+        }, {} as Record<string, number>),
+        collections: {}, // API doesn't return collections facet yet
+        dateRanges: searchResults.facets.dates.reduce((acc, item) => {
+          acc[item.value] = item.count;
+          return acc;
+        }, {} as Record<string, number>)
+      };
+
+      setResults({
+        memories: searchResults.memories,
+        facets: transformedFacets,
+        totalCount: searchResults.total,
+        page: searchResults.page,
+        pageSize: searchResults.pageSize
       });
-      setResults(searchResults);
     } catch (error) {
-      console.error('Search failed:', error);
+      toast.error('Search failed', 'Unable to perform search. Please try again.');
     } finally {
       setIsLoading(false);
     }

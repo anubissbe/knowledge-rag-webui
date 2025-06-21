@@ -25,6 +25,9 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Real-time Updates**: WebSocket integration for live synchronization across users
 - **Live Notifications**: Instant notifications when memories are created, updated, or deleted
 - **Connection Status**: Visual indicators showing connection state and latency
+- **Error Boundaries**: Graceful error handling to prevent app crashes
+- **Toast Notifications**: Non-intrusive feedback system for all user actions
+- **API Integration**: Full REST API integration replacing mock data
 
 ## 📋 Prerequisites
 
@@ -58,6 +61,18 @@ npm run dev
 
 The application will be available at `http://localhost:5173`
 
+## 🔌 API Backend
+
+This web UI requires a compatible backend API server. The backend should implement the following endpoints:
+
+- **Memory Management**: CRUD operations for memories
+- **Search**: Full-text and vector similarity search
+- **Analytics**: Dashboard statistics and metrics
+- **Export**: Data export in multiple formats
+- **WebSocket**: Real-time updates for memory changes
+
+See [API Integration Documentation](./docs/API_INTEGRATION.md) for detailed endpoint specifications.
+
 ## 🏗️ Project Structure
 
 ```
@@ -74,8 +89,11 @@ knowledge-rag-webui/
 │   ├── contexts/          # React contexts (Theme, Auth, etc.)
 │   ├── hooks/             # Custom React hooks
 │   ├── pages/             # Page components (Dashboard, Memories, Search, Settings)
-│   ├── services/          # API services
-│   ├── types/             # TypeScript type definitions
+│   ├── services/          # API services and WebSocket integration
+│   │   ├── api/          # REST API client services
+│   │   └── websocket.ts  # Real-time WebSocket service
+│   ├── stores/           # Zustand state management
+│   ├── types/            # TypeScript type definitions
 │   ├── utils/             # Utility functions
 │   └── styles/            # Global styles and mobile CSS
 ├── public/                # Static assets
@@ -88,6 +106,9 @@ knowledge-rag-webui/
     ├── UI_MOCKUPS.md      # Wireframes and layout specifications
     ├── STYLE_GUIDE.md     # CSS implementation and styling standards
     ├── MOBILE.md          # Mobile-specific features and responsive design
+    ├── ERROR_HANDLING.md  # Error boundaries and error recovery
+    ├── TOAST_NOTIFICATIONS.md # Toast notification system guide
+    ├── API_INTEGRATION.md # API services and integration guide
     └── README.md          # Documentation hub and navigation
 ```
 

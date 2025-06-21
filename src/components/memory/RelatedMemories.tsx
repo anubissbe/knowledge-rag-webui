@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FileText, Calendar, Tag } from 'lucide-react';
 import type { Memory } from '../../types';
+import { memoryApi } from '../../services/api';
+import { useToast } from '../../hooks/useToast';
 
 interface RelatedMemoriesProps {
-  memoryIds: string[];
+  memoryId?: string;
+  memoryIds?: string[]; // For backward compatibility
 }
 
-// Mock related memories for development
+// Mock related memories for development - DEPRECATED: Now using real API
+/*
 const mockRelatedMemories: Memory[] = [
   {
     id: '2',
@@ -61,17 +65,43 @@ const mockRelatedMemories: Memory[] = [
     updatedAt: '2024-01-12T11:15:00Z'
   }
 ];
+*/
 
-export default function RelatedMemories({ memoryIds }: RelatedMemoriesProps) {
+export default function RelatedMemories({ memoryId, memoryIds }: RelatedMemoriesProps) {
+  const toast = useToast();
   const [memories, setMemories] = useState<Memory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // In a real app, fetch related memories from API
-    const related = mockRelatedMemories.filter(m => memoryIds.includes(m.id));
-    setMemories(related);
-    setIsLoading(false);
-  }, [memoryIds]);
+    const fetchRelatedMemories = async () => {
+      if (!memoryId && (!memoryIds || memoryIds.length === 0)) {
+        setMemories([]);
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        if (memoryId) {
+          // Fetch related memories using the API
+          const related = await memoryApi.getRelatedMemories(memoryId, 5);
+          setMemories(related);
+        } else if (memoryIds) {
+          // For backward compatibility - fetch individual memories
+          const promises = memoryIds.slice(0, 5).map(id => memoryApi.getMemory(id));
+          const related = await Promise.all(promises);
+          setMemories(related);
+        }
+      } catch (error) {
+        toast.error('Failed to load related memories', 'Some related content could not be loaded');
+        setMemories([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRelatedMemories();
+  }, [memoryId, memoryIds, toast]);
 
   if (isLoading) {
     return (

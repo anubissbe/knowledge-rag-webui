@@ -12,8 +12,10 @@ import RelatedMemories from '../components/memory/RelatedMemories';
 import EntityList from '../components/memory/EntityList';
 import TagList from '../components/memory/TagList';
 import { useToast } from '../hooks/useToast';
+import { memoryApi } from '../services/api';
 
-// Mock data for development
+// Mock data for development - DEPRECATED: Now using real API
+/*
 const mockMemory: Memory = {
   id: '1',
   title: 'Understanding RAG Systems',
@@ -86,6 +88,7 @@ def rag_pipeline(query: str):
   createdAt: '2024-01-15T10:30:00Z',
   updatedAt: '2024-01-20T14:45:00Z'
 };
+*/
 
 export default function MemoryDetail() {
   const { id } = useParams<{ id: string }>();
@@ -96,10 +99,23 @@ export default function MemoryDetail() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    // In a real app, fetch the memory from API
-    setMemory(mockMemory);
-    setIsLoading(false);
-  }, [id]);
+    const fetchMemory = async () => {
+      if (!id) return;
+      
+      setIsLoading(true);
+      try {
+        const data = await memoryApi.getMemory(id);
+        setMemory(data);
+      } catch (error) {
+        toast.error('Failed to load memory', 'The requested memory could not be found');
+        navigate('/memories');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMemory();
+  }, [id, navigate, toast]);
 
   const handleCopy = async () => {
     if (memory) {
@@ -127,8 +143,7 @@ export default function MemoryDetail() {
     
     setIsDeleting(true);
     try {
-      // API call to delete memory
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      await memoryApi.deleteMemory(memory!.id);
       toast.success('Memory deleted', 'The memory has been permanently deleted');
       navigate('/memories');
     } catch (error) {
@@ -274,7 +289,7 @@ export default function MemoryDetail() {
 
             {/* Related Memories */}
             {memory.relatedMemories && memory.relatedMemories.length > 0 && (
-              <RelatedMemories memoryIds={memory.relatedMemories} />
+              <RelatedMemories memoryId={memory.id} />
             )}
           </div>
 
