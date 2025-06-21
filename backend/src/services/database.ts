@@ -251,6 +251,22 @@ Each has unique strengths for different use cases...`,
     return user;
   }
 
+  async updateUser(id: string, updates: Partial<User>): Promise<User | null> {
+    const user = this.users.get(id);
+    if (!user) return null;
+
+    const updatedUser = { ...user, ...updates };
+    this.users.set(id, updatedUser);
+    
+    // Update email index if email changed
+    if (updates.email && updates.email !== user.email) {
+      this.usersByEmail.delete(user.email);
+      this.usersByEmail.set(updates.email, id);
+    }
+    
+    return updatedUser;
+  }
+
   // Analytics operations
   async getAnalytics(userId: string): Promise<any> {
     const memories = Array.from(this.memories.values())

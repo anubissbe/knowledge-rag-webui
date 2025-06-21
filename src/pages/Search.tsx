@@ -14,6 +14,9 @@ import { useKeyboardShortcutsModal } from '../hooks/useKeyboardShortcutsModal';
 import KeyboardShortcutIndicator from '../components/KeyboardShortcutIndicator';
 import { searchApi } from '../services/api';
 import { useToast } from '../hooks/useToast';
+import { preferencesApi } from '../services/api/preferencesApi';
+import { useAuth } from '../contexts/AuthContext';
+import { logger } from '../utils/logger';
 
 
 // Mock search function - DEPRECATED: Now using real API
@@ -95,6 +98,7 @@ export default function Search() {
   const navigate = useNavigate();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const toast = useToast();
+  const { isAuthenticated } = useAuth();
   
   // Parse query params
   const params = new URLSearchParams(location.search);
@@ -113,8 +117,10 @@ export default function Search() {
     contentType: '',
     sortBy: 'relevance' as 'relevance' | 'date' | 'title'
   });
+  const [filtersLoaded, setFiltersLoaded] = useState(false);
 
   const debouncedQuery = useDebounce(query, 300);
+  const debouncedFilters = useDebounce(filters, 1000); // Save filters after 1 second of no changes
 
   // Perform search
   const performSearch = useCallback(async () => {
@@ -186,6 +192,22 @@ export default function Search() {
     performSearch();
   }, [performSearch]);
 
+  // Save search preferences when filters change (debounced)
+  useEffect(() => {
+    const savePreferences = async () => {
+      if (!isAuthenticated || !filtersLoaded) return;
+
+      try {
+        await preferencesApi.saveSearchPreferences(debouncedFilters);
+        logger.debug('Search preferences saved');
+      } catch (error) {
+        logger.warn('Failed to save search preferences');
+      }
+    };
+
+    savePreferences();
+  }, [debouncedFilters, isAuthenticated, filtersLoaded]);
+
   const handleTagClick = (tag: string) => {
     setFilters(prev => ({
       ...prev,
@@ -218,6 +240,30 @@ export default function Search() {
   const pageShortcuts = usePageKeyboardShortcuts('search');
   const globalShortcuts = useGlobalKeyboardShortcuts();
   const { isOpen: isShortcutsOpen, close: closeShortcuts } = useKeyboardShortcutsModal();
+
+  // Load saved search preferences
+  useEffect(() => {
+    const loadPreferences = async () => {
+      if (!isAuthenticated) {
+        setFiltersLoaded(true);
+        return;
+      }
+
+      try {
+        const preferences = await preferencesApi.getSearchPreferences();
+        if (preferences && !initialTag) {
+          // Only load saved preferences if not overridden by URL params
+          setFilters(preferences.filters);
+        }
+      } catch (error) {
+        logger.warn('Failed to load search preferences');
+      } finally {
+        setFiltersLoaded(true);
+      }
+    };
+
+    loadPreferences();
+  }, [isAuthenticated, initialTag]);
 
   // Focus search input on mount
   useEffect(() => {

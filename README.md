@@ -36,6 +36,7 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **External Logging Integration**: Sentry error tracking with performance monitoring, session replay, and comprehensive error context
 - **Backend API Server**: Full Express.js backend with TypeScript, JWT authentication, WebSocket support, and RESTful API endpoints
 - **JWT Authentication**: Complete user authentication system with login/register, protected routes, and secure token management
+- **Search Filters Persistence**: Automatic saving and restoration of user search filters and sorting preferences across sessions
 
 ## 📋 Prerequisites
 
@@ -100,6 +101,7 @@ The project includes a full-featured backend API server built with Express.js an
 - **Export**: Data export in JSON, Markdown, and CSV formats
 - **Collections**: Organize memories into collections
 - **Authentication**: User login/register with JWT tokens
+- **User Preferences**: Save and retrieve search filter preferences
 
 See [Backend Documentation](./backend/README.md) for detailed API specifications, [Authentication Documentation](./docs/AUTHENTICATION.md) for security implementation details, and [API Integration Documentation](./docs/API_INTEGRATION.md) for frontend integration details.
 
@@ -343,6 +345,7 @@ For comprehensive design and development documentation, see the [docs directory]
 - **[API Key Security](docs/API_KEY_SECURITY.md)** - Secure API key handling and display
 - **[Logging Implementation](docs/LOGGING_IMPLEMENTATION.md)** - Centralized logging system and best practices
 - **[Code Splitting](docs/CODE_SPLITTING.md)** - Bundle optimization and lazy loading implementation
+- **[Search Filters Persistence](docs/SEARCH_FILTERS_PERSISTENCE.md)** - User search preferences persistence and restoration
 
 ## 🤝 Contributing
 

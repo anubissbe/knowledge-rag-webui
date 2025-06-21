@@ -5,6 +5,7 @@ import analyticsRouter from './analytics';
 import searchRouter from './search';
 import authRouter from './auth';
 import exportRouter from './export';
+import preferencesRouter from './preferences';
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.use(`${v1}/analytics`, analyticsRouter);
 router.use(`${v1}/search`, searchRouter);
 router.use(`${v1}/auth`, authRouter);
 router.use(`${v1}/export`, exportRouter);
+router.use(`${v1}/preferences`, preferencesRouter);
 
 // Health check endpoint
 router.get('/health', (req, res) => {
@@ -40,6 +42,7 @@ router.get('/', (req, res) => {
       search: `${v1}/search`,
       auth: `${v1}/auth`,
       export: `${v1}/export`,
+      preferences: `${v1}/preferences`,
     },
   });
 });

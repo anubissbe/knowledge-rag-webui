@@ -20,6 +20,17 @@ export interface User {
       showEmail: boolean;
       showActivity: boolean;
     };
+    search?: {
+      filters: {
+        tags: string[];
+        entities: string[];
+        collections: string[];
+        dateRange: string;
+        contentType: string;
+        sortBy: 'relevance' | 'date' | 'title';
+      };
+      savedAt: string;
+    };
   };
   createdAt: string;
   updatedAt: string;
