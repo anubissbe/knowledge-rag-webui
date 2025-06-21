@@ -9,6 +9,8 @@ import Search from './pages/Search';
 import { useGlobalKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import { useKeyboardShortcutsModal } from './hooks/useKeyboardShortcutsModal';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+import OfflineIndicator from './components/OfflineIndicator';
 
 function AppContent() {
   const globalShortcuts = useGlobalKeyboardShortcuts();
@@ -32,6 +34,8 @@ function AppContent() {
         onClose={close}
         shortcuts={{ global: globalShortcuts }}
       />
+      <PWAInstallPrompt />
+      <OfflineIndicator />
     </>
   );
 }

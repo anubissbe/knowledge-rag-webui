@@ -19,6 +19,9 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Bulk Operations**: Select multiple memories for bulk delete, export, collection assignment, and tag management
 - **Export/Import**: Export memories in multiple formats (JSON, CSV, PDF, Markdown) with bulk export support
 - **Touch Optimized**: Enhanced mobile experience with proper touch targets and gestures
+- **Progressive Web App**: Installable app with offline support, automatic updates, and native-like experience
+- **Offline Mode**: Works offline with cached data and automatic sync when connection restored
+- **Keyboard Shortcuts**: Comprehensive keyboard shortcuts for power users (press ? for help)
 
 ## 📋 Prerequisites
 
@@ -239,6 +242,24 @@ npm run test:e2e -- tests/e2e/mobile-basic.spec.ts
 - **Tablet**: 768px - 1023px
 - **Desktop**: ≥ 1024px
 
+## 💾 Progressive Web App (PWA)
+
+Knowledge RAG WebUI is a fully-featured Progressive Web App that can be installed on your device:
+
+### Installation
+- **Desktop**: Click the install button in your browser's address bar or wait for the install prompt
+- **Android**: Tap "Add to Home Screen" when prompted or use browser menu
+- **iOS**: Tap the share button and select "Add to Home Screen"
+
+### PWA Features
+- **Offline Support**: All core features work offline with cached data
+- **Automatic Updates**: App updates automatically with notification
+- **Native Experience**: Launches in standalone window like a native app
+- **Background Sync**: Changes sync automatically when online
+- **App Shortcuts**: Quick actions from app icon (where supported)
+
+For detailed PWA documentation, see the [PWA Features Guide](docs/PWA_FEATURES.md).
+
 ## 📚 Documentation
 
 For comprehensive design and development documentation, see the [docs directory](docs/):
@@ -248,6 +269,8 @@ For comprehensive design and development documentation, see the [docs directory]
 - **[UI Mockups](docs/UI_MOCKUPS.md)** - Wireframes and layout specifications for all pages and components
 - **[Style Guide](docs/STYLE_GUIDE.md)** - CSS implementation details, animations, and accessibility standards
 - **[Mobile Guide](docs/MOBILE.md)** - Mobile-specific features and responsive design patterns
+- **[Keyboard Shortcuts](docs/KEYBOARD_SHORTCUTS.md)** - Complete list of keyboard shortcuts
+- **[PWA Features](docs/PWA_FEATURES.md)** - Progressive Web App capabilities and configuration
 
 ## 🤝 Contributing
 
