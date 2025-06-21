@@ -1,0 +1,188 @@
+# Knowledge RAG WebUI
+
+A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) systems, inspired by Mem0. Built with React, TypeScript, and Tailwind CSS.
+
+![Knowledge RAG WebUI](docs/images/banner.png)
+
+## 🚀 Features
+
+- **Memory Management**: Create, view, edit, and delete memories with rich metadata
+- **Smart Search**: Full-text search with tag filtering and faceted search
+- **Entity Recognition**: Automatic entity extraction and relationship mapping
+- **Collections**: Organize memories into collections with custom icons and colors
+- **Dark Mode**: Full dark mode support with system preference detection
+- **Responsive Design**: Mobile-first design that works on all devices
+- **Accessibility**: WCAG 2.1 AA compliant with full keyboard navigation
+- **Real-time Updates**: WebSocket support for live updates
+- **Export/Import**: Export memories in multiple formats (JSON, CSV, PDF, Markdown)
+
+## 📋 Prerequisites
+
+- Node.js 18.0 or higher
+- npm 9.0 or higher
+- Git
+
+## 🛠️ Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/knowledge-rag-webui.git
+cd knowledge-rag-webui
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create a `.env` file in the root directory:
+```env
+VITE_API_URL=http://localhost:3001
+VITE_WEBSOCKET_URL=ws://localhost:3001
+```
+
+4. Start the development server:
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`
+
+## 🏗️ Project Structure
+
+```
+knowledge-rag-webui/
+├── src/
+│   ├── components/         # Reusable UI components
+│   │   ├── memory/        # Memory-specific components
+│   │   ├── settings/      # Settings page components
+│   │   └── Layout.tsx     # Main layout wrapper
+│   ├── contexts/          # React contexts (Theme, Auth, etc.)
+│   ├── hooks/             # Custom React hooks
+│   ├── pages/             # Page components
+│   ├── services/          # API services
+│   ├── types/             # TypeScript type definitions
+│   ├── utils/             # Utility functions
+│   └── styles/            # Global styles
+├── public/                # Static assets
+├── tests/                 # Test files
+│   ├── unit/             # Unit tests
+│   └── e2e/              # End-to-end tests
+└── docs/                  # Documentation
+```
+
+## 🧪 Testing
+
+### Run all tests:
+```bash
+npm test
+```
+
+### Run unit tests:
+```bash
+npm run test:unit
+```
+
+### Run E2E tests:
+```bash
+npm run test:e2e
+```
+
+### Run tests with coverage:
+```bash
+npm run test:coverage
+```
+
+## 📦 Building for Production
+
+```bash
+# Build the application
+npm run build
+
+# Preview the production build
+npm run preview
+```
+
+## 🚀 Deployment
+
+### Docker
+
+```bash
+# Build Docker image
+docker build -t knowledge-rag-webui .
+
+# Run container
+docker run -p 8080:80 knowledge-rag-webui
+```
+
+### Manual Deployment
+
+1. Build the application:
+```bash
+npm run build
+```
+
+2. The `dist` folder contains the built files ready for deployment
+3. Serve the files using any static file server (nginx, Apache, etc.)
+
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_API_URL` | Backend API URL | `http://localhost:3001` |
+| `VITE_WEBSOCKET_URL` | WebSocket URL | `ws://localhost:3001` |
+| `VITE_PUBLIC_URL` | Public URL for sharing | `http://localhost:5173` |
+
+### Theme Configuration
+
+Themes can be customized in `tailwind.config.js`. The application supports:
+- Light mode
+- Dark mode
+- System preference detection
+- High contrast mode
+
+## 🎯 Usage
+
+### Creating a Memory
+
+1. Navigate to the Memories page
+2. Click "New Memory"
+3. Fill in the title and content
+4. Add tags and select a collection
+5. Click "Save"
+
+### Searching Memories
+
+1. Use the search bar to find memories by content
+2. Click on tags to filter by specific tags
+3. Use the faceted search for advanced filtering
+
+### Managing Settings
+
+1. Click on Settings in the navigation
+2. Configure your profile, preferences, and privacy settings
+3. Manage API keys for programmatic access
+4. Set up notification preferences
+
+## 🤝 Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Inspired by [Mem0](https://mem0.ai/)
+- Built with [React](https://react.dev/)
+- Styled with [Tailwind CSS](https://tailwindcss.com/)
+- Icons from [Lucide](https://lucide.dev/)
+
+## 📞 Support
+
+- Documentation: [https://docs.knowledge-rag.ai](https://docs.knowledge-rag.ai)
+- Issues: [GitHub Issues](https://github.com/yourusername/knowledge-rag-webui/issues)
+- Discussions: [GitHub Discussions](https://github.com/yourusername/knowledge-rag-webui/discussions)
