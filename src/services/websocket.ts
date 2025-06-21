@@ -145,13 +145,13 @@ export class WebSocketService {
       this.listeners.set(event, new Set());
     }
     
-    this.listeners.get(event)!.add(callback);
+    this.listeners.get(event)!.add(callback as (data: unknown) => void);
 
     // Return unsubscribe function
     return () => {
       const callbacks = this.listeners.get(event);
       if (callbacks) {
-        callbacks.delete(callback);
+        callbacks.delete(callback as (data: unknown) => void);
         if (callbacks.size === 0) {
           this.listeners.delete(event);
         }
