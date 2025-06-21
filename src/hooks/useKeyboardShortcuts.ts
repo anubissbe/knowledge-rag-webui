@@ -133,9 +133,8 @@ export function useGlobalKeyboardShortcuts() {
       cmd: true,
       description: 'New Memory',
       action: () => {
-        // This would open the new memory modal/page
         hookLogger.debug('New memory shortcut triggered');
-        // TODO: Implement when memory creation modal is available
+        navigate('/memories/new');
       },
       global: true
     },

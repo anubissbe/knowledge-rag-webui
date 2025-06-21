@@ -32,6 +32,7 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **API Key Security**: Secure API key display with masking, auto-hide, and security warnings
 - **Memory Leak Prevention**: Comprehensive WebSocket and interval cleanup to prevent memory leaks
 - **Code Splitting**: Intelligent bundle splitting reducing initial load from 904KB to 208KB (77% reduction)
+- **Professional Confirmation Dialogs**: Custom modal dialogs with loading states, accessibility features, and consistent styling replacing browser's default confirm()
 
 ## 📋 Prerequisites
 

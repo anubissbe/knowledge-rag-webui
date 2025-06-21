@@ -11,6 +11,7 @@ import MarkdownContent from '../components/MarkdownContent';
 import RelatedMemories from '../components/memory/RelatedMemories';
 import EntityList from '../components/memory/EntityList';
 import TagList from '../components/memory/TagList';
+import ConfirmationDialog from '../components/ui/ConfirmationDialog';
 import { useToast } from '../hooks/useToast';
 import { memoryApi } from '../services/api';
 
@@ -97,6 +98,7 @@ export default function MemoryDetail() {
   const [memory, setMemory] = useState<Memory | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     const fetchMemory = async () => {
@@ -139,8 +141,6 @@ export default function MemoryDetail() {
   };
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this memory?')) return;
-    
     setIsDeleting(true);
     try {
       await memoryApi.deleteMemory(memory!.id);
@@ -149,6 +149,7 @@ export default function MemoryDetail() {
     } catch (error) {
       toast.error('Delete failed', 'Failed to delete the memory. Please try again.');
       setIsDeleting(false);
+      setShowDeleteConfirm(false);
     }
   };
 
@@ -215,7 +216,7 @@ export default function MemoryDetail() {
                 <Edit className="w-5 h-5" />
               </Link>
               <button
-                onClick={handleDelete}
+                onClick={() => setShowDeleteConfirm(true)}
                 disabled={isDeleting}
                 className="p-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300
                          hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors
@@ -368,6 +369,19 @@ export default function MemoryDetail() {
           </aside>
         </div>
       </main>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDelete}
+        title="Delete Memory"
+        message={`Are you sure you want to delete "${memory?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        isLoading={isDeleting}
+      />
     </div>
   );
 }

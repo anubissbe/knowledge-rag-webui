@@ -17,6 +17,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Memories = lazy(() => import('./pages/Memories'));
 const MemoryDetail = lazy(() => import('./pages/MemoryDetail'));
+const MemoryCreate = lazy(() => import('./pages/MemoryCreate'));
 const Search = lazy(() => import('./pages/Search'));
 
 // Lazy load modal components that are conditionally rendered
@@ -34,6 +35,7 @@ function AppContent() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/memories" element={<Memories />} />
+              <Route path="/memories/new" element={<MemoryCreate />} />
               <Route path="/memories/:id" element={<MemoryDetail />} />
               <Route path="/search" element={<Search />} />
               <Route path="/settings" element={<Settings />} />

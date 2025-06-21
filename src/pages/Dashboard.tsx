@@ -82,8 +82,8 @@ export default function Dashboard() {
           .filter(item => new Date(item.date) > monthAgo)
           .reduce((sum, item) => sum + item.count, 0);
 
-        // Average memory length would come from API
-        const averageMemoryLength = 0; // TODO: Add to API response
+        // Use averageMemoryLength from API response
+        const averageMemoryLength = statsData.averageMemoryLength;
 
         setStats({
           totalMemories: statsData.totalMemories,

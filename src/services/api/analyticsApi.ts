@@ -5,6 +5,7 @@ export interface DashboardStats {
   totalCollections: number;
   totalTags: number;
   searchCount: number;
+  averageMemoryLength: number;
   lastUpdated: string;
 }
 

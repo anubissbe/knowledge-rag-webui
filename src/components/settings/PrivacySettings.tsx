@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { componentLogger } from '../../utils/logger';
 import { Shield, Eye, Users, Trash2, AlertCircle } from 'lucide-react';
+import ConfirmationDialog from '../ui/ConfirmationDialog';
 
 export default function PrivacySettings() {
   const [privacy, setPrivacy] = useState({
@@ -16,14 +17,24 @@ export default function PrivacySettings() {
     retentionDays: 30,
   });
 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+
   const handlePrivacyChange = (key: string, value: string | boolean) => {
     setPrivacy({ ...privacy, [key]: value });
   };
 
-  const handleDeleteAccount = () => {
-    if (confirm('Are you sure you want to delete your account? This action is permanent and cannot be undone.')) {
+  const handleDeleteAccount = async () => {
+    setIsDeletingAccount(true);
+    try {
       // Handle account deletion
       componentLogger.warn('Account deletion initiated by user');
+      // Add actual account deletion logic here
+      setShowDeleteConfirm(false);
+    } catch (error) {
+      componentLogger.error('Account deletion failed', error);
+    } finally {
+      setIsDeletingAccount(false);
     }
   };
 
@@ -195,10 +206,11 @@ export default function PrivacySettings() {
                   Once you delete your account, there is no going back. All your data will be permanently removed.
                 </p>
                 <button
-                  onClick={handleDeleteAccount}
+                  onClick={() => setShowDeleteConfirm(true)}
+                  disabled={isDeletingAccount}
                   className="mt-3 px-4 py-2 bg-red-600 text-white font-medium rounded-lg
                            hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500
-                           transition-colors duration-200"
+                           disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                   aria-label="Delete account permanently"
                 >
                   Delete Account
@@ -219,6 +231,19 @@ export default function PrivacySettings() {
           </button>
         </div>
       </div>
+
+      {/* Delete Account Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDeleteAccount}
+        title="Delete Account"
+        message="Are you sure you want to delete your account? This action is permanent and cannot be undone. All your data, memories, and settings will be permanently removed."
+        confirmText="Delete Account"
+        cancelText="Cancel"
+        variant="danger"
+        isLoading={isDeletingAccount}
+      />
     </div>
   );
 }
