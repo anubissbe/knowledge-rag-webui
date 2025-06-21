@@ -13,6 +13,7 @@ import { usePageKeyboardShortcuts, useGlobalKeyboardShortcuts } from '../hooks/u
 import KeyboardShortcutsModal from '../components/KeyboardShortcutsModal';
 import { useKeyboardShortcutsModal } from '../hooks/useKeyboardShortcutsModal';
 import KeyboardShortcutIndicator from '../components/KeyboardShortcutIndicator';
+import { useRealtimeMemories } from '../hooks/useRealtimeMemories';
 
 // Mock memories for development
 const mockMemories: Memory[] = [
@@ -77,6 +78,21 @@ export default function Memories() {
   const [isBulkMode, setIsBulkMode] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  // Real-time updates
+  useRealtimeMemories({
+    onMemoryCreated: (memory) => {
+      setMemories((prev) => [memory, ...prev]);
+    },
+    onMemoryUpdated: (updatedMemory) => {
+      setMemories((prev) =>
+        prev.map((m) => (m.id === updatedMemory.id ? updatedMemory : m))
+      );
+    },
+    onMemoryDeleted: ({ id }) => {
+      setMemories((prev) => prev.filter((m) => m.id !== id));
+    },
+  });
 
   // Get all unique tags
   const allTags = Array.from(

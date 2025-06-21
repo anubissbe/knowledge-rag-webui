@@ -22,6 +22,9 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Progressive Web App**: Installable app with offline support, automatic updates, and native-like experience
 - **Offline Mode**: Works offline with cached data and automatic sync when connection restored
 - **Keyboard Shortcuts**: Comprehensive keyboard shortcuts for power users (press ? for help)
+- **Real-time Updates**: WebSocket integration for live synchronization across users
+- **Live Notifications**: Instant notifications when memories are created, updated, or deleted
+- **Connection Status**: Visual indicators showing connection state and latency
 
 ## 📋 Prerequisites
 
@@ -271,6 +274,7 @@ For comprehensive design and development documentation, see the [docs directory]
 - **[Mobile Guide](docs/MOBILE.md)** - Mobile-specific features and responsive design patterns
 - **[Keyboard Shortcuts](docs/KEYBOARD_SHORTCUTS.md)** - Complete list of keyboard shortcuts
 - **[PWA Features](docs/PWA_FEATURES.md)** - Progressive Web App capabilities and configuration
+- **[WebSocket Integration](docs/WEBSOCKET_INTEGRATION.md)** - Real-time updates and live synchronization
 
 ## 🤝 Contributing
 

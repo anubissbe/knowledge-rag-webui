@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { useState } from 'react';
+import ConnectionStatus from './ConnectionStatus';
 
 interface LayoutProps {
   children: ReactNode;
@@ -67,6 +68,11 @@ export default function Layout({ children }: LayoutProps) {
 
             {/* Right side buttons */}
             <div className="flex items-center space-x-2 sm:space-x-4">
+              {/* Connection status */}
+              <div className="hidden sm:block">
+                <ConnectionStatus />
+              </div>
+              
               {/* Keyboard shortcuts */}
               <button
                 onClick={() => window.dispatchEvent(new CustomEvent('show-keyboard-shortcuts'))}

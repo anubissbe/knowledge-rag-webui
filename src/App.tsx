@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { WebSocketProvider } from './contexts/WebSocketContext';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Settings from './pages/Settings';
@@ -11,6 +12,7 @@ import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import { useKeyboardShortcutsModal } from './hooks/useKeyboardShortcutsModal';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import OfflineIndicator from './components/OfflineIndicator';
+import RealtimeNotification from './components/RealtimeNotification';
 
 function AppContent() {
   const globalShortcuts = useGlobalKeyboardShortcuts();
@@ -36,6 +38,7 @@ function AppContent() {
       />
       <PWAInstallPrompt />
       <OfflineIndicator />
+      <RealtimeNotification />
     </>
   );
 }
@@ -43,9 +46,11 @@ function AppContent() {
 function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <WebSocketProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </WebSocketProvider>
     </ThemeProvider>
   );
 }

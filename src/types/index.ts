@@ -98,6 +98,15 @@ export interface Collection {
   updatedAt: string;
 }
 
+export interface Tag {
+  id: string;
+  name: string;
+  color?: string;
+  count?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface SearchResult {
   memories: Memory[];
   facets: {
