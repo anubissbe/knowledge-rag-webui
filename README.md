@@ -28,6 +28,9 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Error Boundaries**: Graceful error handling to prevent app crashes
 - **Toast Notifications**: Non-intrusive feedback system for all user actions
 - **API Integration**: Full REST API integration replacing mock data
+- **Centralized Logging**: Structured logging system with environment-aware behavior and external service integration
+- **API Key Security**: Secure API key display with masking, auto-hide, and security warnings
+- **Memory Leak Prevention**: Comprehensive WebSocket and interval cleanup to prevent memory leaks
 
 ## 📋 Prerequisites
 
@@ -94,7 +97,8 @@ knowledge-rag-webui/
 │   │   └── websocket.ts  # Real-time WebSocket service
 │   ├── stores/           # Zustand state management
 │   ├── types/            # TypeScript type definitions
-│   ├── utils/             # Utility functions
+│   ├── utils/             # Utility functions and centralized logger
+│   │   └── logger.ts     # Structured logging system with context support
 │   └── styles/            # Global styles and mobile CSS
 ├── public/                # Static assets
 ├── tests/                 # Test files
@@ -296,6 +300,12 @@ For comprehensive design and development documentation, see the [docs directory]
 - **[Keyboard Shortcuts](docs/KEYBOARD_SHORTCUTS.md)** - Complete list of keyboard shortcuts
 - **[PWA Features](docs/PWA_FEATURES.md)** - Progressive Web App capabilities and configuration
 - **[WebSocket Integration](docs/WEBSOCKET_INTEGRATION.md)** - Real-time updates and live synchronization
+- **[Error Boundaries](docs/ERROR_BOUNDARIES.md)** - Error handling and crash prevention strategies
+- **[Toast Notifications](docs/TOAST_NOTIFICATIONS.md)** - User feedback system implementation
+- **[API Integration](docs/API_INTEGRATION.md)** - REST API integration and service architecture
+- **[WebSocket Memory Management](docs/WEBSOCKET_MEMORY_LEAK_FIXES.md)** - Memory leak prevention and cleanup strategies
+- **[API Key Security](docs/API_KEY_SECURITY.md)** - Secure API key handling and display
+- **[Logging Implementation](docs/LOGGING_IMPLEMENTATION.md)** - Centralized logging system and best practices
 
 ## 🤝 Contributing
 

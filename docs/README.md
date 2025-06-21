@@ -10,6 +10,19 @@ Welcome to the comprehensive documentation for the Knowledge RAG WebUI project. 
 - **[UI Mockups](UI_MOCKUPS.md)** - ASCII-based wireframes and layout specifications for all pages and components
 - **[Style Guide](STYLE_GUIDE.md)** - CSS implementation details, animation specifications, and accessibility standards
 
+### Technical Documentation
+- **[PWA Features](PWA_FEATURES.md)** - Progressive Web App capabilities and configuration
+- **[WebSocket Integration](WEBSOCKET_INTEGRATION.md)** - Real-time updates and live synchronization
+- **[API Integration](API_INTEGRATION.md)** - REST API integration and service architecture
+- **[Keyboard Shortcuts](KEYBOARD_SHORTCUTS.md)** - Complete list of keyboard shortcuts
+
+### Security & Quality Documentation
+- **[Error Boundaries](ERROR_BOUNDARIES.md)** - Error handling and crash prevention strategies
+- **[Toast Notifications](TOAST_NOTIFICATIONS.md)** - User feedback system implementation
+- **[WebSocket Memory Management](WEBSOCKET_MEMORY_LEAK_FIXES.md)** - Memory leak prevention and cleanup strategies
+- **[API Key Security](API_KEY_SECURITY.md)** - Secure API key handling and display
+- **[Logging Implementation](LOGGING_IMPLEMENTATION.md)** - Centralized logging system and best practices
+
 ### User Documentation
 - **[Mobile Guide](MOBILE.md)** - Mobile-specific features, responsive design, and touch interactions
 
