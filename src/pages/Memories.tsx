@@ -5,6 +5,10 @@ import type { Memory } from '../types';
 import MemoryCard from '../components/memory/MemoryCard';
 import MemoryListItem from '../components/memory/MemoryListItem';
 import MobileFloatingActionButton from '../components/mobile/MobileFloatingActionButton';
+import BulkSelectionHeader from '../components/bulk/BulkSelectionHeader';
+import BulkSelectionToolbar from '../components/bulk/BulkSelectionToolbar';
+import BulkSelectableMemoryCard from '../components/bulk/BulkSelectableMemoryCard';
+import { useBulkSelection } from '../hooks/useBulkSelection';
 
 // Mock memories for development
 const mockMemories: Memory[] = [
@@ -62,10 +66,11 @@ const mockMemories: Memory[] = [
 ];
 
 export default function Memories() {
-  const [memories] = useState<Memory[]>(mockMemories);
+  const [memories, setMemories] = useState<Memory[]>(mockMemories);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [isBulkMode, setIsBulkMode] = useState(false);
 
   // Get all unique tags
   const allTags = Array.from(
@@ -84,6 +89,95 @@ export default function Memories() {
     
     return matchesSearch && matchesTags;
   });
+  
+  // Bulk selection functionality
+  const {
+    selectedItems,
+    isAllSelected,
+    isIndeterminate,
+    toggleItem,
+    toggleAll,
+    selectAll,
+    clearSelection,
+    hasSelection,
+    selectionCount
+  } = useBulkSelection(filteredMemories.map(m => m.id));
+  
+  const selectedMemories = memories.filter(memory => selectedItems.includes(memory.id));
+  
+  // Bulk operations handlers
+  const handleBulkDelete = async (memoryIds: string[]) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setMemories(prev => prev.filter(memory => !memoryIds.includes(memory.id)));
+    console.log('Deleted memories:', memoryIds);
+  };
+  
+  const handleBulkExport = (memoryIds: string[], format: 'json' | 'markdown' | 'csv') => {
+    const exportData = memories.filter(memory => memoryIds.includes(memory.id));
+    
+    let content = '';
+    let filename = '';
+    
+    switch (format) {
+      case 'json':
+        content = JSON.stringify(exportData, null, 2);
+        filename = 'memories.json';
+        break;
+      case 'markdown':
+        content = exportData.map(memory => 
+          `# ${memory.title}\n\n${memory.content}\n\n---\n`
+        ).join('\n');
+        filename = 'memories.md';
+        break;
+      case 'csv':
+        const headers = 'Title,Content,Tags,Created';
+        const rows = exportData.map(memory => 
+          `"${memory.title}","${memory.content.replace(/"/g, '""')}","${memory.tags.join(';')}","${memory.createdAt}"`
+        );
+        content = [headers, ...rows].join('\n');
+        filename = 'memories.csv';
+        break;
+    }
+    
+    // Create and download file
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    console.log('Exported memories:', memoryIds, 'as', format);
+  };
+  
+  const handleBulkMoveToCollection = async (memoryIds: string[], collectionId: string) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 500));
+    console.log('Moved memories to collection:', memoryIds, collectionId);
+    // In real app, update memories with collection assignment
+  };
+  
+  const handleBulkAddTags = async (memoryIds: string[], tags: string[]) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 500));
+    setMemories(prev => prev.map(memory => 
+      memoryIds.includes(memory.id) 
+        ? { ...memory, tags: [...new Set([...memory.tags, ...tags])] }
+        : memory
+    ));
+    console.log('Added tags to memories:', memoryIds, tags);
+  };
+  
+  const handleToggleBulkMode = () => {
+    setIsBulkMode(!isBulkMode);
+    if (isBulkMode) {
+      clearSelection();
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -198,6 +292,35 @@ export default function Memories() {
         </div>
       </div>
 
+      {/* Bulk Selection Toolbar */}
+      {hasSelection && (
+        <BulkSelectionToolbar
+          selectedCount={selectionCount}
+          selectedMemories={selectedMemories}
+          onClearSelection={clearSelection}
+          onBulkDelete={handleBulkDelete}
+          onBulkExport={handleBulkExport}
+          onBulkMoveToCollection={handleBulkMoveToCollection}
+          onBulkAddTags={handleBulkAddTags}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
+        />
+      )}
+      
+      {/* Bulk Selection Header */}
+      {filteredMemories.length > 0 && (
+        <BulkSelectionHeader
+          totalCount={filteredMemories.length}
+          selectedCount={selectionCount}
+          isAllSelected={isAllSelected}
+          isIndeterminate={isIndeterminate}
+          onToggleAll={toggleAll}
+          onToggleBulkMode={handleToggleBulkMode}
+          isBulkMode={isBulkMode}
+          onSelectAll={selectAll}
+          onClearSelection={clearSelection}
+        />
+      )}
+
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {filteredMemories.length === 0 ? (
@@ -221,9 +344,19 @@ export default function Memories() {
           </div>
         ) : viewMode === 'grid' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredMemories.map(memory => (
-              <MemoryCard key={memory.id} memory={memory} />
-            ))}
+            {filteredMemories.map(memory => 
+              isBulkMode ? (
+                <BulkSelectableMemoryCard
+                  key={memory.id}
+                  memory={memory}
+                  isSelected={selectedItems.includes(memory.id)}
+                  onToggleSelect={toggleItem}
+                  isBulkMode={isBulkMode}
+                />
+              ) : (
+                <MemoryCard key={memory.id} memory={memory} />
+              )
+            )}
           </div>
         ) : (
           <div className="space-y-3 sm:space-y-4">

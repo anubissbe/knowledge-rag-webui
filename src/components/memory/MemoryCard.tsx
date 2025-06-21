@@ -17,8 +17,11 @@ export default function MemoryCard({ memory }: MemoryCardProps) {
   const ContentIcon = contentTypeIcons[memory.contentType];
   
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md 
-                      transition-shadow duration-200 overflow-hidden">
+    <article 
+      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md 
+                      transition-shadow duration-200 overflow-hidden"
+      data-testid="memory-card"
+    >
       <Link to={`/memories/${memory.id}`} className="block p-4 sm:p-6 touch-manipulation">
         <div className="flex items-start justify-between mb-3">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white line-clamp-2 flex-1 leading-tight">
