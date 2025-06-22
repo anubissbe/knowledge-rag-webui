@@ -7,6 +7,7 @@ import authRouter from './auth';
 import exportRouter from './export';
 import preferencesRouter from './preferences';
 import memoryVersionsRouter from './memoryVersions';
+import memoryTemplatesRouter from './memoryTemplates';
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.use(`${v1}/search`, searchRouter);
 router.use(`${v1}/auth`, authRouter);
 router.use(`${v1}/export`, exportRouter);
 router.use(`${v1}/preferences`, preferencesRouter);
+router.use(`${v1}/templates`, memoryTemplatesRouter);
 
 // Health check endpoint
 router.get('/health', (req, res) => {
@@ -46,6 +48,7 @@ router.get('/', (req, res) => {
       auth: `${v1}/auth`,
       export: `${v1}/export`,
       preferences: `${v1}/preferences`,
+      templates: `${v1}/templates`,
     },
   });
 });

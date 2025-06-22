@@ -3,6 +3,7 @@ import { Memory } from '../models/Memory';
 import { Collection } from '../models/Collection';
 import { User } from '../models/User';
 import { MemoryVersion, MemoryVersionSummary, MemoryVersionComparison, VersionDiff, CreateVersionDto } from '../models/MemoryVersion';
+import { MemoryTemplate, CreateTemplateDto, defaultTemplates } from '../models/MemoryTemplate';
 
 // In-memory database for development
 // In production, this would be replaced with PostgreSQL + pgvector
@@ -12,6 +13,7 @@ class InMemoryDatabase {
   private users: Map<string, User> = new Map();
   private usersByEmail: Map<string, string> = new Map(); // email -> userId
   private memoryVersions: Map<string, MemoryVersion[]> = new Map(); // memoryId -> versions[]
+  private memoryTemplates: Map<string, MemoryTemplate> = new Map(); // templateId -> template
 
   constructor() {
     this.initializeSampleData();
@@ -531,6 +533,142 @@ Each has unique strengths for different use cases...`,
     }
 
     return differences;
+  }
+
+  // Memory Template Methods
+
+  private async initializeDefaultTemplates() {
+    // Initialize default system templates
+    const { v4: uuidv4 } = await import('uuid');
+    
+    defaultTemplates.forEach((templateData) => {
+      const template: MemoryTemplate = {
+        id: uuidv4(),
+        ...templateData,
+        usageCount: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      this.memoryTemplates.set(template.id, template);
+    });
+  }
+
+  // Get all memory templates (system + user custom)
+  async getMemoryTemplates(userId: string): Promise<MemoryTemplate[]> {
+    // Initialize default templates if not already done
+    if (this.memoryTemplates.size === 0) {
+      await this.initializeDefaultTemplates();
+    }
+
+    const templates = Array.from(this.memoryTemplates.values())
+      .filter(template => template.isSystem || template.userId === userId)
+      .sort((a, b) => {
+        // System templates first, then custom templates
+        if (a.isSystem !== b.isSystem) {
+          return a.isSystem ? -1 : 1;
+        }
+        // Within same type, sort by usage count (descending), then by name
+        if (a.usageCount !== b.usageCount) {
+          return b.usageCount - a.usageCount;
+        }
+        return a.name.localeCompare(b.name);
+      });
+
+    return templates;
+  }
+
+  // Get templates by category
+  async getMemoryTemplatesByCategory(category: MemoryTemplate['category'], userId: string): Promise<MemoryTemplate[]> {
+    const allTemplates = await this.getMemoryTemplates(userId);
+    return allTemplates.filter(template => template.category === category);
+  }
+
+  // Get specific memory template
+  async getMemoryTemplate(templateId: string, userId: string): Promise<MemoryTemplate | null> {
+    const template = this.memoryTemplates.get(templateId);
+    if (!template) {
+      return null;
+    }
+
+    // Check if user has access (system templates or own custom templates)
+    if (template.isSystem || template.userId === userId) {
+      return template;
+    }
+
+    return null;
+  }
+
+  // Create custom memory template
+  async createMemoryTemplate(createDto: CreateTemplateDto & { userId: string }, userId: string): Promise<MemoryTemplate> {
+    const { v4: uuidv4 } = await import('uuid');
+    
+    const template: MemoryTemplate = {
+      id: uuidv4(),
+      name: createDto.name,
+      description: createDto.description,
+      category: createDto.category,
+      icon: createDto.icon || '📝',
+      color: createDto.color || '#6B7280',
+      template: createDto.template,
+      isSystem: false,
+      userId: userId,
+      usageCount: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.memoryTemplates.set(template.id, template);
+    return template;
+  }
+
+  // Update memory template (only custom templates)
+  async updateMemoryTemplate(templateId: string, updateData: Partial<CreateTemplateDto>, userId: string): Promise<MemoryTemplate | null> {
+    const template = this.memoryTemplates.get(templateId);
+    if (!template || template.isSystem || template.userId !== userId) {
+      return null;
+    }
+
+    const updatedTemplate: MemoryTemplate = {
+      ...template,
+      ...updateData,
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.memoryTemplates.set(templateId, updatedTemplate);
+    return updatedTemplate;
+  }
+
+  // Delete memory template (only custom templates)
+  async deleteMemoryTemplate(templateId: string, userId: string): Promise<boolean> {
+    const template = this.memoryTemplates.get(templateId);
+    if (!template || template.isSystem || template.userId !== userId) {
+      return false;
+    }
+
+    return this.memoryTemplates.delete(templateId);
+  }
+
+  // Increment template usage count
+  async incrementTemplateUsage(templateId: string, userId: string): Promise<void> {
+    const template = this.memoryTemplates.get(templateId);
+    if (template && (template.isSystem || template.userId === userId)) {
+      template.usageCount++;
+      template.updatedAt = new Date().toISOString();
+      this.memoryTemplates.set(templateId, template);
+    }
+  }
+
+  // Get template usage statistics
+  async getTemplateStats(templateId: string, userId: string): Promise<{ usageCount: number; lastUsed: string } | null> {
+    const template = this.memoryTemplates.get(templateId);
+    if (!template || (!template.isSystem && template.userId !== userId)) {
+      return null;
+    }
+
+    return {
+      usageCount: template.usageCount,
+      lastUsed: template.updatedAt,
+    };
   }
 }
 

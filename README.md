@@ -38,6 +38,7 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **JWT Authentication**: Complete user authentication system with login/register, protected routes, and secure token management
 - **Search Filters Persistence**: Automatic saving and restoration of user search filters and sorting preferences across sessions
 - **Memory Versioning**: Complete version history for all memory edits with comparison, restoration, and audit trail functionality
+- **Memory Templates**: Pre-defined templates for common memory types with dynamic fields, placeholder replacement, and custom template creation
 
 ## 📋 Prerequisites
 
@@ -104,6 +105,7 @@ The project includes a full-featured backend API server built with Express.js an
 - **Authentication**: User login/register with JWT tokens
 - **User Preferences**: Save and retrieve search filter preferences
 - **Memory Versioning**: Version history tracking, comparison, and restoration endpoints
+- **Memory Templates**: Template management with CRUD operations, usage tracking, and dynamic field processing
 
 See [Backend Documentation](./backend/README.md) for detailed API specifications, [Authentication Documentation](./docs/AUTHENTICATION.md) for security implementation details, and [API Integration Documentation](./docs/API_INTEGRATION.md) for frontend integration details.
 
@@ -349,6 +351,7 @@ For comprehensive design and development documentation, see the [docs directory]
 - **[Code Splitting](docs/CODE_SPLITTING.md)** - Bundle optimization and lazy loading implementation
 - **[Search Filters Persistence](docs/SEARCH_FILTERS_PERSISTENCE.md)** - User search preferences persistence and restoration
 - **[Memory Versioning](docs/MEMORY_VERSIONING.md)** - Version history, comparison, and restoration system implementation
+- **[Memory Templates](docs/MEMORY_TEMPLATES.md)** - Pre-defined templates system with dynamic fields and custom template creation
 
 ## 🤝 Contributing
 

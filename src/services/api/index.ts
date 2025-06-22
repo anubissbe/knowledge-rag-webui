@@ -4,3 +4,4 @@ export * from './memoryVersionsApi';
 export * from './searchApi';
 export * from './analyticsApi';
 export * from './exportApi';
+export * from './memoryTemplatesApi';

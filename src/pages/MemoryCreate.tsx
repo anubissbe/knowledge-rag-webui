@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, X } from 'lucide-react';
+import { ArrowLeft, Save, X, Sparkles } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
 import { memoryApi } from '../services/api/memoryApi';
 import { componentLogger } from '../utils/logger';
+import TemplateSelector from '../components/memory/TemplateSelector';
+import TemplateFields from '../components/memory/TemplateFields';
+import type { MemoryTemplate } from '../services/api/memoryTemplatesApi';
 
 export default function MemoryCreate() {
   const navigate = useNavigate();
@@ -16,6 +19,9 @@ export default function MemoryCreate() {
     collectionId: '',
   });
   const [tagInput, setTagInput] = useState('');
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<MemoryTemplate | null>(null);
+  const [templateFieldValues, setTemplateFieldValues] = useState<Record<string, string>>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +77,68 @@ export default function MemoryCreate() {
     }
   };
 
+  const handleTemplateSelect = (template: MemoryTemplate) => {
+    setSelectedTemplate(template);
+    
+    // Apply template content with placeholder replacement
+    let processedTitle = template.template.title;
+    let processedContent = template.template.content;
+    
+    // Replace common placeholders with default values
+    const today = new Date();
+    const replacements: Record<string, string> = {
+      date: today.toISOString().split('T')[0],
+      time: today.toTimeString().split(' ')[0].slice(0, 5),
+      today: today.toDateString(),
+      ...templateFieldValues
+    };
+    
+    Object.entries(replacements).forEach(([key, value]) => {
+      const placeholder = `{{${key}}}`;
+      processedTitle = processedTitle.replace(new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'), value);
+      processedContent = processedContent.replace(new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'), value);
+    });
+    
+    setFormData(prev => ({
+      ...prev,
+      title: processedTitle,
+      content: processedContent,
+      tags: [...new Set([...prev.tags, ...template.template.tags])]
+    }));
+    
+    componentLogger.info('Template selected', { templateId: template.id, templateName: template.name });
+  };
+
+  const handleTemplateFieldsChange = (values: Record<string, string>) => {
+    setTemplateFieldValues(values);
+    
+    if (selectedTemplate) {
+      // Re-process template content with updated field values
+      let processedTitle = selectedTemplate.template.title;
+      let processedContent = selectedTemplate.template.content;
+      
+      const today = new Date();
+      const replacements: Record<string, string> = {
+        date: today.toISOString().split('T')[0],
+        time: today.toTimeString().split(' ')[0].slice(0, 5),
+        today: today.toDateString(),
+        ...values
+      };
+      
+      Object.entries(replacements).forEach(([key, value]) => {
+        const placeholder = `{{${key}}}`;
+        processedTitle = processedTitle.replace(new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'), value);
+        processedContent = processedContent.replace(new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'), value);
+      });
+      
+      setFormData(prev => ({
+        ...prev,
+        title: processedTitle,
+        content: processedContent
+      }));
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
       {/* Header */}
@@ -88,7 +156,57 @@ export default function MemoryCreate() {
             Create New Memory
           </h1>
         </div>
+        
+        <button
+          onClick={() => setShowTemplateSelector(true)}
+          className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg
+                   hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2
+                   focus:ring-purple-500 transition-colors font-medium"
+        >
+          <Sparkles className="w-4 h-4 mr-2" />
+          Use Template
+        </button>
       </div>
+
+      {/* Template Info */}
+      {selectedTemplate && (
+        <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <span className="text-2xl">{selectedTemplate.icon}</span>
+              <div>
+                <h3 className="text-lg font-medium text-purple-900 dark:text-purple-300">
+                  Using Template: {selectedTemplate.name}
+                </h3>
+                <p className="text-sm text-purple-700 dark:text-purple-400">
+                  {selectedTemplate.description}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedTemplate(null);
+                setTemplateFieldValues({});
+                setFormData({ title: '', content: '', tags: [], collectionId: '' });
+              }}
+              className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-200"
+              aria-label="Remove template"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      )}
+      
+      {/* Template Fields */}
+      {selectedTemplate?.template.metadata?.fields && selectedTemplate.template.metadata.fields.length > 0 && (
+        <TemplateFields
+          fields={selectedTemplate.template.metadata.fields}
+          values={templateFieldValues}
+          onChange={handleTemplateFieldsChange}
+        />
+      )}
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -205,6 +323,13 @@ export default function MemoryCreate() {
           </button>
         </div>
       </form>
+      
+      {/* Template Selector Modal */}
+      <TemplateSelector
+        isOpen={showTemplateSelector}
+        onTemplateSelect={handleTemplateSelect}
+        onClose={() => setShowTemplateSelector(false)}
+      />
     </div>
   );
 }
