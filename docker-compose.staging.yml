@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  knowledge-rag-webui-staging:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=staging
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL:-http://staging-api:8002}
+      - VITE_KNOWLEDGE_GRAPH_URL=${VITE_KNOWLEDGE_GRAPH_URL:-http://staging-graph:8001}
+      - VITE_VECTOR_DB_URL=${VITE_VECTOR_DB_URL:-http://staging-vector:8003}
+      - VITE_UNIFIED_DB_URL=${VITE_UNIFIED_DB_URL:-http://staging-db:8004}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.staging-webui.rule=Host(`staging.knowledge-rag.example.com`)"
+      - "traefik.http.routers.staging-webui.tls=true"
+      - "traefik.http.routers.staging-webui.tls.certresolver=letsencrypt"
+    networks:
+      - staging-network
+
+networks:
+  staging-network:
+    external: true

@@ -25,7 +25,15 @@
     "docker:build": "docker build -t knowledge-rag-webui .",
     "docker:run": "docker run -p 3000:3000 knowledge-rag-webui",
     "docker:compose": "docker-compose up -d",
-    "test:mcp": "node scripts/test-mcp-integration.js"
+    "test:mcp": "node scripts/test-mcp-integration.js",
+    "deploy:staging": "scripts/deployment/deploy.sh staging",
+    "deploy:production": "scripts/deployment/deploy.sh production",
+    "rollback:staging": "scripts/deployment/rollback.sh staging",
+    "rollback:production": "scripts/deployment/rollback.sh production",
+    "setup:staging": "scripts/deployment/setup-environment.sh staging",
+    "setup:production": "scripts/deployment/setup-environment.sh production",
+    "security:audit": "npm audit && docker run --rm -v \"$PWD:/app\" securecodewarrior/docker-action scan",
+    "lighthouse": "npm run build && lighthouse http://localhost:3000 --output-path=./lighthouse-report.html"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

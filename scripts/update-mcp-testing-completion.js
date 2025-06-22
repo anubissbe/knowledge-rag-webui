@@ -11,7 +11,7 @@ import axios from 'axios';
 import chalk from 'chalk';
 import { promises as fs } from 'fs';
 
-const MCP_TASK_API = 'http://192.168.1.24:3001/api';
+const MCP_TASK_API = process.env.MCP_TASK_API_URL || 'http://localhost:3001/api';
 
 const TESTING_TASK_UPDATE = {
   searchTerms: ['testing', 'test suite', 'jest', 'playwright', 'unit tests'],

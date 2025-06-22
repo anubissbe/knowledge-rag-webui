@@ -3,7 +3,7 @@
 # MCP Task Manager Update Script
 # Updates completed tasks for the knowledge-rag-webui project
 
-API_URL="http://192.168.1.24:3001/api"
+API_URL="${MCP_TASK_API_URL:-http://localhost:3001/api}"
 PROJECT_ID="9fbc487c-1b29-4f74-b235-4697cf9610e5"
 
 # Color codes for output

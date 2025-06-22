@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  knowledge-rag-webui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL:-http://localhost:8002}
+      - VITE_KNOWLEDGE_GRAPH_URL=${VITE_KNOWLEDGE_GRAPH_URL:-http://localhost:8001}
+      - VITE_VECTOR_DB_URL=${VITE_VECTOR_DB_URL:-http://localhost:8003}
+      - VITE_UNIFIED_DB_URL=${VITE_UNIFIED_DB_URL:-http://localhost:8004}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - knowledge-rag-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - knowledge-rag-webui
+    restart: unless-stopped
+    networks:
+      - knowledge-rag-network
+
+networks:
+  knowledge-rag-network:
+    external: true
