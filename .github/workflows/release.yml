@@ -54,7 +54,7 @@ jobs:
         zip -r knowledge-rag-webui-${{ github.ref_name }}.zip dist/
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         name: Release ${{ github.ref_name }}
         body_path: RELEASE_NOTES.md
