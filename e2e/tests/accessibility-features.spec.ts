@@ -210,4 +210,128 @@ test.describe('Accessibility Features', () => {
     focusedElement = page.locator(':focus')
     await expect(focusedElement).toHaveText('Accessibility')
     
-    // Press Enter to \"navigate\" to accessibility (in this case, it's just visual feedback)\n    await page.keyboard.press('Enter')\n    \n    // Continue tabbing to accessibility toggles\n    await page.keyboard.press('Tab')\n    await page.keyboard.press('Tab')\n    \n    // Should be on the high contrast toggle\n    focusedElement = page.locator(':focus')\n    await expect(focusedElement).toHaveAttribute('aria-label', 'Toggle high contrast mode')\n  })\n\n  test('should have proper ARIA labels and roles', async ({ page }) => {\n    // Check that toggles have proper ARIA attributes\n    const highContrastToggle = page.locator('button[aria-label=\"Toggle high contrast mode\"]')\n    await expect(highContrastToggle).toHaveAttribute('aria-pressed')\n    \n    const reducedMotionToggle = page.locator('button[aria-label=\"Toggle reduced motion\"]')\n    await expect(reducedMotionToggle).toHaveAttribute('aria-pressed')\n    \n    // Check focus ring buttons have proper ARIA attributes\n    const focusRingButtons = page.locator('button:has-text(\"Default\"), button:has-text(\"Enhanced\"), button:has-text(\"High contrast\")')\n    for (const button of await focusRingButtons.all()) {\n      await expect(button).toHaveAttribute('aria-pressed')\n    }\n  })\n\n  test('should work with high contrast mode visually', async ({ page }) => {\n    // Enable high contrast mode\n    await page.locator('button[aria-label=\"Toggle high contrast mode\"]').click()\n    \n    // Take a screenshot to verify visual changes\n    await expect(page).toHaveScreenshot('high-contrast-mode.png')\n    \n    // Check that text has sufficient contrast\n    const headings = page.locator('h1, h2, h3')\n    const firstHeading = headings.first()\n    \n    // In high contrast mode, text should be highly visible\n    const textColor = await firstHeading.evaluate(el => {\n      return window.getComputedStyle(el).color\n    })\n    \n    // Should be white or very light in high contrast mode\n    expect(textColor).toMatch(/rgb\\(255, 255, 255\\)|rgb\\(240, 240, 240\\)/)\n  })\n\n  test('should handle system preferences detection', async ({ page }) => {\n    // Test with prefers-reduced-motion\n    await page.emulateMedia({ reducedMotion: 'reduce' })\n    \n    // Reload to pick up system preference\n    await page.reload()\n    await page.waitForSelector('text=Accessibility')\n    \n    // Reduced motion should be enabled automatically\n    const reducedMotionToggle = page.locator('button[aria-label=\"Toggle reduced motion\"]')\n    await expect(reducedMotionToggle).toHaveAttribute('aria-pressed', 'true')\n    \n    // Test with high contrast preference\n    await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'no-preference' })\n    await page.reload()\n    await page.waitForSelector('text=Accessibility')\n    \n    // Should respect the system preference\n    const documentElement = page.locator('html')\n    // Note: This might not work in all browsers/test environments\n    // but it's good to test the principle\n  })\n\n  test('should announce changes to screen readers', async ({ page }) => {\n    // Enable screen reader mode first\n    await page.locator('button[aria-label=\"Toggle screen reader mode\"]').click()\n    \n    // Check for live region\n    const liveRegion = page.locator('#accessibility-live-region')\n    await expect(liveRegion).toBeInTheDocument()\n    await expect(liveRegion).toHaveAttribute('aria-live', 'polite')\n    \n    // Toggle high contrast and check for announcement\n    await page.locator('button[aria-label=\"Toggle high contrast mode\"]').click()\n    \n    // Note: Testing actual screen reader announcements is difficult in automated tests\n    // We're checking that the infrastructure is in place\n  })\n\n  test('should work on mobile viewport', async ({ page }) => {\n    // Set mobile viewport\n    await page.setViewportSize({ width: 375, height: 667 })\n    \n    await page.goto('/settings')\n    \n    // Accessibility section should still be accessible\n    await expect(page.locator('text=Accessibility')).toBeVisible()\n    \n    // Toggles should work on mobile\n    const highContrastToggle = page.locator('button[aria-label=\"Toggle high contrast mode\"]')\n    await highContrastToggle.click()\n    \n    await expect(highContrastToggle).toHaveAttribute('aria-pressed', 'true')\n    await expect(page.locator('html')).toHaveClass(/high-contrast/)\n    \n    // Keyboard shortcuts helper should be responsive\n    await expect(page.locator('text=Keyboard Shortcuts')).toBeVisible()\n  })\n\n  test('should maintain focus visibility with different focus ring styles', async ({ page }) => {\n    // Test enhanced focus ring\n    await page.locator('button:has-text(\"Enhanced\")').click()\n    \n    // Focus a button and check visibility\n    const testButton = page.locator('button[aria-label=\"Toggle high contrast mode\"]')\n    await testButton.focus()\n    \n    // Enhanced focus should be visible (we can't easily test the exact visual appearance)\n    await expect(testButton).toBeFocused()\n    \n    // Test high contrast focus ring\n    await page.locator('button:has-text(\"High contrast\")').click()\n    await testButton.focus()\n    \n    await expect(testButton).toBeFocused()\n    await expect(page.locator('html')).toHaveAttribute('data-focus-ring', 'high-contrast')\n  })\n})"
+    // Press Enter to "navigate" to accessibility (in this case, it's just visual feedback)
+    await page.keyboard.press('Enter')
+    
+    // Continue tabbing to accessibility toggles
+    await page.keyboard.press('Tab')
+    await page.keyboard.press('Tab')
+    
+    // Should be on the high contrast toggle
+    focusedElement = page.locator(':focus')
+    await expect(focusedElement).toHaveAttribute('aria-label', 'Toggle high contrast mode')
+  })
+
+  test('should have proper ARIA labels and roles', async ({ page }) => {
+    // Check that toggles have proper ARIA attributes
+    const highContrastToggle = page.locator('button[aria-label="Toggle high contrast mode"]')
+    await expect(highContrastToggle).toHaveAttribute('aria-pressed')
+    
+    const reducedMotionToggle = page.locator('button[aria-label="Toggle reduced motion"]')
+    await expect(reducedMotionToggle).toHaveAttribute('aria-pressed')
+    
+    // Check focus ring buttons have proper ARIA attributes
+    const focusRingButtons = page.locator('button:has-text("Default"), button:has-text("Enhanced"), button:has-text("High contrast")')
+    for (const button of await focusRingButtons.all()) {
+      await expect(button).toHaveAttribute('aria-pressed')
+    }
+  })
+
+  test('should work with high contrast mode visually', async ({ page }) => {
+    // Enable high contrast mode
+    await page.locator('button[aria-label="Toggle high contrast mode"]').click()
+    
+    // Take a screenshot to verify visual changes
+    await expect(page).toHaveScreenshot('high-contrast-mode.png')
+    
+    // Check that text has sufficient contrast
+    const headings = page.locator('h1, h2, h3')
+    const firstHeading = headings.first()
+    
+    // In high contrast mode, text should be highly visible
+    const textColor = await firstHeading.evaluate(el => {
+      return window.getComputedStyle(el).color
+    })
+    
+    // Should be white or very light in high contrast mode
+    expect(textColor).toMatch(/rgb\(255, 255, 255\)|rgb\(240, 240, 240\)/)
+  })
+
+  test('should handle system preferences detection', async ({ page }) => {
+    // Test with prefers-reduced-motion
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    
+    // Reload to pick up system preference
+    await page.reload()
+    await page.waitForSelector('text=Accessibility')
+    
+    // Reduced motion should be enabled automatically
+    const reducedMotionToggle = page.locator('button[aria-label="Toggle reduced motion"]')
+    await expect(reducedMotionToggle).toHaveAttribute('aria-pressed', 'true')
+    
+    // Test with high contrast preference
+    await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'no-preference' })
+    await page.reload()
+    await page.waitForSelector('text=Accessibility')
+    
+    // Should respect the system preference
+    const documentElement = page.locator('html')
+    // Note: This might not work in all browsers/test environments
+    // but it's good to test the principle
+  })
+
+  test('should announce changes to screen readers', async ({ page }) => {
+    // Enable screen reader mode first
+    await page.locator('button[aria-label="Toggle screen reader mode"]').click()
+    
+    // Check for live region
+    const liveRegion = page.locator('#accessibility-live-region')
+    await expect(liveRegion).toBeInTheDocument()
+    await expect(liveRegion).toHaveAttribute('aria-live', 'polite')
+    
+    // Toggle high contrast and check for announcement
+    await page.locator('button[aria-label="Toggle high contrast mode"]').click()
+    
+    // Note: Testing actual screen reader announcements is difficult in automated tests
+    // We're checking that the infrastructure is in place
+  })
+
+  test('should work on mobile viewport', async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 })
+    
+    await page.goto('/settings')
+    
+    // Accessibility section should still be accessible
+    await expect(page.locator('text=Accessibility')).toBeVisible()
+    
+    // Toggles should work on mobile
+    const highContrastToggle = page.locator('button[aria-label="Toggle high contrast mode"]')
+    await highContrastToggle.click()
+    
+    await expect(highContrastToggle).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.locator('html')).toHaveClass(/high-contrast/)
+    
+    // Keyboard shortcuts helper should be responsive
+    await expect(page.locator('text=Keyboard Shortcuts')).toBeVisible()
+  })
+
+  test('should maintain focus visibility with different focus ring styles', async ({ page }) => {
+    // Test enhanced focus ring
+    await page.locator('button:has-text("Enhanced")').click()
+    
+    // Focus a button and check visibility
+    const testButton = page.locator('button[aria-label="Toggle high contrast mode"]')
+    await testButton.focus()
+    
+    // Enhanced focus should be visible (we can't easily test the exact visual appearance)
+    await expect(testButton).toBeFocused()
+    
+    // Test high contrast focus ring
+    await page.locator('button:has-text("High contrast")').click()
+    await testButton.focus()
+    
+    await expect(testButton).toBeFocused()
+    await expect(page.locator('html')).toHaveAttribute('data-focus-ring', 'high-contrast')
+  })
+})
