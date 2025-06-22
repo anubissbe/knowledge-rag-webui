@@ -8,7 +8,7 @@ test.describe('Accessibility Features', () => {
     })
     
     await page.goto('/settings')
-    await page.waitForSelector('[data-testid=\"app-container\"]')
+    await page.waitForSelector('[data-testid="app-container"]')
   })
 
   test('should show accessibility section in settings', async ({ page }) => {
@@ -24,7 +24,7 @@ test.describe('Accessibility Features', () => {
 
   test('should toggle high contrast mode', async ({ page }) => {
     // Find and click the high contrast toggle
-    const highContrastToggle = page.locator('button[aria-label=\"Toggle high contrast mode\"]')
+    const highContrastToggle = page.locator('button[aria-label="Toggle high contrast mode"]')
     await expect(highContrastToggle).toBeVisible()
     await expect(highContrastToggle).toHaveAttribute('aria-pressed', 'false')
     
@@ -39,7 +39,7 @@ test.describe('Accessibility Features', () => {
   })
 
   test('should toggle reduced motion', async ({ page }) => {
-    const reducedMotionToggle = page.locator('button[aria-label=\"Toggle reduced motion\"]')
+    const reducedMotionToggle = page.locator('button[aria-label="Toggle reduced motion"]')
     await expect(reducedMotionToggle).toBeVisible()
     
     await reducedMotionToggle.click()
@@ -52,7 +52,7 @@ test.describe('Accessibility Features', () => {
   })
 
   test('should toggle large text', async ({ page }) => {
-    const largeTextToggle = page.locator('button[aria-label=\"Toggle large text\"]')
+    const largeTextToggle = page.locator('button[aria-label="Toggle large text"]')
     await expect(largeTextToggle).toBeVisible()
     
     await largeTextToggle.click()
@@ -65,7 +65,7 @@ test.describe('Accessibility Features', () => {
   })
 
   test('should toggle screen reader mode', async ({ page }) => {
-    const screenReaderToggle = page.locator('button[aria-label=\"Toggle screen reader mode\"]')
+    const screenReaderToggle = page.locator('button[aria-label="Toggle screen reader mode"]')
     await expect(screenReaderToggle).toBeVisible()
     
     await screenReaderToggle.click()
@@ -78,7 +78,7 @@ test.describe('Accessibility Features', () => {
   })
 
   test('should toggle keyboard navigation help', async ({ page }) => {
-    const keyboardNavToggle = page.locator('button[aria-label=\"Toggle keyboard navigation help\"]')
+    const keyboardNavToggle = page.locator('button[aria-label="Toggle keyboard navigation help"]')
     await expect(keyboardNavToggle).toBeVisible()
     
     // Should be enabled by default
@@ -97,11 +97,11 @@ test.describe('Accessibility Features', () => {
 
   test('should change focus ring style', async ({ page }) => {
     // Test default focus ring
-    const defaultButton = page.locator('button:has-text(\"Default\")')
+    const defaultButton = page.locator('button:has-text("Default")')
     await expect(defaultButton).toHaveAttribute('aria-pressed', 'true')
     
     // Switch to enhanced
-    const enhancedButton = page.locator('button:has-text(\"Enhanced\")')
+    const enhancedButton = page.locator('button:has-text("Enhanced")')
     await enhancedButton.click()
     await expect(enhancedButton).toHaveAttribute('aria-pressed', 'true')
     await expect(defaultButton).toHaveAttribute('aria-pressed', 'false')
@@ -111,7 +111,7 @@ test.describe('Accessibility Features', () => {
     await expect(documentElement).toHaveAttribute('data-focus-ring', 'enhanced')
     
     // Switch to high contrast
-    const highContrastButton = page.locator('button:has-text(\"High contrast\")')
+    const highContrastButton = page.locator('button:has-text("High contrast")')
     await highContrastButton.click()
     await expect(highContrastButton).toHaveAttribute('aria-pressed', 'true')
     await expect(documentElement).toHaveAttribute('data-focus-ring', 'high-contrast')
@@ -119,9 +119,9 @@ test.describe('Accessibility Features', () => {
 
   test('should reset accessibility settings', async ({ page }) => {
     // Enable some settings first
-    await page.locator('button[aria-label=\"Toggle high contrast mode\"]').click()
-    await page.locator('button[aria-label=\"Toggle reduced motion\"]').click()
-    await page.locator('button:has-text(\"Enhanced\")').click()
+    await page.locator('button[aria-label="Toggle high contrast mode"]').click()
+    await page.locator('button[aria-label="Toggle reduced motion"]').click()
+    await page.locator('button:has-text("Enhanced")').click()
     
     // Verify settings are applied
     const documentElement = page.locator('html')
@@ -130,7 +130,7 @@ test.describe('Accessibility Features', () => {
     await expect(documentElement).toHaveAttribute('data-focus-ring', 'enhanced')
     
     // Reset settings
-    await page.locator('button:has-text(\"Reset Accessibility Settings\")').click()
+    await page.locator('button:has-text("Reset Accessibility Settings")').click()
     
     // Verify settings are reset
     await expect(documentElement).not.toHaveClass(/high-contrast/)
@@ -138,14 +138,14 @@ test.describe('Accessibility Features', () => {
     await expect(documentElement).toHaveAttribute('data-focus-ring', 'default')
     
     // Check toggle states
-    await expect(page.locator('button[aria-label=\"Toggle high contrast mode\"]')).toHaveAttribute('aria-pressed', 'false')
-    await expect(page.locator('button[aria-label=\"Toggle reduced motion\"]')).toHaveAttribute('aria-pressed', 'false')
-    await expect(page.locator('button:has-text(\"Default\")')).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.locator('button[aria-label="Toggle high contrast mode"]')).toHaveAttribute('aria-pressed', 'false')
+    await expect(page.locator('button[aria-label="Toggle reduced motion"]')).toHaveAttribute('aria-pressed', 'false')
+    await expect(page.locator('button:has-text("Default")')).toHaveAttribute('aria-pressed', 'true')
   })
 
   test('should persist accessibility settings across page reloads', async ({ page }) => {
     // Enable high contrast
-    await page.locator('button[aria-label=\"Toggle high contrast mode\"]').click()
+    await page.locator('button[aria-label="Toggle high contrast mode"]').click()
     await expect(page.locator('html')).toHaveClass(/high-contrast/)
     
     // Reload the page
@@ -154,7 +154,7 @@ test.describe('Accessibility Features', () => {
     
     // Settings should persist
     await expect(page.locator('html')).toHaveClass(/high-contrast/)
-    await expect(page.locator('button[aria-label=\"Toggle high contrast mode\"]')).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.locator('button[aria-label="Toggle high contrast mode"]')).toHaveAttribute('aria-pressed', 'true')
   })
 
   test('should work with skip to main content link', async ({ page }) => {
@@ -165,7 +165,7 @@ test.describe('Accessibility Features', () => {
     await page.keyboard.press('Tab')
     
     // The skip link should be visible when focused
-    const skipLink = page.locator('a:has-text(\"Skip to main content\")')
+    const skipLink = page.locator('a:has-text("Skip to main content")')
     await expect(skipLink).toBeFocused()
     
     // Press Enter to use the skip link
@@ -188,11 +188,11 @@ test.describe('Accessibility Features', () => {
     await expect(page.locator('text=Focus search')).toBeVisible()
     
     // Check keyboard elements
-    await expect(page.locator('kbd:has-text(\"Tab\")')).toBeVisible()
-    await expect(page.locator('kbd:has-text(\"Shift+Tab\")')).toBeVisible()
-    await expect(page.locator('kbd:has-text(\"Enter\")')).toBeVisible()
-    await expect(page.locator('kbd:has-text(\"Esc\")')).toBeVisible()
-    await expect(page.locator('kbd:has-text(\"/\")')).toBeVisible()
+    await expect(page.locator('kbd:has-text("Tab")')).toBeVisible()
+    await expect(page.locator('kbd:has-text("Shift+Tab")')).toBeVisible()
+    await expect(page.locator('kbd:has-text("Enter")')).toBeVisible()
+    await expect(page.locator('kbd:has-text("Esc")')).toBeVisible()
+    await expect(page.locator('kbd:has-text("/")')).toBeVisible()
   })
 
   test('should handle focus management correctly', async ({ page }) => {

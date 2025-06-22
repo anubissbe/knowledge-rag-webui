@@ -239,7 +239,7 @@ test.describe('Onboarding Flow', () => {
     await page.click('button:has-text("Start Tour")')
     
     // Check initial progress (step 1 of 7)
-    let progressBar = page.locator('.h-1.bg-primary')
+    const progressBar = page.locator('.h-1.bg-primary')
     let progressWidth = await progressBar.evaluate(el => el.style.width)
     expect(progressWidth).toBe('14.2857%') // 1/7 ≈ 14.29%
     
