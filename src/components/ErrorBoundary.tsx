@@ -30,10 +30,10 @@ export class ErrorBoundary extends Component<Props, State> {
     }
     
     // Send error to Sentry if available
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
-      const Sentry = (window as any).Sentry;
-      Sentry.withScope((scope: any) => {
-        scope.setContext('errorBoundary', {
+    if (typeof window !== 'undefined' && (window as unknown as { Sentry?: unknown }).Sentry) {
+      const Sentry = (window as unknown as { Sentry: { withScope: (callback: (scope: unknown) => void) => void; captureException: (error: Error) => void } }).Sentry;
+      Sentry.withScope((scope: unknown) => {
+        (scope as { setContext: (key: string, value: unknown) => void }).setContext('errorBoundary', {
           componentStack: errorInfo.componentStack,
         });
         Sentry.captureException(error);

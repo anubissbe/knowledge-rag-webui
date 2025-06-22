@@ -46,7 +46,7 @@ export default function MemoryVersionComparison({ comparison, onClose }: MemoryV
     }
   };
 
-  const renderDiffValue = (value: any) => {
+  const renderDiffValue = (value: unknown) => {
     if (value === null || value === undefined) {
       return <span className="text-gray-400 italic">(empty)</span>;
     }
