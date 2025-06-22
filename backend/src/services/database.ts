@@ -226,7 +226,7 @@ Each has unique strengths for different use cases...`,
     return this.memories.delete(id);
   }
 
-  async searchMemories(userId: string, query: string, filters?: any): Promise<Memory[]> {
+  async searchMemories(userId: string, query: string, _filters?: Record<string, unknown>): Promise<Memory[]> {
     const userMemories = Array.from(this.memories.values())
       .filter(m => m.userId === userId);
 
@@ -289,7 +289,7 @@ Each has unique strengths for different use cases...`,
   }
 
   // Analytics operations
-  async getAnalytics(userId: string): Promise<any> {
+  async getAnalytics(userId: string): Promise<Record<string, unknown>> {
     const memories = Array.from(this.memories.values())
       .filter(m => m.userId === userId);
     
@@ -456,7 +456,7 @@ Each has unique strengths for different use cases...`,
     return restoredMemory;
   }
 
-  private detectChangedFields(memory: Memory, createVersionDto: CreateVersionDto): string[] {
+  private detectChangedFields(_memory: Memory, _createVersionDto: CreateVersionDto): string[] {
     // For now, return all major fields as potentially changed
     // In a real implementation, this would compare with the previous version
     const fields = ['title', 'content', 'summary', 'tags', 'contentType'];

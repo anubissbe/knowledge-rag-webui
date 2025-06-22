@@ -24,7 +24,7 @@ export interface MemoryVersionMetadata {
   language: string;
   changedFields: string[];
   previousVersion?: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface MemoryVersionSummary {
@@ -39,8 +39,8 @@ export interface MemoryVersionSummary {
 
 export interface VersionDiff {
   field: string;
-  oldValue: any;
-  newValue: any;
+  oldValue: unknown;
+  newValue: unknown;
   changeType: 'added' | 'removed' | 'modified';
 }
 

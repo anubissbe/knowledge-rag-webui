@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { body, query, param, validationResult } from 'express-validator';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../services/database';
@@ -6,12 +6,12 @@ import { wsService } from '../services/websocket';
 import { Memory, CreateMemoryDto } from '../models/Memory';
 import { asyncHandler } from '../utils/asyncHandler';
 import { ApiError } from '../middleware/errorHandler';
-import { authenticateToken } from '../middleware/auth';
+// import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
 
 // Validation middleware
-const handleValidationErrors = (req: any, res: any, next: any) => {
+const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new ApiError('Validation failed', 400, 'VALIDATION_ERROR', errors.array());

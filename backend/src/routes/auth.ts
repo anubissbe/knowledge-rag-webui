@@ -24,7 +24,7 @@ const generateToken = (user: User): string => {
       username: user.username 
     },
     JWT_SECRET,
-    { expiresIn: JWT_EXPIRY } as any
+    { expiresIn: JWT_EXPIRY }
   );
 };
 
@@ -38,14 +38,14 @@ router.post('/login',
       throw new ApiError('Validation failed', 400, 'VALIDATION_ERROR', errors.array());
     }
 
-    const { email, password }: LoginDto = req.body;
+    const { email }: LoginDto = req.body;
 
     // For demo, accept any password for demo@example.com
     if (email === 'demo@example.com') {
       const user = await db.getUserByEmail(email);
       if (user) {
         const token = generateToken(user);
-        const { passwordHash, ...userWithoutPassword } = user;
+        const { passwordHash: _passwordHash, ...userWithoutPassword } = user;
         
         res.json({
           user: userWithoutPassword,
@@ -109,7 +109,7 @@ router.post('/register',
 
     const created = await db.createUser(user);
     const token = generateToken(created);
-    const { passwordHash: _, ...userWithoutPassword } = created;
+    const { passwordHash: _passwordHash2, ...userWithoutPassword } = created;
 
     res.status(201).json({
       user: userWithoutPassword,
@@ -128,7 +128,7 @@ router.get('/me',
       throw new ApiError('User not found', 404, 'NOT_FOUND');
     }
 
-    const { passwordHash, ...userWithoutPassword } = user;
+    const { passwordHash: _passwordHash3, ...userWithoutPassword } = user;
     res.json(userWithoutPassword);
   })
 );

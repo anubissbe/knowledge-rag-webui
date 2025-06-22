@@ -21,7 +21,7 @@ export interface Entity {
   type: 'person' | 'place' | 'organization' | 'concept' | 'event' | 'other';
   description?: string;
   aliases?: string[];
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
   memoryIds: string[];
 }
 
@@ -32,7 +32,7 @@ export interface MemoryMetadata {
   wordCount: number;
   readingTime: number;
   language: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface CreateMemoryDto {

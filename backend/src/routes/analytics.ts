@@ -19,7 +19,7 @@ router.get('/stats',
 router.get('/activity',
   query('limit').optional().isInt({ min: 1, max: 50 }),
   asyncHandler(async (req, res) => {
-    const userId = 'user-1';
+    const _userId = 'user-1';
     const limit = parseInt(req.query.limit as string) || 10;
     
     // Mock recent activity - in production, track actual events
@@ -52,7 +52,7 @@ router.get('/activity',
 router.get('/search-patterns',
   query('days').optional().isInt({ min: 1, max: 365 }),
   asyncHandler(async (req, res) => {
-    const days = parseInt(req.query.days as string) || 7;
+    const _days = parseInt(req.query.days as string) || 7;
     
     // Mock search patterns - in production, track actual searches
     const patterns = [

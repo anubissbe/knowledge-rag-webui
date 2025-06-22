@@ -45,7 +45,7 @@ test.describe('Toast Notifications', () => {
     
     // Simulate an error by injecting it
     await page.evaluate(() => {
-      // @ts-ignore
+      // @ts-expect-error
       const { toast } = window.require?.('../stores/notificationStore') || {};
       if (toast) {
         toast.error('Creation failed', 'API key name is required');
@@ -104,7 +104,7 @@ test.describe('Toast Notifications', () => {
     
     // Trigger multiple toasts
     await page.evaluate(() => {
-      // @ts-ignore
+      // @ts-expect-error
       const { toast } = window.require?.('../stores/notificationStore') || {};
       if (toast) {
         toast.success('First notification', 'This is the first one');
@@ -129,7 +129,7 @@ test.describe('Toast Notifications', () => {
     
     // Trigger a toast
     await page.evaluate(() => {
-      // @ts-ignore
+      // @ts-expect-error
       const { toast } = window.require?.('../stores/notificationStore') || {};
       if (toast) {
         toast.success('Dark mode test', 'Checking dark mode styles');
@@ -153,7 +153,7 @@ test.describe('Toast Notifications', () => {
     
     // Create notification with action
     await page.evaluate(() => {
-      // @ts-ignore
+      // @ts-expect-error
       const { toast } = window.require?.('../stores/notificationStore') || {};
       if (toast) {
         toast.error('Connection lost', 'Unable to reach server', {

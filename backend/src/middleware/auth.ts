@@ -3,15 +3,13 @@ import jwt from 'jsonwebtoken';
 import { ApiError } from './errorHandler';
 
 // Extend Express Request type to include user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: string;
-        email: string;
-        username: string;
-      };
-    }
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: {
+      id: string;
+      email: string;
+      username: string;
+    };
   }
 }
 

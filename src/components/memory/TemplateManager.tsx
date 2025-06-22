@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Eye, Star, Users } from 'lucide-react';
-import { memoryTemplatesApi, type MemoryTemplate, type CreateTemplateDto } from '../../services/api/memoryTemplatesApi';
+import { memoryTemplatesApi, type MemoryTemplate } from '../../services/api/memoryTemplatesApi';
 import { useToast } from '../../hooks/useToast';
 import { componentLogger } from '../../utils/logger';
 import ConfirmationDialog from '../ui/ConfirmationDialog';
@@ -10,35 +10,35 @@ interface TemplateManagerProps {
   showActions?: boolean;
 }
 
-const categoryIcons: Record<string, string> = {
-  meeting: '👥',
-  learning: '📚',
-  project: '📋',
-  research: '🔬',
-  personal: '📝',
-  code: '💻',
-  recipe: '🍳',
-  book: '📖',
-  custom: '⚙️'
-};
+// const categoryIcons: Record<string, string> = {
+//   meeting: '👥',
+//   learning: '📚',
+//   project: '📋',
+//   research: '🔬',
+//   personal: '📝',
+//   code: '💻',
+//   recipe: '🍳',
+//   book: '📖',
+//   custom: '⚙️'
+// };
 
-const categoryColors: Record<string, string> = {
-  meeting: '#3B82F6',
-  learning: '#10B981',
-  project: '#8B5CF6',
-  research: '#F59E0B',
-  personal: '#EC4899',
-  code: '#EF4444',
-  recipe: '#F97316',
-  book: '#84CC16',
-  custom: '#6B7280'
-};
+// const categoryColors: Record<string, string> = {
+//   meeting: '#3B82F6',
+//   learning: '#10B981',
+//   project: '#8B5CF6',
+//   research: '#F59E0B',
+//   personal: '#EC4899',
+//   code: '#EF4444',
+//   recipe: '#F97316',
+//   book: '#84CC16',
+//   custom: '#6B7280'
+// };
 
 export default function TemplateManager({ onTemplateSelect, showActions = true }: TemplateManagerProps) {
   const [templates, setTemplates] = useState<MemoryTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [editingTemplate, setEditingTemplate] = useState<MemoryTemplate | null>(null);
+  // const [showCreateForm, setShowCreateForm] = useState(false);
+  // const [editingTemplate, setEditingTemplate] = useState<MemoryTemplate | null>(null);
   const [deletingTemplate, setDeletingTemplate] = useState<MemoryTemplate | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const toast = useToast();
@@ -61,31 +61,31 @@ export default function TemplateManager({ onTemplateSelect, showActions = true }
     }
   };
 
-  const handleCreateTemplate = async (templateData: CreateTemplateDto) => {
-    try {
-      const newTemplate = await memoryTemplatesApi.createTemplate(templateData);
-      setTemplates(prev => [newTemplate, ...prev]);
-      setShowCreateForm(false);
-      toast.success('Template created', `"${templateData.name}" template has been created.`);
-      componentLogger.info('Template created', { templateId: newTemplate.id, name: newTemplate.name });
-    } catch (error) {
-      componentLogger.error('Failed to create template', error);
-      toast.error('Failed to create template', 'Please check your input and try again.');
-    }
-  };
+  // const handleCreateTemplate = async (templateData: CreateTemplateDto) => {
+  //   try {
+  //     const newTemplate = await memoryTemplatesApi.createTemplate(templateData);
+  //     setTemplates(prev => [newTemplate, ...prev]);
+  //     setShowCreateForm(false);
+  //     toast.success('Template created', `"${templateData.name}" template has been created.`);
+  //     componentLogger.info('Template created', { templateId: newTemplate.id, name: newTemplate.name });
+  //   } catch (error) {
+  //     componentLogger.error('Failed to create template', error);
+  //     toast.error('Failed to create template', 'Please check your input and try again.');
+  //   }
+  // };
 
-  const handleUpdateTemplate = async (templateId: string, updates: Partial<CreateTemplateDto>) => {
-    try {
-      const updatedTemplate = await memoryTemplatesApi.updateTemplate(templateId, updates);
-      setTemplates(prev => prev.map(t => t.id === templateId ? updatedTemplate : t));
-      setEditingTemplate(null);
-      toast.success('Template updated', 'Template has been updated successfully.');
-      componentLogger.info('Template updated', { templateId, updates });
-    } catch (error) {
-      componentLogger.error('Failed to update template', error);
-      toast.error('Failed to update template', 'Please try again.');
-    }
-  };
+  // const handleUpdateTemplate = async (templateId: string, updates: Partial<CreateTemplateDto>) => {
+  //   try {
+  //     const updatedTemplate = await memoryTemplatesApi.updateTemplate(templateId, updates);
+  //     setTemplates(prev => prev.map(t => t.id === templateId ? updatedTemplate : t));
+  //     setEditingTemplate(null);
+  //     toast.success('Template updated', 'Template has been updated successfully.');
+  //     componentLogger.info('Template updated', { templateId, updates });
+  //   } catch (error) {
+  //     componentLogger.error('Failed to update template', error);
+  //     toast.error('Failed to update template', 'Please try again.');
+  //   }
+  // };
 
   const handleDeleteTemplate = async () => {
     if (!deletingTemplate) return;
@@ -140,7 +140,7 @@ export default function TemplateManager({ onTemplateSelect, showActions = true }
         </h2>
         {showActions && (
           <button
-            onClick={() => setShowCreateForm(true)}
+            onClick={() => { /* TODO: Implement create template */ }}
             className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg
                      hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2
                      focus:ring-purple-500 transition-colors font-medium"
@@ -243,7 +243,7 @@ export default function TemplateManager({ onTemplateSelect, showActions = true }
                     {!template.isSystem && (
                       <>
                         <button
-                          onClick={() => setEditingTemplate(template)}
+                          onClick={() => { /* TODO: Implement edit template */ }}
                           className="p-2 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400
                                    hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                           title="Edit template"
@@ -282,7 +282,7 @@ export default function TemplateManager({ onTemplateSelect, showActions = true }
           </p>
           {showActions && (
             <button
-              onClick={() => setShowCreateForm(true)}
+              onClick={() => { /* TODO: Implement create template */ }}
               className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg
                        hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2
                        focus:ring-purple-500 transition-colors font-medium"

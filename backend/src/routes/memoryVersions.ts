@@ -99,7 +99,7 @@ router.post('/:memoryId/versions/:version/restore',
     }
 
     const { memoryId, version } = req.params;
-    const { changeDescription } = req.body;
+    const { changeDescription: _changeDescription } = req.body;
     const userId = req.user!.id;
     const versionNumber = parseInt(version);
 

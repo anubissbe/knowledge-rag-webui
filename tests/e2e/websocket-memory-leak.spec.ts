@@ -5,8 +5,8 @@ test.describe('WebSocket Memory Leak Prevention', () => {
     // Mock WebSocket server
     await page.evaluateOnNewDocument(() => {
       // Track intervals and timeouts for memory leak detection
-      (window as any).activeIntervals = new Set();
-      (window as any).activeTimeouts = new Set();
+      (window as unknown as { activeIntervals: Set<number> }).activeIntervals = new Set<number>();
+      (window as unknown as { activeTimeouts: Set<number> }).activeTimeouts = new Set<number>();
       
       const originalSetInterval = window.setInterval;
       const originalClearInterval = window.clearInterval;

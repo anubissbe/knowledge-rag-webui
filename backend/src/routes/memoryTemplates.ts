@@ -29,7 +29,7 @@ router.get('/category/:category',
 
     const { category } = req.params;
     const userId = req.user!.id;
-    const templates = await db.getMemoryTemplatesByCategory(category as any, userId);
+    const templates = await db.getMemoryTemplatesByCategory(category as 'meeting' | 'learning' | 'project' | 'research' | 'personal' | 'code' | 'recipe' | 'book' | 'custom', userId);
     res.json({ templates });
   })
 );

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { body, param, validationResult } from 'express-validator';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../services/database';
@@ -9,7 +9,7 @@ import { ApiError } from '../middleware/errorHandler';
 const router = Router();
 
 // Validation middleware
-const handleValidationErrors = (req: any, res: any, next: any) => {
+const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new ApiError('Validation failed', 400, 'VALIDATION_ERROR', errors.array());

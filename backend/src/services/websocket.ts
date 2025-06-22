@@ -88,7 +88,7 @@ class WebSocketService {
     }, interval);
   }
 
-  private handleMessage(clientId: string, data: any) {
+  private handleMessage(clientId: string, data: Record<string, unknown>) {
     const client = this.clients.get(clientId);
     if (!client) return;
 
@@ -106,7 +106,7 @@ class WebSocketService {
     }
   }
 
-  private handleAuth(clientId: string, token: string) {
+  private handleAuth(clientId: string, _token: string) {
     const client = this.clients.get(clientId);
     if (!client) return;
 
@@ -121,14 +121,14 @@ class WebSocketService {
     });
   }
 
-  sendToClient(clientId: string, data: any) {
+  sendToClient(clientId: string, data: Record<string, unknown>) {
     const client = this.clients.get(clientId);
     if (client && client.ws.readyState === WebSocket.OPEN) {
       client.ws.send(JSON.stringify(data));
     }
   }
 
-  broadcastToUser(userId: string, data: any) {
+  broadcastToUser(userId: string, data: Record<string, unknown>) {
     this.clients.forEach((client) => {
       if (client.userId === userId && client.ws.readyState === WebSocket.OPEN) {
         client.ws.send(JSON.stringify(data));
@@ -136,7 +136,7 @@ class WebSocketService {
     });
   }
 
-  broadcast(data: any) {
+  broadcast(data: Record<string, unknown>) {
     this.clients.forEach((client) => {
       if (client.ws.readyState === WebSocket.OPEN) {
         client.ws.send(JSON.stringify(data));
@@ -145,7 +145,7 @@ class WebSocketService {
   }
 
   // Notify clients of memory events
-  notifyMemoryCreated(userId: string, memory: any) {
+  notifyMemoryCreated(userId: string, memory: Record<string, unknown>) {
     this.broadcastToUser(userId, {
       type: 'memory:created',
       data: memory,
@@ -153,7 +153,7 @@ class WebSocketService {
     });
   }
 
-  notifyMemoryUpdated(userId: string, memory: any) {
+  notifyMemoryUpdated(userId: string, memory: Record<string, unknown>) {
     this.broadcastToUser(userId, {
       type: 'memory:updated',
       data: memory,

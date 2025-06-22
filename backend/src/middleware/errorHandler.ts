@@ -4,9 +4,9 @@ import { logger } from '../utils/logger';
 export class ApiError extends Error {
   statusCode: number;
   code: string;
-  details?: any;
+  details?: Record<string, unknown>;
 
-  constructor(message: string, statusCode = 500, code = 'INTERNAL_ERROR', details?: any) {
+  constructor(message: string, statusCode = 500, code = 'INTERNAL_ERROR', details?: Record<string, unknown>) {
     super(message);
     this.statusCode = statusCode;
     this.code = code;
@@ -19,7 +19,7 @@ export const errorHandler = (
   err: ApiError,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   logger.error('Error occurred:', err);
 
