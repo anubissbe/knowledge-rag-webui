@@ -118,10 +118,11 @@ router.put('/:id',
   body('summary').optional().trim(),
   body('collectionId').optional().isString(),
   body('tags').optional().isArray(),
+  body('changeDescription').optional().isString().isLength({ max: 500 }),
   handleValidationErrors,
   asyncHandler(async (req, res) => {
     const userId = 'user-1';
-    const updates = req.body;
+    const { changeDescription, ...updates } = req.body;
     
     // Recalculate metadata if content changed
     if (updates.content) {
@@ -134,7 +135,7 @@ router.put('/:id',
       };
     }
     
-    const updated = await db.updateMemory(req.params.id, updates, userId);
+    const updated = await db.updateMemory(req.params.id, updates, userId, changeDescription);
     
     if (!updated) {
       throw new ApiError('Memory not found', 404, 'NOT_FOUND');

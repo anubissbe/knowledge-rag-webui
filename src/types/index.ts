@@ -71,6 +71,7 @@ export interface Memory {
   embedding?: number[];
   score?: number;
   relatedMemories?: string[];
+  version?: number;
   createdAt: string;
   updatedAt: string;
 }

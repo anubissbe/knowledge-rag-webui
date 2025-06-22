@@ -2,6 +2,7 @@
 import { Memory } from '../models/Memory';
 import { Collection } from '../models/Collection';
 import { User } from '../models/User';
+import { MemoryVersion, MemoryVersionSummary, MemoryVersionComparison, VersionDiff, CreateVersionDto } from '../models/MemoryVersion';
 
 // In-memory database for development
 // In production, this would be replaced with PostgreSQL + pgvector
@@ -10,6 +11,7 @@ class InMemoryDatabase {
   private collections: Map<string, Collection> = new Map();
   private users: Map<string, User> = new Map();
   private usersByEmail: Map<string, string> = new Map(); // email -> userId
+  private memoryVersions: Map<string, MemoryVersion[]> = new Map(); // memoryId -> versions[]
 
   constructor() {
     this.initializeSampleData();
@@ -157,7 +159,16 @@ Each has unique strengths for different use cases...`,
   }
 
   async createMemory(memory: Memory): Promise<Memory> {
-    this.memories.set(memory.id, memory);
+    // Ensure memory has version 1
+    const memoryWithVersion = { ...memory, version: 1 };
+    this.memories.set(memory.id, memoryWithVersion);
+    
+    // Create initial version
+    await this.createMemoryVersion(memoryWithVersion, {
+      memoryId: memory.id,
+      changeType: 'created',
+      changeDescription: 'Initial creation',
+    }, memory.userId);
     
     // Update collection count
     if (memory.collectionId) {
@@ -168,10 +179,10 @@ Each has unique strengths for different use cases...`,
       }
     }
     
-    return memory;
+    return memoryWithVersion;
   }
 
-  async updateMemory(id: string, updates: Partial<Memory>, userId: string): Promise<Memory | null> {
+  async updateMemory(id: string, updates: Partial<Memory>, userId: string, changeDescription?: string): Promise<Memory | null> {
     const memory = await this.getMemoryById(id, userId);
     if (!memory) return null;
 
@@ -186,6 +197,14 @@ Each has unique strengths for different use cases...`,
     };
 
     this.memories.set(id, updatedMemory);
+    
+    // Create version entry for the update
+    await this.createMemoryVersion(updatedMemory, {
+      memoryId: id,
+      changeType: 'updated',
+      changeDescription: changeDescription || 'Memory updated',
+    }, userId);
+    
     return updatedMemory;
   }
 
@@ -309,6 +328,209 @@ Each has unique strengths for different use cases...`,
       searchCount: Math.floor(Math.random() * 100) + 50, // Mock data
       lastUpdated: new Date().toISOString(),
     };
+  }
+
+  // Memory Version operations
+  async createMemoryVersion(memory: Memory, createVersionDto: CreateVersionDto, createdBy: string): Promise<MemoryVersion> {
+    const { v4: uuidv4 } = await import('uuid');
+    
+    const version: MemoryVersion = {
+      id: uuidv4(),
+      memoryId: memory.id,
+      version: memory.version || 1,
+      title: memory.title,
+      content: memory.content,
+      contentType: memory.contentType,
+      summary: memory.summary,
+      tags: [...memory.tags],
+      metadata: {
+        ...memory.metadata,
+        changedFields: this.detectChangedFields(memory, createVersionDto),
+        previousVersion: createVersionDto.changeType === 'restored' ? createVersionDto.restoredFromVersion : (memory.version || 1) - 1,
+      },
+      changeType: createVersionDto.changeType,
+      changeDescription: createVersionDto.changeDescription,
+      userId: memory.userId,
+      createdAt: new Date().toISOString(),
+      createdBy,
+    };
+
+    const versions = this.memoryVersions.get(memory.id) || [];
+    versions.push(version);
+    this.memoryVersions.set(memory.id, versions);
+
+    return version;
+  }
+
+  async getMemoryVersions(memoryId: string, userId: string, limit = 20, offset = 0): Promise<MemoryVersionSummary[]> {
+    const memory = await this.getMemoryById(memoryId, userId);
+    if (!memory) return [];
+
+    const versions = this.memoryVersions.get(memoryId) || [];
+    return versions
+      .sort((a, b) => b.version - a.version)
+      .slice(offset, offset + limit)
+      .map(v => ({
+        id: v.id,
+        version: v.version,
+        changeType: v.changeType,
+        changeDescription: v.changeDescription,
+        createdAt: v.createdAt,
+        createdBy: v.createdBy,
+        changedFields: v.metadata.changedFields,
+      }));
+  }
+
+  async getMemoryVersion(memoryId: string, version: number, userId: string): Promise<MemoryVersion | null> {
+    const memory = await this.getMemoryById(memoryId, userId);
+    if (!memory) return null;
+
+    const versions = this.memoryVersions.get(memoryId) || [];
+    return versions.find(v => v.version === version) || null;
+  }
+
+  async compareMemoryVersions(memoryId: string, fromVersion: number, toVersion: number, userId: string): Promise<MemoryVersionComparison | null> {
+    const memory = await this.getMemoryById(memoryId, userId);
+    if (!memory) return null;
+
+    const versions = this.memoryVersions.get(memoryId) || [];
+    const fromVer = versions.find(v => v.version === fromVersion);
+    const toVer = versions.find(v => v.version === toVersion);
+
+    if (!fromVer || !toVer) return null;
+
+    const differences = this.calculateVersionDifferences(fromVer, toVer);
+    
+    return {
+      memoryId,
+      fromVersion,
+      toVersion,
+      differences,
+      summary: {
+        totalChanges: differences.length,
+        fieldsChanged: [...new Set(differences.map(d => d.field))],
+        addedContent: differences.filter(d => d.changeType === 'added').length,
+        removedContent: differences.filter(d => d.changeType === 'removed').length,
+      },
+    };
+  }
+
+  async restoreMemoryVersion(memoryId: string, version: number, userId: string, restoredBy: string): Promise<Memory | null> {
+    const memory = await this.getMemoryById(memoryId, userId);
+    if (!memory) return null;
+
+    const targetVersion = await this.getMemoryVersion(memoryId, version, userId);
+    if (!targetVersion) return null;
+
+    // Create a version of the current state before restoring
+    await this.createMemoryVersion(memory, {
+      memoryId,
+      changeType: 'updated',
+      changeDescription: `Before restoring to version ${version}`,
+    }, restoredBy);
+
+    // Restore the memory to the target version
+    const restoredMemory: Memory = {
+      ...memory,
+      title: targetVersion.title,
+      content: targetVersion.content,
+      contentType: targetVersion.contentType,
+      summary: targetVersion.summary,
+      tags: [...targetVersion.tags],
+      updatedAt: new Date().toISOString(),
+      version: (memory.version || 0) + 1,
+    };
+
+    this.memories.set(memoryId, restoredMemory);
+
+    // Create a version entry for the restoration
+    await this.createMemoryVersion(restoredMemory, {
+      memoryId,
+      changeType: 'restored',
+      changeDescription: `Restored from version ${version}`,
+      restoredFromVersion: version,
+    }, restoredBy);
+
+    return restoredMemory;
+  }
+
+  private detectChangedFields(memory: Memory, createVersionDto: CreateVersionDto): string[] {
+    // For now, return all major fields as potentially changed
+    // In a real implementation, this would compare with the previous version
+    const fields = ['title', 'content', 'summary', 'tags', 'contentType'];
+    return fields;
+  }
+
+  private calculateVersionDifferences(fromVersion: MemoryVersion, toVersion: MemoryVersion): VersionDiff[] {
+    const differences: VersionDiff[] = [];
+
+    // Compare title
+    if (fromVersion.title !== toVersion.title) {
+      differences.push({
+        field: 'title',
+        oldValue: fromVersion.title,
+        newValue: toVersion.title,
+        changeType: 'modified',
+      });
+    }
+
+    // Compare content
+    if (fromVersion.content !== toVersion.content) {
+      differences.push({
+        field: 'content',
+        oldValue: fromVersion.content,
+        newValue: toVersion.content,
+        changeType: 'modified',
+      });
+    }
+
+    // Compare summary
+    if (fromVersion.summary !== toVersion.summary) {
+      differences.push({
+        field: 'summary',
+        oldValue: fromVersion.summary,
+        newValue: toVersion.summary,
+        changeType: 'modified',
+      });
+    }
+
+    // Compare tags
+    const fromTags = new Set(fromVersion.tags);
+    const toTags = new Set(toVersion.tags);
+    
+    for (const tag of fromTags) {
+      if (!toTags.has(tag)) {
+        differences.push({
+          field: 'tags',
+          oldValue: tag,
+          newValue: null,
+          changeType: 'removed',
+        });
+      }
+    }
+    
+    for (const tag of toTags) {
+      if (!fromTags.has(tag)) {
+        differences.push({
+          field: 'tags',
+          oldValue: null,
+          newValue: tag,
+          changeType: 'added',
+        });
+      }
+    }
+
+    // Compare content type
+    if (fromVersion.contentType !== toVersion.contentType) {
+      differences.push({
+        field: 'contentType',
+        oldValue: fromVersion.contentType,
+        newValue: toVersion.contentType,
+        changeType: 'modified',
+      });
+    }
+
+    return differences;
   }
 }
 

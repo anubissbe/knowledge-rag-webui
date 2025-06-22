@@ -37,6 +37,7 @@ A modern web interface for Knowledge Retrieval-Augmented Generation (RAG) system
 - **Backend API Server**: Full Express.js backend with TypeScript, JWT authentication, WebSocket support, and RESTful API endpoints
 - **JWT Authentication**: Complete user authentication system with login/register, protected routes, and secure token management
 - **Search Filters Persistence**: Automatic saving and restoration of user search filters and sorting preferences across sessions
+- **Memory Versioning**: Complete version history for all memory edits with comparison, restoration, and audit trail functionality
 
 ## 📋 Prerequisites
 
@@ -102,6 +103,7 @@ The project includes a full-featured backend API server built with Express.js an
 - **Collections**: Organize memories into collections
 - **Authentication**: User login/register with JWT tokens
 - **User Preferences**: Save and retrieve search filter preferences
+- **Memory Versioning**: Version history tracking, comparison, and restoration endpoints
 
 See [Backend Documentation](./backend/README.md) for detailed API specifications, [Authentication Documentation](./docs/AUTHENTICATION.md) for security implementation details, and [API Integration Documentation](./docs/API_INTEGRATION.md) for frontend integration details.
 
@@ -113,7 +115,7 @@ knowledge-rag-webui/
 │   ├── components/        # Reusable UI components
 │   │   ├── bulk/          # Bulk operations components
 │   │   ├── dashboard/     # Dashboard and analytics components
-│   │   ├── memory/        # Memory-specific components
+│   │   ├── memory/        # Memory-specific components (versioning, history, comparison)
 │   │   ├── mobile/        # Mobile-specific components
 │   │   ├── search/        # Search-related components
 │   │   ├── settings/      # Settings page components
@@ -346,6 +348,7 @@ For comprehensive design and development documentation, see the [docs directory]
 - **[Logging Implementation](docs/LOGGING_IMPLEMENTATION.md)** - Centralized logging system and best practices
 - **[Code Splitting](docs/CODE_SPLITTING.md)** - Bundle optimization and lazy loading implementation
 - **[Search Filters Persistence](docs/SEARCH_FILTERS_PERSISTENCE.md)** - User search preferences persistence and restoration
+- **[Memory Versioning](docs/MEMORY_VERSIONING.md)** - Version history, comparison, and restoration system implementation
 
 ## 🤝 Contributing
 

@@ -1,4 +1,4 @@
-import { apiClient } from './client';
+import { apiClient } from './baseApi';
 
 export interface SearchFilters {
   tags: string[];
@@ -22,7 +22,7 @@ export const preferencesApi = {
   // Get search preferences
   async getSearchPreferences(): Promise<SearchPreferences | null> {
     const response = await apiClient.get<PreferencesResponse>('/preferences/search');
-    return response.data.preferences;
+    return response.preferences;
   },
 
   // Save search preferences
@@ -30,6 +30,6 @@ export const preferencesApi = {
     const response = await apiClient.put<{ preferences: SearchPreferences }>('/preferences/search', {
       filters
     });
-    return response.data.preferences;
+    return response.preferences;
   }
 };

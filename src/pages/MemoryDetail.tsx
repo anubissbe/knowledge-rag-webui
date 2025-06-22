@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, Calendar, Clock, User, 
   Edit, Trash2, Share2, Copy, ExternalLink, 
-  FileText
+  FileText, History
 } from 'lucide-react';
 import type { Memory } from '../types';
 import { formatDistanceToNow } from '../utils/date';
@@ -11,9 +11,13 @@ import MarkdownContent from '../components/MarkdownContent';
 import RelatedMemories from '../components/memory/RelatedMemories';
 import EntityList from '../components/memory/EntityList';
 import TagList from '../components/memory/TagList';
+import MemoryVersionHistory from '../components/memory/MemoryVersionHistory';
+import MemoryVersionViewer from '../components/memory/MemoryVersionViewer';
+import MemoryVersionComparison from '../components/memory/MemoryVersionComparison';
 import ConfirmationDialog from '../components/ui/ConfirmationDialog';
 import { useToast } from '../hooks/useToast';
 import { memoryApi } from '../services/api';
+import type { MemoryVersion, MemoryVersionComparison as VersionComparison } from '../services/api/memoryVersionsApi';
 
 // Mock data for development - DEPRECATED: Now using real API
 /*
@@ -99,6 +103,9 @@ export default function MemoryDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
+  const [viewingVersion, setViewingVersion] = useState<MemoryVersion | null>(null);
+  const [versionComparison, setVersionComparison] = useState<VersionComparison | null>(null);
 
   useEffect(() => {
     const fetchMemory = async () => {
@@ -191,6 +198,15 @@ export default function MemoryDetail() {
             </Link>
             
             <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setShowVersionHistory(!showVersionHistory)}
+                className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white
+                         hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                aria-label="Version history"
+                title="Version History"
+              >
+                <History className="w-5 h-5" />
+              </button>
               <button
                 onClick={handleCopy}
                 className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white
@@ -369,6 +385,52 @@ export default function MemoryDetail() {
           </aside>
         </div>
       </main>
+
+      {/* Version History Sidebar */}
+      {showVersionHistory && (
+        <div className="fixed inset-y-0 right-0 w-96 bg-white dark:bg-gray-800 shadow-xl border-l border-gray-200 dark:border-gray-700 z-40 overflow-y-auto">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Version History</h2>
+              <button
+                onClick={() => setShowVersionHistory(false)}
+                className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+            </div>
+            <MemoryVersionHistory
+              memoryId={memory.id}
+              currentVersion={memory.version}
+              onVersionRestore={(version) => {
+                toast.success('Version restored', `Memory restored to version ${version}`);
+                // Refresh the memory data
+                window.location.reload();
+              }}
+              onVersionView={setViewingVersion}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Version Viewer Modal */}
+      {viewingVersion && (
+        <MemoryVersionViewer
+          memoryId={memory.id}
+          version={viewingVersion}
+          currentVersion={memory.version}
+          onClose={() => setViewingVersion(null)}
+          onCompare={setVersionComparison}
+        />
+      )}
+
+      {/* Version Comparison Modal */}
+      {versionComparison && (
+        <MemoryVersionComparison
+          comparison={versionComparison}
+          onClose={() => setVersionComparison(null)}
+        />
+      )}
 
       {/* Delete Confirmation Dialog */}
       <ConfirmationDialog
