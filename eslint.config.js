@@ -27,9 +27,13 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-unsafe-function-type': 'warn',
+      '@typescript-eslint/no-empty-object-type': 'warn',
       'no-case-declarations': 'warn',
       'prefer-const': 'warn',
       'prefer-rest-params': 'warn',
+      'no-constant-binary-expression': 'warn',
+      'react-hooks/rules-of-hooks': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
     },
   },
 )
