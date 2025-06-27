@@ -45,7 +45,7 @@
     "chalk": "^5.4.1",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
-    "lucide-react": "^0.522.0",
+    "lucide-react": "^0.525.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.58.1",
